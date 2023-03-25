@@ -1,0 +1,35 @@
+.menu-label {
+    font-size: 0.75em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.menu-list {
+    line-height: 1.25;
+}
+
+.menu-list li {
+    margin-bottom: 5px;
+}
+
+.menu-list a {
+    border-radius: 2px;
+    color: #fff;
+    display: block;
+    padding: 0.5em 0.75em;
+}
+
+.menu-list a:hover {
+    background-color: #20aa68;
+    color: #fff;
+}
+
+.menu-list a:hover {
+    background-color: #20aa68;
+    color: #fff;
+}
+
+.menu-list a.is-active {
+    background-color: #20aa68;
+    color: #fff;
+}
