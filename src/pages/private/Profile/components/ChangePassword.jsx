@@ -81,7 +81,9 @@ const ChangePassword = () => {
             } catch (error) {
                 console.log(error);
                 setChangePassErrorMsg(
-                    error?.response?.data?.message || "Something went wrong"
+                    error?.message ||
+                        error?.response?.data?.message ||
+                        "Something went wrong"
                 );
             } finally {
                 setIsLoading(false);

@@ -8,15 +8,30 @@ const Sidebar = () => {
     const { type: userType } = useUserStore(state => state);
 
     const menuItems = [
+        //defaul routes
         { name: "Dashboard", path: "/dashboard", userType: undefined },
         { name: "Profile", path: "/profile", userType: undefined },
 
-        { name: "School Year", path: "/schoolYear", userType: 1 },
-        { name: "Section", path: "/section", userType: 1 },
-        { name: "Subject", path: "/subject", userType: 1 },
+        //admin routes
+        { name: "Courses", path: "/courses", userType: 1 },
+        { name: "Subjects", path: "/subjects", userType: 1 },
+        { name: "Sections", path: "/sections", userType: 1 },
+        { name: "School Years", path: "/schoolYears", userType: 1 },
+        { name: "Registrations", path: "/registrations", userType: 1 },
+        { name: "Enrollments", path: "/adminViewEnrollments", userType: 1 },
+        {
+            name: "Edit Info Approval",
+            path: "/editInfoApproval",
+            userType: 1
+        },
+
+        //student routes
         { name: "Enroll", path: "/enroll", userType: 3 },
+        { name: "Enrollments", path: "/studentViewEnrollments", userType: 3 },
         { name: "Grading Sheet", path: "/gradingSheet", userType: 3 },
         { name: "Request TOR", path: "/requestTOR", userType: 3 },
+
+        //teacher routes
         { name: "Browse", path: "/browse", userType: 4 },
         { name: "Input Grade", path: "/inputGrade", userType: 4 }
     ];

@@ -16,12 +16,20 @@ import Dashboard from "pages/private/Dashboard";
 import Profile from "pages/private/Profile/Profile";
 
 //admin routes
-import SchoolYear from "pages/private/AdminPages/SchoolYear";
-import Section from "pages/private/AdminPages/Section";
-import Subject from "pages/private/AdminPages/Subject";
+import Courses from "pages/private/AdminPages/Courses/Index";
+import Subject from "pages/private/AdminPages/Subjects/Index";
+import CreateSubject from "pages/private/AdminPages/Subjects/CreateSubject";
+import UpdateSubject from "pages/private/AdminPages/Subjects/UpdateSubject";
+import Section from "pages/private/AdminPages/Sections/Index";
+import SchoolYear from "pages/private/AdminPages/SchoolYears/Index";
+import Registrations from "pages/private/AdminPages/Registrations/Index";
+import AdminViewEnrollments from "pages/private/AdminPages/Enrollments/Index";
+import EditInfoApproval from "pages/private/AdminPages/EditInfoApproval/Index";
 
 //student routes
 import Enroll from "pages/private/StudentPages/Enroll";
+import StudentViewEnrollments from "pages/private/StudentPages/Enrollments";
+
 import GradingSheet from "pages/private/StudentPages/GradingSheet";
 import RequestTOR from "pages/private/StudentPages/RequestTOR";
 
@@ -38,17 +46,36 @@ function App() {
     ];
 
     const privateRoutes = [
+        //default routes
         { path: "/dashboard", element: Dashboard },
         { path: "/profile", element: Profile },
 
-        { path: "/schoolYear", element: SchoolYear, userType: 1 },
-        { path: "/section", element: Section, userType: 1 },
-        { path: "/subject", element: Subject, userType: 1 },
+        //admin routes
+        { path: "/courses", element: Courses, userType: 1 },
+        { path: "/subjects", element: Subject, userType: 1 },
+        { path: "/createSubject", element: CreateSubject, userType: 1 },
+        { path: "/updateSubject/:id", element: UpdateSubject, userType: 1 },
+        { path: "/sections", element: Section, userType: 1 },
+        { path: "/schoolYears", element: SchoolYear, userType: 1 },
+        { path: "/registrations", element: Registrations, userType: 1 },
+        {
+            path: "/adminViewEnrollments",
+            element: AdminViewEnrollments,
+            userType: 1
+        },
+        { path: "/editInfoApproval", element: EditInfoApproval, userType: 1 },
 
+        //student routes
         { path: "/enroll", element: Enroll, userType: 3 },
+        {
+            path: "/studentViewEnrollments",
+            element: StudentViewEnrollments,
+            userType: 3
+        },
         { path: "/gradingSheet", element: GradingSheet, userType: 3 },
         { path: "/requestTOR", element: RequestTOR, userType: 3 },
 
+        //teacher routes
         { path: "/browse", element: Browse, userType: 4 },
         { path: "/inputGrade", element: InputGrade, userType: 4 }
     ];

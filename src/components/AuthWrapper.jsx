@@ -19,7 +19,8 @@ const AuthWrapper = () => {
                 setUser({
                     id: data.id,
                     name: data.name,
-                    type: data.user_type
+                    type: data.user_type,
+                    is_verified: data.is_verified
                 });
             } catch (error) {
                 console.log(error);

@@ -19,6 +19,7 @@ const Register = () => {
     });
 
     const [isLoading, setIsLoading] = useState(false);
+    const [registerErrorMsg, setRegisterErrorMsg] = useState("");
 
     const navigate = useNavigate();
 
@@ -77,15 +78,16 @@ const Register = () => {
                     password: "",
                     confirmPassword: ""
                 });
+                setRegisterErrorMsg("");
 
                 setIsLoading(true);
                 await csrf();
                 await http.post("/register", {
+                    user_type: userType,
                     name,
                     email,
                     password,
-                    password_confirmation: confirmPassword,
-                    user_type: userType
+                    password_confirmation: confirmPassword
                 });
 
                 setFormData({
@@ -98,11 +100,20 @@ const Register = () => {
 
                 window.location = "/login";
             } catch (error) {
-                setFormError({
-                    ...formError,
-                    email:
-                        error?.response?.data?.message || "Something went wrong"
-                });
+                console.log(error);
+                const errors = error?.response?.data?.errors || null;
+                if (errors) {
+                    setFormError({
+                        ...formError,
+                        ...errors
+                    });
+                } else {
+                    setRegisterErrorMsg(
+                        error?.response?.data?.message ||
+                            error?.message ||
+                            "Something went wrong"
+                    );
+                }
             } finally {
                 setIsLoading(false);
             }
@@ -127,6 +138,7 @@ const Register = () => {
                                         <option value={3}>Student</option>
                                         <option value={4}>Teacher</option>
                                         <option value={5}>Non Teaching</option>
+                                        <option value={6}>Registrar</option>
                                     </select>
                                 </div>
                             </div>
@@ -215,6 +227,12 @@ const Register = () => {
                                 </div>
                             )}
                         </div>
+
+                        {registerErrorMsg && (
+                            <div className="notification is-danger my-4">
+                                {registerErrorMsg}
+                            </div>
+                        )}
 
                         <button
                             className={`button is-success is-fullwidth ${

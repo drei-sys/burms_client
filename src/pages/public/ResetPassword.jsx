@@ -65,7 +65,9 @@ const ResetPassword = () => {
                 setFormError({
                     ...formError,
                     newPassword:
-                        error?.response?.data?.message || "Something went wrong"
+                        error?.response?.data?.message ||
+                        error?.message ||
+                        "Something went wrong"
                 });
             } finally {
                 setIsLoading(false);
