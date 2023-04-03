@@ -6,15 +6,13 @@ import Error from "components/common/Error";
 
 import http from "services/httpService";
 
-const UpdateSubject = () => {
-    const [subject, setSubject] = useState(null);
+const UpdateSection = () => {
+    const [section, setSection] = useState(null);
 
     const [formData, setFormData] = useState({
-        code: "",
         name: ""
     });
     const [formError, setFormError] = useState({
-        code: "",
         name: ""
     });
 
@@ -28,13 +26,13 @@ const UpdateSubject = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const getSubject = async () => {
+        const getSection = async () => {
             try {
-                const { data } = await http.get(`/api/subject/${params.id}`);
+                const { data } = await http.get(`/api/section/${params.id}`);
 
                 if (data?.name) {
-                    setSubject(data);
-                    setFormData({ code: data.code, name: data.name });
+                    setSection(data);
+                    setFormData({ name: data.name });
                 } else {
                     setIsNotExist(true);
                 }
@@ -45,7 +43,7 @@ const UpdateSubject = () => {
             }
         };
 
-        getSubject();
+        getSection();
     }, []);
 
     if (isContentLoading) {
@@ -57,7 +55,7 @@ const UpdateSubject = () => {
     }
 
     if (isNotExist) {
-        return <div className="has-text-centered mt-6">Subject not found.</div>;
+        return <div className="has-text-centered mt-6">Section not found.</div>;
     }
 
     const handleInputChange = e => {
@@ -69,20 +67,15 @@ const UpdateSubject = () => {
     const handleFormSubmit = async e => {
         e.preventDefault();
 
-        const { code, name } = formData;
+        const { name } = formData;
 
         let hasError = false;
         const formError = {
-            code: "",
             name: ""
         };
 
-        if (code.trim() === "") {
-            formError.code = "Subject code is required";
-            hasError = true;
-        }
         if (name.trim() === "") {
-            formError.name = "Subject name is required";
+            formError.name = "Section name is required";
             hasError = true;
         }
 
@@ -90,15 +83,12 @@ const UpdateSubject = () => {
             setFormError(formError);
         } else {
             try {
-                setFormError({
-                    code: "",
-                    name: ""
-                });
+                setFormError({ name: "" });
 
                 setIsLoading(true);
-                await http.put(`/api/subject/${subject.id}`, { code, name });
+                await http.put(`/api/section/${section.id}`, { name });
 
-                navigate("/subjects");
+                navigate("/sections");
             } catch (error) {
                 setFormError({
                     ...formError,
@@ -117,45 +107,24 @@ const UpdateSubject = () => {
             <h1 className="is-size-4 mb-5">
                 <button
                     className="button is-ghost"
-                    onClick={() => navigate("/subjects")}
+                    onClick={() => navigate("/sections")}
                 >
                     <i className="fa-solid fa-arrow-left"></i>
                 </button>{" "}
-                Update Subject
+                Update Section
             </h1>
             <div className="columns">
                 <div className="column">
                     <div className="box">
                         <form onSubmit={handleFormSubmit}>
                             <div className="field">
-                                <label className="label">Subject code</label>
-                                <div className="control">
-                                    <input
-                                        name="code"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Enter subject code"
-                                        value={formData.code}
-                                        onChange={handleInputChange}
-                                    />
-                                </div>
-                                {formError.code && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.code}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className="field">
-                                <label className="label">Subject name</label>
+                                <label className="label">Section name</label>
                                 <div className="control">
                                     <input
                                         name="name"
                                         className="input"
                                         type="text"
-                                        placeholder="Enter subject name"
+                                        placeholder="Enter section name"
                                         value={formData.name}
                                         onChange={handleInputChange}
                                     />
@@ -175,7 +144,7 @@ const UpdateSubject = () => {
                                 }`}
                                 type="submit"
                             >
-                                Update subject
+                                Update section
                             </button>
                         </form>
                     </div>
@@ -186,4 +155,4 @@ const UpdateSubject = () => {
     );
 };
 
-export default UpdateSubject;
+export default UpdateSection;

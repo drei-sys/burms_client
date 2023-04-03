@@ -15,8 +15,6 @@ const Login = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const csrf = () => http.get("/sanctum/csrf-cookie");
-
     const handleInputChange = e => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -47,7 +45,7 @@ const Login = () => {
                 setFormError({ email: "", password: "" });
 
                 setIsLoading(true);
-                await csrf();
+                await http.get("/sanctum/csrf-cookie");
                 await http.post("/login", formData);
 
                 setFormData({ email: "", password: "" });
@@ -57,10 +55,9 @@ const Login = () => {
             } catch (error) {
                 setFormError({
                     ...formError,
-                    email:
-                        error?.response?.data?.message ||
-                        error?.message ||
-                        "Something went wrong"
+                    ...(error?.response?.data?.errors || {
+                        email: "Something went wrong!"
+                    })
                 });
             } finally {
                 setIsLoading(false);
@@ -123,7 +120,7 @@ const Login = () => {
 
                     <button
                         className={`button is-success is-fullwidth ${
-                            isLoading && "is-loading"
+                            isLoading ? "is-loading" : ""
                         }`}
                         type="submit"
                     >

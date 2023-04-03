@@ -19,11 +19,8 @@ const Register = () => {
     });
 
     const [isLoading, setIsLoading] = useState(false);
-    const [registerErrorMsg, setRegisterErrorMsg] = useState("");
 
     const navigate = useNavigate();
-
-    const csrf = () => http.get("/sanctum/csrf-cookie");
 
     const handleInputChange = e => {
         let { name, value } = e.target;
@@ -78,10 +75,9 @@ const Register = () => {
                     password: "",
                     confirmPassword: ""
                 });
-                setRegisterErrorMsg("");
 
                 setIsLoading(true);
-                await csrf();
+                await http.get("/sanctum/csrf-cookie");
                 await http.post("/register", {
                     user_type: userType,
                     name,
@@ -100,20 +96,12 @@ const Register = () => {
 
                 window.location = "/login";
             } catch (error) {
-                console.log(error);
-                const errors = error?.response?.data?.errors || null;
-                if (errors) {
-                    setFormError({
-                        ...formError,
-                        ...errors
-                    });
-                } else {
-                    setRegisterErrorMsg(
-                        error?.response?.data?.message ||
-                            error?.message ||
-                            "Something went wrong"
-                    );
-                }
+                setFormError({
+                    ...formError,
+                    ...(error?.response?.data?.errors || {
+                        confirmPassword: "Something went wrong!"
+                    })
+                });
             } finally {
                 setIsLoading(false);
             }
@@ -228,15 +216,9 @@ const Register = () => {
                             )}
                         </div>
 
-                        {registerErrorMsg && (
-                            <div className="notification is-danger my-4">
-                                {registerErrorMsg}
-                            </div>
-                        )}
-
                         <button
                             className={`button is-success is-fullwidth ${
-                                isLoading && "is-loading"
+                                isLoading ? "is-loading" : ""
                             }`}
                             type="submit"
                         >

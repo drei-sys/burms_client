@@ -14,16 +14,6 @@ const Layout = () => {
                     </div>
                 </div>
             </div>
-
-            {/* <div>
-                <Link to="/dashboard">Dashboard</Link>{" "}
-                <Link to="/admin">Admin</Link>{" "}
-                <Link to="/student">Student</Link>{" "}
-                <Link to="/teacher">Teacher</Link>
-            </div>
-            <div>
-                <Outlet />
-            </div> */}
         </div>
     );
 };

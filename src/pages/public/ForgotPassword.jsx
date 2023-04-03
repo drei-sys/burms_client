@@ -9,8 +9,6 @@ const ForgotPassword = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const csrf = () => http.get("/sanctum/csrf-cookie");
-
     const handleInputChange = e => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -35,16 +33,15 @@ const ForgotPassword = () => {
         } else {
             try {
                 setIsLoading(true);
-                await csrf();
+                await http.get("/sanctum/csrf-cookie");
                 await http.post("/forgot-password", { email });
                 setIsSendEmailSuccess(true);
             } catch (error) {
                 setFormError({
                     ...formError,
-                    email:
-                        error?.response?.data?.message ||
-                        error?.message ||
-                        "Something went wrong"
+                    ...(error?.response?.data?.errors || {
+                        confirmPassword: "Something went wrong!"
+                    })
                 });
             } finally {
                 setIsLoading(false);
@@ -99,7 +96,7 @@ const ForgotPassword = () => {
 
                             <button
                                 className={`button is-success is-fullwidth ${
-                                    isLoading && "is-loading"
+                                    isLoading ? "is-loading" : ""
                                 }`}
                                 type="submit"
                             >

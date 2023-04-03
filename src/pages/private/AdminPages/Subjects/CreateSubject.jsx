@@ -30,6 +30,7 @@ const CreateSubject = () => {
 
         let hasError = false;
         const formError = {
+            code: "",
             name: ""
         };
 
@@ -52,8 +53,6 @@ const CreateSubject = () => {
                 });
 
                 setIsLoading(true);
-                await http.get("/sanctum/csrf-cookie");
-
                 await http.post("/api/subject", {
                     code,
                     name,
@@ -62,12 +61,11 @@ const CreateSubject = () => {
 
                 navigate("/subjects");
             } catch (error) {
-                console.log(error);
-
                 setFormError({
                     ...formError,
-                    code:
-                        error?.response?.data?.message || "Something went wrong"
+                    ...(error?.response?.data?.errors || {
+                        name: "Something went wrong!"
+                    })
                 });
             } finally {
                 setIsLoading(false);
@@ -134,7 +132,7 @@ const CreateSubject = () => {
 
                             <button
                                 className={`button is-success  ${
-                                    isLoading && "is-loading"
+                                    isLoading ? "is-loading" : ""
                                 }`}
                                 type="submit"
                             >

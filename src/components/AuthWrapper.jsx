@@ -23,7 +23,6 @@ const AuthWrapper = () => {
                     is_verified: data.is_verified
                 });
             } catch (error) {
-                console.log(error);
                 if (error.message !== "Request failed with status code 401") {
                     setIsError(true);
                 }

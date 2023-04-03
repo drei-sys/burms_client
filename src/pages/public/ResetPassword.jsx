@@ -18,8 +18,6 @@ const ResetPassword = () => {
 
     const [searchParams] = useSearchParams();
 
-    const csrf = () => http.get("/sanctum/csrf-cookie");
-
     const handleInputChange = e => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -52,7 +50,7 @@ const ResetPassword = () => {
         } else {
             try {
                 setIsLoading(true);
-                await csrf();
+                await http.get("/sanctum/csrf-cookie");
                 await http.post("/reset-password", {
                     token: searchParams.get("token"),
                     email: searchParams.get("email"),
@@ -61,13 +59,11 @@ const ResetPassword = () => {
                 });
                 setIsResetPasswordSuccess(true);
             } catch (error) {
-                console.log(error);
                 setFormError({
                     ...formError,
-                    newPassword:
-                        error?.response?.data?.message ||
-                        error?.message ||
-                        "Something went wrong"
+                    ...(error?.response?.data?.errors || {
+                        confirmPassword: "Something went wrong!"
+                    })
                 });
             } finally {
                 setIsLoading(false);
@@ -142,7 +138,7 @@ const ResetPassword = () => {
 
                             <button
                                 className={`button is-success is-fullwidth ${
-                                    isLoading && "is-loading"
+                                    isLoading ? "is-loading" : ""
                                 }`}
                                 type="submit"
                             >

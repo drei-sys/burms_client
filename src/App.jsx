@@ -14,17 +14,23 @@ import NotFound from "pages/public/NotFound";
 import Layout from "layout/Layout";
 import Dashboard from "pages/private/Dashboard";
 import Profile from "pages/private/Profile/Profile";
+import UpdateProfile from "pages/private/Profile/UpdateProfile";
 
 //admin routes
 import Courses from "pages/private/AdminPages/Courses/Index";
-import Subject from "pages/private/AdminPages/Subjects/Index";
+import CreateCourse from "pages/private/AdminPages/Courses/CreateCourse";
+import UpdateCourse from "pages/private/AdminPages/Courses/UpdateCourse";
+import Subjects from "pages/private/AdminPages/Subjects/Index";
 import CreateSubject from "pages/private/AdminPages/Subjects/CreateSubject";
 import UpdateSubject from "pages/private/AdminPages/Subjects/UpdateSubject";
-import Section from "pages/private/AdminPages/Sections/Index";
+import Sections from "pages/private/AdminPages/Sections/Index";
+import CreateSection from "pages/private/AdminPages/Sections/CreateSection";
+import UpdateSection from "pages/private/AdminPages/Sections/UpdateSection";
 import SchoolYear from "pages/private/AdminPages/SchoolYears/Index";
 import Registrations from "pages/private/AdminPages/Registrations/Index";
+import ViewRegistration from "pages/private/AdminPages/Registrations/ViewRegistrations";
+import ProfileEditApprovals from "pages/private/AdminPages/ProfileEditApprovals/Index";
 import AdminViewEnrollments from "pages/private/AdminPages/Enrollments/Index";
-import EditInfoApproval from "pages/private/AdminPages/EditInfoApproval/Index";
 
 //student routes
 import Enroll from "pages/private/StudentPages/Enroll";
@@ -37,6 +43,9 @@ import RequestTOR from "pages/private/StudentPages/RequestTOR";
 import Browse from "pages/private/TeacherPages/Browse";
 import InputGrade from "pages/private/TeacherPages/InputGrade";
 
+//registrar
+import TORRequests from "pages/private/Registrar/TORRequests";
+
 function App() {
     const publicRoutes = [
         { path: "/login", element: Login },
@@ -45,39 +54,47 @@ function App() {
         { path: "/resetPassword", element: ResetPassword }
     ];
 
+    const adminRoutes = [
+        { path: "/courses", element: Courses },
+        { path: "/createCourse", element: CreateCourse },
+        { path: "/updateCourse/:id", element: UpdateCourse },
+        { path: "/subjects", element: Subjects },
+        { path: "/createSubject", element: CreateSubject },
+        { path: "/updateSubject/:id", element: UpdateSubject },
+        { path: "/sections", element: Sections },
+        { path: "/createSection", element: CreateSection },
+        { path: "/updateSection/:id", element: UpdateSection },
+        { path: "/schoolYears", element: SchoolYear },
+        { path: "/registrations", element: Registrations },
+        { path: "/registration/:id", element: ViewRegistration },
+        { path: "/profileEditApprovals", element: ProfileEditApprovals },
+        { path: "/adminViewEnrollments", element: AdminViewEnrollments }
+    ];
+
+    const studentRoutes = [
+        { path: "/enroll", element: Enroll },
+        { path: "/studentViewEnrollments", element: StudentViewEnrollments },
+        { path: "/gradingSheet", element: GradingSheet },
+        { path: "/requestTOR", element: RequestTOR }
+    ];
+
+    const teacherRoutes = [
+        { path: "/browse", element: Browse },
+        { path: "/inputGrade", element: InputGrade }
+    ];
+
+    const registrarRoutes = [{ path: "/TORRequests", element: TORRequests }];
+
     const privateRoutes = [
         //default routes
         { path: "/dashboard", element: Dashboard },
         { path: "/profile", element: Profile },
+        { path: "/updateProfile", element: UpdateProfile },
 
-        //admin routes
-        { path: "/courses", element: Courses, userType: 1 },
-        { path: "/subjects", element: Subject, userType: 1 },
-        { path: "/createSubject", element: CreateSubject, userType: 1 },
-        { path: "/updateSubject/:id", element: UpdateSubject, userType: 1 },
-        { path: "/sections", element: Section, userType: 1 },
-        { path: "/schoolYears", element: SchoolYear, userType: 1 },
-        { path: "/registrations", element: Registrations, userType: 1 },
-        {
-            path: "/adminViewEnrollments",
-            element: AdminViewEnrollments,
-            userType: 1
-        },
-        { path: "/editInfoApproval", element: EditInfoApproval, userType: 1 },
-
-        //student routes
-        { path: "/enroll", element: Enroll, userType: 3 },
-        {
-            path: "/studentViewEnrollments",
-            element: StudentViewEnrollments,
-            userType: 3
-        },
-        { path: "/gradingSheet", element: GradingSheet, userType: 3 },
-        { path: "/requestTOR", element: RequestTOR, userType: 3 },
-
-        //teacher routes
-        { path: "/browse", element: Browse, userType: 4 },
-        { path: "/inputGrade", element: InputGrade, userType: 4 }
+        ...adminRoutes.map(i => ({ ...i, userType: 1 })),
+        ...studentRoutes.map(i => ({ ...i, userType: 3 })),
+        ...teacherRoutes.map(i => ({ ...i, userType: 4 })),
+        ...registrarRoutes.map(i => ({ ...i, userType: 6 }))
     ];
 
     return (
@@ -130,6 +147,17 @@ function App() {
                         <Route path="/" element={<RoleRoutes userType={4} />}>
                             {privateRoutes
                                 .filter(({ userType }) => userType === 4)
+                                .map(({ path, element: Element }) => (
+                                    <Route
+                                        key={path}
+                                        path={path}
+                                        element={<Element />}
+                                    />
+                                ))}
+                        </Route>
+                        <Route path="/" element={<RoleRoutes userType={6} />}>
+                            {privateRoutes
+                                .filter(({ userType }) => userType === 6)
                                 .map(({ path, element: Element }) => (
                                     <Route
                                         key={path}

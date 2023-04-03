@@ -26,8 +26,8 @@ const ConfirmModal = ({
                         Cancel
                     </button>
                     <button
-                        className={`button is-danger ${
-                            isLoading && "is-loading"
+                        className={`button is-info ${
+                            isLoading ? "is-loading" : ""
                         }`}
                         onClick={onOk}
                     >

@@ -7,8 +7,8 @@ import ConfirmModal from "components/common/ConfirmModal";
 
 import http from "services/httpService";
 
-const Subject = () => {
-    const [refetchSubjectRef, setRefetchSubjectRef] = useState(0);
+const Subjects = () => {
+    const [refetchSubjectsRef, setRefetchSubjectsRef] = useState(0);
     const [subjects, setSubjects] = useState([]);
     const [selectedSubject, setSelectedSubject] = useState(null);
 
@@ -25,7 +25,6 @@ const Subject = () => {
                 const { data } = await http.get("/api/subjects");
                 setSubjects(data);
             } catch (error) {
-                console.log(error);
                 setError(error);
             } finally {
                 setIsContentLoading(false);
@@ -33,7 +32,7 @@ const Subject = () => {
         };
 
         getSubjects();
-    }, [refetchSubjectRef]);
+    }, [refetchSubjectsRef]);
 
     if (isContentLoading) {
         return <Loader />;
@@ -51,14 +50,12 @@ const Subject = () => {
     const handleDelete = async () => {
         try {
             setIsDeleteLoading(true);
-            await http.get("/sanctum/csrf-cookie");
             await http.delete(`/api/subject/${selectedSubject.id}`);
-            setIsOpenConfirmDelete(false);
-            setRefetchSubjectRef(Math.random());
+            setRefetchSubjectsRef(Math.random());
         } catch (error) {
-            setIsOpenConfirmDelete(false);
             alert("An error occured while deleting. Please try again.");
         } finally {
+            setIsOpenConfirmDelete(false);
             setIsDeleteLoading(false);
         }
     };
@@ -80,7 +77,7 @@ const Subject = () => {
                 <div>
                     {subjects.length == 0 ? (
                         <div className="has-text-centered p-5">
-                            No Subject Created
+                            No subjects found.
                         </div>
                     ) : (
                         <table className="table is-fullwidth is-hoverable">
@@ -129,7 +126,7 @@ const Subject = () => {
 
             <ConfirmModal
                 title="Delete Subject"
-                description={`Are you sure do you want to delete ${selectedSubject?.name} subject`}
+                description={`Are you sure do you want to delete ${selectedSubject?.name} subject?`}
                 isOpen={isOpenConfirmDelete}
                 isLoading={isDeleteLoading}
                 onOk={() => {
@@ -143,4 +140,4 @@ const Subject = () => {
     );
 };
 
-export default Subject;
+export default Subjects;

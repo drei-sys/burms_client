@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useSearchParams, Link } from "react-router-dom";
 import http from "services/httpService";
 
 const ChangePassword = () => {
@@ -16,9 +15,6 @@ const ChangePassword = () => {
     });
 
     const [isLoading, setIsLoading] = useState(false);
-    const [changePassErrorMsg, setChangePassErrorMsg] = useState("");
-
-    //const csrf = () => http.get("/sanctum/csrf-cookie");
 
     const handleInputChange = e => {
         const { name, value } = e.target;
@@ -65,11 +61,10 @@ const ChangePassword = () => {
                     newPassword: "",
                     confirmPassword: ""
                 });
-                setChangePassErrorMsg("");
-                //await csrf();
+
                 await http.post("/change-password", {
-                    old_password: oldPassword,
-                    new_password: newPassword
+                    oldPassword,
+                    newPassword
                 });
                 setFormData({
                     oldPassword: "",
@@ -79,12 +74,12 @@ const ChangePassword = () => {
 
                 alert("Password successfully changed!");
             } catch (error) {
-                console.log(error);
-                setChangePassErrorMsg(
-                    error?.message ||
-                        error?.response?.data?.message ||
-                        "Something went wrong"
-                );
+                setFormError({
+                    ...formError,
+                    ...(error?.response?.data?.errors || {
+                        email: "Something went wrong!"
+                    })
+                });
             } finally {
                 setIsLoading(false);
             }
@@ -156,15 +151,9 @@ const ChangePassword = () => {
                 )}
             </div>
 
-            {changePassErrorMsg && (
-                <div className="notification is-danger my-4">
-                    {changePassErrorMsg}
-                </div>
-            )}
-
             <button
                 className={`button is-success is-fullwidth ${
-                    isLoading && "is-loading"
+                    isLoading ? "is-loading" : ""
                 }`}
                 type="submit"
             >
