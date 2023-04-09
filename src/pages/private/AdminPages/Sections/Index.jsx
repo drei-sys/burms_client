@@ -68,8 +68,8 @@ const Sections = () => {
                     <div>{sections.length} total sections</div>
                     <div>
                         <Link to="/createSection">
-                            <button className="button is-primary">
-                                Add section
+                            <button className="button is-success">
+                                Create section
                             </button>
                         </Link>
                     </div>

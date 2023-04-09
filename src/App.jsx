@@ -27,13 +27,17 @@ import Sections from "pages/private/AdminPages/Sections/Index";
 import CreateSection from "pages/private/AdminPages/Sections/CreateSection";
 import UpdateSection from "pages/private/AdminPages/Sections/UpdateSection";
 import SchoolYear from "pages/private/AdminPages/SchoolYears/Index";
+import CreateSchoolYear from "pages/private/AdminPages/SchoolYears/CreateSchoolYear";
+import UpdateSchoolYear from "pages/private/AdminPages/SchoolYears/UpdateSchoolYear";
+import SchoolYearSections from "pages/private/AdminPages/SchoolYears/SchoolYearSections";
+import SchoolYearAddSection from "pages/private/AdminPages/SchoolYears/SchoolYearAddSection";
 import Registrations from "pages/private/AdminPages/Registrations/Index";
 import ViewRegistration from "pages/private/AdminPages/Registrations/ViewRegistrations";
 import ProfileEditApprovals from "pages/private/AdminPages/ProfileEditApprovals/Index";
 import AdminViewEnrollments from "pages/private/AdminPages/Enrollments/Index";
 
 //student routes
-import Enroll from "pages/private/StudentPages/Enroll";
+import Enroll from "pages/private/StudentPages/Enroll/Index";
 import StudentViewEnrollments from "pages/private/StudentPages/Enrollments";
 
 import GradingSheet from "pages/private/StudentPages/GradingSheet";
@@ -65,6 +69,10 @@ function App() {
         { path: "/createSection", element: CreateSection },
         { path: "/updateSection/:id", element: UpdateSection },
         { path: "/schoolYears", element: SchoolYear },
+        { path: "/createSchoolYear", element: CreateSchoolYear },
+        { path: "/updateSchoolYear/:id", element: UpdateSchoolYear },
+        { path: "/schoolYearSection/:id", element: SchoolYearSections },
+        { path: "/schoolYearAddSection/:id", element: SchoolYearAddSection },
         { path: "/registrations", element: Registrations },
         { path: "/registration/:id", element: ViewRegistration },
         { path: "/profileEditApprovals", element: ProfileEditApprovals },

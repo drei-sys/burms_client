@@ -68,8 +68,8 @@ const Courses = () => {
                     <div>{courses.length} total courses</div>
                     <div>
                         <Link to="/createCourse">
-                            <button className="button is-primary">
-                                Add course
+                            <button className="button is-success">
+                                Create course
                             </button>
                         </Link>
                     </div>

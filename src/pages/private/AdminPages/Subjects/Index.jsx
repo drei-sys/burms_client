@@ -68,8 +68,8 @@ const Subjects = () => {
                     <div>{subjects.length} total subjects</div>
                     <div>
                         <Link to="/createSubject">
-                            <button className="button is-primary">
-                                Add subject
+                            <button className="button is-success">
+                                Create subject
                             </button>
                         </Link>
                     </div>
