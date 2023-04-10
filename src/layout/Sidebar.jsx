@@ -18,7 +18,8 @@ const Sidebar = () => {
             path: "/profileEditApprovals",
             group: 3
         },
-        { name: "Enrollments", path: "/adminViewEnrollments", group: 3 }
+        { name: "Enrollments", path: "/adminViewEnrollments", group: 3 },
+        { name: "Blockchain", path: "/blockchain", group: 5 }
     ];
     const studentMenuItems = [
         { name: "Enroll", path: "/enroll" },
@@ -32,13 +33,24 @@ const Sidebar = () => {
     ];
     const registrarMenuItems = [{ name: "TOR Requests", path: "/TORRequests" }];
 
+    const deanMenuItems = [
+        { name: "Approve Grades", path: "/approveGrades" },
+        { name: "Assign Teacher", path: "/assignTeacher" }
+    ];
+
+    const deptChainMenuItems = [
+        { name: "School Year", path: "/deptChairSchoolYears" }
+    ];
+
     const menuItems = [
         //defaul routes
         { name: "Dashboard", path: "/dashboard", userType: undefined },
         { name: "Profile", path: "/profile", userType: undefined },
         ...studentMenuItems.map(i => ({ ...i, userType: 3 })),
         ...teacherMenuItems.map(i => ({ ...i, userType: 4 })),
-        ...registrarMenuItems.map(i => ({ ...i, userType: 6 }))
+        ...registrarMenuItems.map(i => ({ ...i, userType: 6 })),
+        ...deanMenuItems.map(i => ({ ...i, userType: 7 })),
+        ...deptChainMenuItems.map(i => ({ ...i, userType: 8 }))
     ];
 
     const AdminMenuItems = () => {
@@ -109,6 +121,25 @@ const Sidebar = () => {
                             </li>
                         ))}
                 </ul>
+                <p className="menu-label has-text-white">Users</p>
+                <ul className="menu-list">
+                    {adminMenuItems
+                        .filter(({ group }) => group === 5)
+                        .map(({ name, path }) => (
+                            <li key={path}>
+                                <Link
+                                    to={path}
+                                    className={
+                                        path === location.pathname
+                                            ? "is-active"
+                                            : ""
+                                    }
+                                >
+                                    {name}
+                                </Link>
+                            </li>
+                        ))}
+                </ul>
             </>
         );
     };
@@ -117,10 +148,11 @@ const Sidebar = () => {
         <aside
             style={{
                 background: "#21BF73",
-                width: 250,
+                width: 270,
                 height: "100vh",
                 padding: 16,
                 position: "sticky",
+                overflow: "auto",
                 top: 0
             }}
         >

@@ -6,6 +6,8 @@ import Error from "components/common/Error";
 
 import http from "services/httpService";
 
+import { useUserStore } from "store/userStore";
+
 const SchoolYearAddSection = () => {
     const [formData, setFormData] = useState({
         courseId: 0,
@@ -33,6 +35,7 @@ const SchoolYearAddSection = () => {
 
     const params = useParams();
     const navigate = useNavigate();
+    const { type: userType } = useUserStore(state => state);
 
     useEffect(() => {
         const getSchoolYear = async () => {
@@ -148,7 +151,13 @@ const SchoolYearAddSection = () => {
                     status: "active"
                 });
 
-                navigate(`/schoolYearSection/${schoolYear.id}`);
+                navigate(
+                    `/${
+                        userType === 8
+                            ? "deptChairSchoolYearSections"
+                            : "schoolYearSections"
+                    }/${schoolYear.id}`
+                );
             } catch (error) {
                 setFormError({
                     ...formError,
@@ -160,8 +169,6 @@ const SchoolYearAddSection = () => {
                 setIsLoading(false);
             }
         }
-
-        console.log(formData);
     };
 
     return (
@@ -169,9 +176,15 @@ const SchoolYearAddSection = () => {
             <h1 className="is-size-4 mb-5">
                 <button
                     className="button is-ghost"
-                    onClick={() =>
-                        navigate(`/schoolYearSection/${schoolYear.id}`)
-                    }
+                    onClick={() => {
+                        navigate(
+                            `/${
+                                userType === 8
+                                    ? "deptChairSchoolYearSections"
+                                    : "schoolYearSections"
+                            }/${schoolYear.id}`
+                        );
+                    }}
                 >
                     <i className="fa-solid fa-arrow-left"></i>
                 </button>{" "}

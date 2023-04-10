@@ -5,6 +5,8 @@ import Loader from "components/common/Loader";
 import Error from "components/common/Error";
 import ConfirmModal from "components/common/ConfirmModal";
 
+import { useUserStore } from "store/userStore";
+
 import http from "services/httpService";
 
 const SchoolYearSections = () => {
@@ -43,6 +45,7 @@ const SchoolYearSections = () => {
 
     const params = useParams();
     const navigate = useNavigate();
+    const { type: userType } = useUserStore(state => state);
 
     useEffect(() => {
         const getSchoolYear = async () => {
@@ -51,7 +54,6 @@ const SchoolYearSections = () => {
                 const { data } = await http.get(
                     `/api/schoolYearSection/${params.id}`
                 );
-                console.log(data);
 
                 const {
                     schoolYear,
@@ -199,7 +201,15 @@ const SchoolYearSections = () => {
             <h1 className="is-size-4 mb-5">
                 <button
                     className="button is-ghost"
-                    onClick={() => navigate("/schoolYears")}
+                    onClick={() =>
+                        navigate(
+                            `/${
+                                userType === 8
+                                    ? "deptChairSchoolYears"
+                                    : "schoolYears"
+                            }`
+                        )
+                    }
                 >
                     <i className="fa-solid fa-arrow-left"></i>
                 </button>{" "}
@@ -291,7 +301,7 @@ const SchoolYearSections = () => {
                                                                 {schoolYear.status ===
                                                                     "active" && (
                                                                     <button
-                                                                        class="button is-ghost"
+                                                                        className="button is-ghost"
                                                                         onClick={() =>
                                                                             showConfirmDelete(
                                                                                 section_id
@@ -325,7 +335,13 @@ const SchoolYearSections = () => {
 
                         <div>
                             {schoolYear.status !== "locked" && (
-                                <Link to={`/schoolYearAddSection/${params.id}`}>
+                                <Link
+                                    to={`/${
+                                        userType === 8
+                                            ? "deptChairSchoolYearAddSection"
+                                            : "schoolYearAddSection"
+                                    }/${params.id}`}
+                                >
                                     <button className="button is-success">
                                         Add section
                                     </button>

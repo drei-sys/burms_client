@@ -72,7 +72,9 @@ const Registrations = () => {
         3: "Student",
         4: "Teacher",
         5: "Non Teaching",
-        6: "Registrar"
+        6: "Registrar",
+        7: "Dean",
+        8: "Department Chair"
     };
 
     const Table = ({ users }) => {

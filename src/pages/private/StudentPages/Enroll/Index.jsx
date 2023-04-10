@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useUserStore } from "store/userStore";
 
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
+import ConfirmModal from "components/common/ConfirmModal";
 
 import http from "services/httpService";
 
@@ -14,14 +16,21 @@ const Enroll = () => {
     const [subjectsSelection, setSubjectsSelection] = useState([]);
     const [sectionsSelection, setSectionsSelection] = useState([]);
 
-    const [selectedSubjectId, setSelectedSubjectId] = useState(0);
-    const [selectedSectionId, setSelectedSectionId] = useState(0);
+    const [selectedCourse, setSelectedCourse] = useState(null);
+    const [selectedSubject, setSelectedSubject] = useState(null);
+    const [selectedSection, setSelectedSection] = useState(null);
+
+    const [enrollmentItems, setEnrollmentItems] = useState([]);
 
     const [isContentLoading, setIsContentLoading] = useState(true);
     const [isSchoolYearSectionLoading, setIsSchoolYearSectionLoading] =
         useState(true);
     const [error, setError] = useState(null);
 
+    const [isOpenConfirmEnroll, setIsOpenConfirmEnroll] = useState(false);
+    const [isEnrollLoading, setIsEnrollLoading] = useState(false);
+
+    const navigate = useNavigate();
     const { is_verified: userIsVerified } = useUserStore(state => state);
 
     useEffect(() => {
@@ -29,7 +38,9 @@ const Enroll = () => {
             try {
                 setIsContentLoading(true);
                 const { data } = await http.get("/api/schoolYearPublished");
-                setSchoolYear(data);
+                if (data?.year) {
+                    setSchoolYear(data);
+                }
             } catch (error) {
                 console.log(error);
                 setError(error);
@@ -116,6 +127,16 @@ const Enroll = () => {
     }
 
     const handleSYChange = id => {
+        setSchoolYearSections(null);
+
+        setSubjectsSelection([]);
+        setSectionsSelection([]);
+
+        setSelectedCourse(null);
+        setSelectedSubject(null);
+        setSelectedSection(null);
+
+        setEnrollmentItems([]);
         setSchoolYearId(Number(id));
     };
 
@@ -141,13 +162,18 @@ const Enroll = () => {
         );
     }
 
-    const handleSubjectsSelectionChange = subjectId => {
+    const semesters = {
+        1: "1st",
+        2: "2nd"
+    };
+
+    const handleSubjectsSelectionChange = subject => {
         const sectionsSelection = [];
 
         schoolYearSections
             .filter(({ subjects: subjectsString }) => {
                 const subjectIdsParsed = JSON.parse(subjectsString);
-                if (subjectIdsParsed.includes(subjectId)) {
+                if (subjectIdsParsed.includes(subject.id)) {
                     return true;
                 }
 
@@ -161,12 +187,75 @@ const Enroll = () => {
                 });
             });
 
-        setSelectedSubjectId(subjectId);
+        setSelectedSubject(subject);
         setSectionsSelection(sectionsSelection);
+        setSelectedSection(null);
     };
 
-    const handleSectionsSelectionChange = sectionId => {
-        setSelectedSectionId(sectionId);
+    const handleSectionsSelectionChange = (course, section) => {
+        setSelectedCourse(course);
+        setSelectedSection(section);
+    };
+
+    const handleAddToEnrollment = () => {
+        const subjectExist = enrollmentItems.find(
+            ({ subject_id }) => subject_id === selectedSubject.id
+        );
+
+        if (subjectExist) {
+            alert("Your selected subject was already on the enrollment list.");
+        } else {
+            setSelectedCourse(null);
+            setSelectedSection(null);
+            setSelectedSubject(null);
+
+            const enrollmentItem = {
+                sy_id: schoolYear.id,
+                sy_year: schoolYear.year,
+                sy_semester: semesters[schoolYear.semester],
+                course_id: selectedCourse.id,
+                course_name: selectedCourse.name,
+                section_id: selectedSection.id,
+                section_name: selectedSection.name,
+                subject_id: selectedSubject.id,
+                subject_code: selectedSubject.code,
+                subject_name: selectedSubject.name
+            };
+
+            setEnrollmentItems([...enrollmentItems, enrollmentItem]);
+        }
+    };
+
+    const handleDelete = subjectId => {
+        setEnrollmentItems(
+            enrollmentItems.filter(({ subject_id }) => subject_id !== subjectId)
+        );
+    };
+
+    const showConfirmEnroll = () => {
+        if (enrollmentItems.length === 0) {
+            alert("No subjects to be enroll");
+        } else {
+            setIsOpenConfirmEnroll(true);
+        }
+    };
+
+    const handleEnroll = async () => {
+        try {
+            setIsEnrollLoading(true);
+            await http.post("/api/enrollment", {
+                sy_id: schoolYear.id,
+                status: "for_approval",
+                items: enrollmentItems
+            });
+
+            //navigate("/studentViewEnrollments");
+        } catch (error) {
+            console.log(error);
+            //setError(error);
+        } finally {
+            setIsEnrollLoading(false);
+        }
     };
 
     return (
@@ -179,13 +268,14 @@ const Enroll = () => {
                     <div className="control">
                         <div className="select is-fullwidth">
                             <select
-                                name="courseId"
+                                name="syId"
+                                value={schoolYearId}
                                 onChange={e => handleSYChange(e.target.value)}
                             >
                                 <option value={0}></option>
                                 <option value={schoolYear.id}>
-                                    {schoolYear.year}: {schoolYear.semester}{" "}
-                                    Semester
+                                    {schoolYear.year}:{" "}
+                                    {semesters[schoolYear.semester]} Semester
                                 </option>
                             </select>
                         </div>
@@ -207,26 +297,29 @@ const Enroll = () => {
                                         Select Subject
                                     </label>
                                     <div className="control">
-                                        {subjectsSelection.map(
-                                            ({ id, code, name }) => {
-                                                return (
-                                                    <div key={id}>
-                                                        <label className="radio">
-                                                            <input
-                                                                type="radio"
-                                                                name="subject"
-                                                                onChange={() =>
-                                                                    handleSubjectsSelectionChange(
-                                                                        id
-                                                                    )
-                                                                }
-                                                            />{" "}
-                                                            {code}: {name}
-                                                        </label>
-                                                    </div>
-                                                );
-                                            }
-                                        )}
+                                        {subjectsSelection.map(subject => {
+                                            const { id, code, name } = subject;
+                                            return (
+                                                <div key={id}>
+                                                    <label className="radio">
+                                                        <input
+                                                            type="radio"
+                                                            name="subject"
+                                                            checked={
+                                                                id ===
+                                                                selectedSubject?.id
+                                                            }
+                                                            onChange={() =>
+                                                                handleSubjectsSelectionChange(
+                                                                    subject
+                                                                )
+                                                            }
+                                                        />{" "}
+                                                        {code}: {name}
+                                                    </label>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             </div>
@@ -254,9 +347,14 @@ const Enroll = () => {
                                                             <input
                                                                 type="radio"
                                                                 name="section"
+                                                                checked={
+                                                                    id ===
+                                                                    selectedSection?.id
+                                                                }
                                                                 onChange={() =>
                                                                     handleSectionsSelectionChange(
-                                                                        id
+                                                                        course,
+                                                                        section
                                                                     )
                                                                 }
                                                             />{" "}
@@ -272,7 +370,11 @@ const Enroll = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <button className="button is-success">
+                                    <button
+                                        className="button is-success"
+                                        disabled={!selectedSection}
+                                        onClick={handleAddToEnrollment}
+                                    >
                                         Add to enrollment
                                     </button>
                                 </div>
@@ -293,26 +395,75 @@ const Enroll = () => {
                                         <th>Course</th>
                                         <th>Section</th>
                                         <th>Subject</th>
+                                        <th style={{ width: 60 }}></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>2022-2023</td>
-                                        <td>2nd</td>
-                                        <td>BSIT</td>
-                                        <td>1IT-1</td>
-                                        <td>CS101: Computer Programming 1</td>
-                                    </tr>
+                                    {enrollmentItems.map(enrollmentItem => {
+                                        const {
+                                            subject_id,
+                                            sy_year,
+                                            sy_semester,
+                                            course_name,
+                                            section_name,
+                                            subject_code,
+                                            subject_name
+                                        } = enrollmentItem;
+
+                                        return (
+                                            <tr key={subject_id}>
+                                                <td>{sy_year}</td>
+                                                <td>{sy_semester}</td>
+                                                <td>{course_name}</td>
+                                                <td>{section_name}</td>
+                                                <td>
+                                                    {subject_code}:{" "}
+                                                    {subject_name}
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        className="button is-danger"
+                                                        title="Delete"
+                                                        onClick={() =>
+                                                            handleDelete(
+                                                                subject_id
+                                                            )
+                                                        }
+                                                    >
+                                                        <span className="icon">
+                                                            <i className="fa-solid fa-trash"></i>
+                                                        </span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
                                 </tbody>
                             </table>
                             <hr />
-                            <button className="button is-success">
+                            <button
+                                className="button is-success"
+                                onClick={showConfirmEnroll}
+                            >
                                 Enroll
                             </button>
                         </div>
                     </div>
                 </>
             )}
+
+            <ConfirmModal
+                title="Enroll"
+                description={`Are you sure do you want to enroll the following subjects on your list?`}
+                isOpen={isOpenConfirmEnroll}
+                isLoading={isEnrollLoading}
+                onOk={() => {
+                    handleEnroll();
+                }}
+                onClose={() => {
+                    setIsOpenConfirmEnroll(false);
+                }}
+            />
         </>
     );
 };

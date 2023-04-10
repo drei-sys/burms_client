@@ -28,7 +28,6 @@ const SchoolYears = () => {
             try {
                 setIsContentLoading(true);
                 const { data } = await http.get("/api/schoolYears");
-                console.log(data);
                 setSchoolYears(data);
             } catch (error) {
                 console.log(error);
@@ -114,7 +113,7 @@ const SchoolYears = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">School Year</h1>
+            <h1 className="is-size-4 mb-5">School Years</h1>
             <div className="box">
                 <div className="is-flex is-justify-content-space-between mb-4">
                     <div>{schoolYears.length} total school year</div>
@@ -150,7 +149,7 @@ const SchoolYears = () => {
                                             <td>{status}</td>
                                             <td>
                                                 <Link
-                                                    to={`/schoolYearSection/${id}`}
+                                                    to={`/schoolYearSections/${id}`}
                                                 >
                                                     <button
                                                         className="button mr-1"
@@ -163,7 +162,7 @@ const SchoolYears = () => {
                                                 </Link>
                                                 {status !== "locked" && (
                                                     <Link
-                                                        to={`/schoolYearSection/${id}`}
+                                                        to={`/schoolYearSections/${id}`}
                                                     >
                                                         <button
                                                             className="button mr-1"

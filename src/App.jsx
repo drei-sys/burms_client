@@ -35,6 +35,7 @@ import Registrations from "pages/private/AdminPages/Registrations/Index";
 import ViewRegistration from "pages/private/AdminPages/Registrations/ViewRegistrations";
 import ProfileEditApprovals from "pages/private/AdminPages/ProfileEditApprovals/Index";
 import AdminViewEnrollments from "pages/private/AdminPages/Enrollments/Index";
+import BlockChain from "pages/private/AdminPages/BlockChain/Index";
 
 //student routes
 import Enroll from "pages/private/StudentPages/Enroll/Index";
@@ -49,6 +50,13 @@ import InputGrade from "pages/private/TeacherPages/InputGrade";
 
 //registrar
 import TORRequests from "pages/private/Registrar/TORRequests";
+
+//dean routes
+import ApproveGrade from "pages/private/Dean/ApproveGrade";
+import AssignTeacher from "pages/private/Dean/AssignTeacher";
+
+//dept chair routes
+import DeptChairSchoolYear from "pages/private/DeptChairPages/SchoolYear/Index";
 
 function App() {
     const publicRoutes = [
@@ -71,12 +79,13 @@ function App() {
         { path: "/schoolYears", element: SchoolYear },
         { path: "/createSchoolYear", element: CreateSchoolYear },
         { path: "/updateSchoolYear/:id", element: UpdateSchoolYear },
-        { path: "/schoolYearSection/:id", element: SchoolYearSections },
+        { path: "/schoolYearSections/:id", element: SchoolYearSections },
         { path: "/schoolYearAddSection/:id", element: SchoolYearAddSection },
         { path: "/registrations", element: Registrations },
         { path: "/registration/:id", element: ViewRegistration },
         { path: "/profileEditApprovals", element: ProfileEditApprovals },
-        { path: "/adminViewEnrollments", element: AdminViewEnrollments }
+        { path: "/adminViewEnrollments", element: AdminViewEnrollments },
+        { path: "/blockchain", element: BlockChain }
     ];
 
     const studentRoutes = [
@@ -93,6 +102,23 @@ function App() {
 
     const registrarRoutes = [{ path: "/TORRequests", element: TORRequests }];
 
+    const deanRoutes = [
+        { path: "/approveGrades", element: ApproveGrade },
+        { path: "/assignTeacher", element: AssignTeacher }
+    ];
+
+    const deptChairRoutes = [
+        { path: "/deptChairSchoolYears", element: DeptChairSchoolYear },
+        {
+            path: "/deptChairSchoolYearSections/:id",
+            element: SchoolYearSections
+        },
+        {
+            path: "/deptChairSchoolYearAddSection/:id",
+            element: SchoolYearAddSection
+        }
+    ];
+
     const privateRoutes = [
         //default routes
         { path: "/dashboard", element: Dashboard },
@@ -102,7 +128,9 @@ function App() {
         ...adminRoutes.map(i => ({ ...i, userType: 1 })),
         ...studentRoutes.map(i => ({ ...i, userType: 3 })),
         ...teacherRoutes.map(i => ({ ...i, userType: 4 })),
-        ...registrarRoutes.map(i => ({ ...i, userType: 6 }))
+        ...registrarRoutes.map(i => ({ ...i, userType: 6 })),
+        ...deanRoutes.map(i => ({ ...i, userType: 7 })),
+        ...deptChairRoutes.map(i => ({ ...i, userType: 8 }))
     ];
 
     return (
@@ -166,6 +194,28 @@ function App() {
                         <Route path="/" element={<RoleRoutes userType={6} />}>
                             {privateRoutes
                                 .filter(({ userType }) => userType === 6)
+                                .map(({ path, element: Element }) => (
+                                    <Route
+                                        key={path}
+                                        path={path}
+                                        element={<Element />}
+                                    />
+                                ))}
+                        </Route>
+                        <Route path="/" element={<RoleRoutes userType={7} />}>
+                            {privateRoutes
+                                .filter(({ userType }) => userType === 7)
+                                .map(({ path, element: Element }) => (
+                                    <Route
+                                        key={path}
+                                        path={path}
+                                        element={<Element />}
+                                    />
+                                ))}
+                        </Route>
+                        <Route path="/" element={<RoleRoutes userType={8} />}>
+                            {privateRoutes
+                                .filter(({ userType }) => userType === 8)
                                 .map(({ path, element: Element }) => (
                                     <Route
                                         key={path}
