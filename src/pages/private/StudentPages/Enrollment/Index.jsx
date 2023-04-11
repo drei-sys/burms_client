@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
-import ConfirmModal from "components/common/ConfirmModal";
 
 import { useUserStore } from "store/userStore";
 import http from "services/httpService";
