@@ -249,11 +249,16 @@ const Enroll = () => {
                 items: enrollmentItems
             });
 
-            //navigate("/studentViewEnrollments");
+            navigate("/studentViewEnrollments");
         } catch (error) {
+            alert(
+                error?.response?.data?.message ||
+                    error?.message ||
+                    "Something went wrong"
+            );
             console.log(error);
-            //setError(error);
         } finally {
+            setIsOpenConfirmEnroll(false);
             setIsEnrollLoading(false);
         }
     };

@@ -35,11 +35,13 @@ import Registrations from "pages/private/AdminPages/Registrations/Index";
 import ViewRegistration from "pages/private/AdminPages/Registrations/ViewRegistrations";
 import ProfileEditApprovals from "pages/private/AdminPages/ProfileEditApprovals/Index";
 import AdminViewEnrollments from "pages/private/AdminPages/Enrollments/Index";
+import AdminViewEnrollment from "pages/private/AdminPages/Enrollments/ViewEnrollment";
 import BlockChain from "pages/private/AdminPages/BlockChain/Index";
 
 //student routes
 import Enroll from "pages/private/StudentPages/Enroll/Index";
-import StudentViewEnrollments from "pages/private/StudentPages/Enrollments";
+import StudentViewEnrollments from "pages/private/StudentPages/Enrollment/Index";
+import StudentViewEnrollment from "pages/private/StudentPages/Enrollment/ViewEnrollment";
 
 import GradingSheet from "pages/private/StudentPages/GradingSheet";
 import RequestTOR from "pages/private/StudentPages/RequestTOR";
@@ -85,12 +87,14 @@ function App() {
         { path: "/registration/:id", element: ViewRegistration },
         { path: "/profileEditApprovals", element: ProfileEditApprovals },
         { path: "/adminViewEnrollments", element: AdminViewEnrollments },
+        { path: "/adminViewEnrollment/:id", element: AdminViewEnrollment },
         { path: "/blockchain", element: BlockChain }
     ];
 
     const studentRoutes = [
         { path: "/enroll", element: Enroll },
         { path: "/studentViewEnrollments", element: StudentViewEnrollments },
+        { path: "/studentViewEnrollment/:id", element: StudentViewEnrollment },
         { path: "/gradingSheet", element: GradingSheet },
         { path: "/requestTOR", element: RequestTOR }
     ];
