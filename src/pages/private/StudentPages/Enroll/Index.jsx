@@ -126,20 +126,6 @@ const Enroll = () => {
         return <Error error={error} />;
     }
 
-    const handleSYChange = id => {
-        setSchoolYearSections(null);
-
-        setSubjectsSelection([]);
-        setSectionsSelection([]);
-
-        setSelectedCourse(null);
-        setSelectedSubject(null);
-        setSelectedSection(null);
-
-        setEnrollmentItems([]);
-        setSchoolYearId(Number(id));
-    };
-
     if (!userIsVerified) {
         return (
             <>
@@ -165,6 +151,20 @@ const Enroll = () => {
     const semesters = {
         1: "1st",
         2: "2nd"
+    };
+
+    const handleSYChange = id => {
+        setSchoolYearSections(null);
+
+        setSubjectsSelection([]);
+        setSectionsSelection([]);
+
+        setSelectedCourse(null);
+        setSelectedSubject(null);
+        setSelectedSection(null);
+
+        setEnrollmentItems([]);
+        setSchoolYearId(Number(id));
     };
 
     const handleSubjectsSelectionChange = subject => {

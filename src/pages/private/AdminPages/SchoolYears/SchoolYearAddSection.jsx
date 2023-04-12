@@ -16,10 +16,10 @@ const SchoolYearAddSection = () => {
         subjectIds: []
     });
     const [formError, setFormError] = useState({
-        course: "",
-        section: "",
+        courseId: "",
+        sectionId: "",
         slots: "",
-        subjects: ""
+        subjectIds: ""
     });
 
     const [schoolYear, setSchoolYear] = useState(null);
@@ -99,7 +99,7 @@ const SchoolYearAddSection = () => {
         }
 
         setFormData({ ...formData, subjectIds: newCheckedSubjectIds });
-        setFormError({ ...formError, subjects: "" });
+        setFormError({ ...formError, subjectIds: "" });
     };
 
     const handleFormSubmit = async e => {
@@ -109,18 +109,18 @@ const SchoolYearAddSection = () => {
 
         let hasError = false;
         const formError = {
-            course: "",
-            section: "",
+            courseId: "",
+            sectionId: "",
             slots: "",
-            subjects: ""
+            subjectIds: ""
         };
 
         if (courseId === "") {
-            formError.course = "Course is required";
+            formError.courseId = "Course is required";
             hasError = true;
         }
         if (sectionId === "") {
-            formError.section = "Section is required";
+            formError.sectionId = "Section is required";
             hasError = true;
         }
         if (slots === "" || slots <= 0) {
@@ -128,7 +128,7 @@ const SchoolYearAddSection = () => {
             hasError = true;
         }
         if (subjectIds.length === 0) {
-            formError.subjects = "Subjects is required";
+            formError.subjectIds = "Subjects is required";
             hasError = true;
         }
 
@@ -137,10 +137,10 @@ const SchoolYearAddSection = () => {
         } else {
             try {
                 setFormError({
-                    course: "",
-                    section: "",
+                    courseId: "",
+                    sectionId: "",
                     slots: "",
-                    subjects: ""
+                    subjectIds: ""
                 });
 
                 setIsLoading(true);
@@ -242,10 +242,10 @@ const SchoolYearAddSection = () => {
                                             </select>
                                         </div>
                                     </div>
-                                    {formError.course && (
+                                    {formError.courseId && (
                                         <div>
                                             <span className="has-text-danger">
-                                                {formError.course}
+                                                {formError.courseId}
                                             </span>
                                         </div>
                                     )}
@@ -272,10 +272,10 @@ const SchoolYearAddSection = () => {
                                                 )}
                                             </select>
                                         </div>
-                                        {formError.section && (
+                                        {formError.sectionId && (
                                             <div>
                                                 <span className="has-text-danger">
-                                                    {formError.section}
+                                                    {formError.sectionId}
                                                 </span>
                                             </div>
                                         )}
@@ -322,14 +322,16 @@ const SchoolYearAddSection = () => {
                                             </div>
                                         ))}
                                     </div>
-                                    {formError.subjects && (
+                                    {formError.subjectIds && (
                                         <div>
                                             <span className="has-text-danger">
-                                                {formError.subjects}
+                                                {formError.subjectIds}
                                             </span>
                                         </div>
                                     )}
                                 </div>
+
+                                <hr />
 
                                 <button
                                     className={`button is-success  ${

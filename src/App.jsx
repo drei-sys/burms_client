@@ -26,6 +26,10 @@ import UpdateSubject from "pages/private/AdminPages/Subjects/UpdateSubject";
 import Sections from "pages/private/AdminPages/Sections/Index";
 import CreateSection from "pages/private/AdminPages/Sections/CreateSection";
 import UpdateSection from "pages/private/AdminPages/Sections/UpdateSection";
+import AssignedTeachers from "pages/private/AdminPages/AssignedTeachers/Index";
+import AssignTeacher from "pages/private/AdminPages/AssignedTeachers/AssignTeacher";
+import UpdateAssignedTeacher from "pages/private/AdminPages/AssignedTeachers/UpdateAssignedTeacher";
+import ViewAssignedTeacher from "pages/private/AdminPages/AssignedTeachers/ViewAssignedTeacher";
 import SchoolYear from "pages/private/AdminPages/SchoolYears/Index";
 import CreateSchoolYear from "pages/private/AdminPages/SchoolYears/CreateSchoolYear";
 import UpdateSchoolYear from "pages/private/AdminPages/SchoolYears/UpdateSchoolYear";
@@ -55,7 +59,7 @@ import TORRequests from "pages/private/Registrar/TORRequests";
 
 //dean routes
 import ApproveGrade from "pages/private/Dean/ApproveGrade";
-import AssignTeacher from "pages/private/Dean/AssignTeacher";
+//import AssignTeacher from "pages/private/Dean/AssignTeacher";
 
 //dept chair routes
 import DeptChairSchoolYear from "pages/private/DeptChairPages/SchoolYear/Index";
@@ -78,6 +82,10 @@ function App() {
         { path: "/sections", element: Sections },
         { path: "/createSection", element: CreateSection },
         { path: "/updateSection/:id", element: UpdateSection },
+        { path: "/assignedTeachers", element: AssignedTeachers },
+        { path: "/assignTeacher", element: AssignTeacher },
+        { path: "/updateAssignedTeacher/:id", element: UpdateAssignedTeacher },
+        { path: "/assignedTeacher/:id", element: ViewAssignedTeacher },
         { path: "/schoolYears", element: SchoolYear },
         { path: "/createSchoolYear", element: CreateSchoolYear },
         { path: "/updateSchoolYear/:id", element: UpdateSchoolYear },

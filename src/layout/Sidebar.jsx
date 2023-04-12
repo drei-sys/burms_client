@@ -12,6 +12,7 @@ const Sidebar = () => {
         { name: "Subjects", path: "/subjects", group: 2 },
         { name: "Sections", path: "/sections", group: 2 },
         { name: "School Years", path: "/schoolYears", group: 2 },
+        { name: "Assigned Teachers", path: "/assignedTeachers", group: 2 },
         { name: "Registrations", path: "/registrations", group: 3 },
         {
             name: "Profile Edit Approvals",
