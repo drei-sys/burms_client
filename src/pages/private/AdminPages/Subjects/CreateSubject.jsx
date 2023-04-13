@@ -6,11 +6,13 @@ import http from "services/httpService";
 const CreateSubject = () => {
     const [formData, setFormData] = useState({
         code: "",
-        name: ""
+        name: "",
+        unit: 0
     });
     const [formError, setFormError] = useState({
         code: "",
-        name: ""
+        name: "",
+        unit: ""
     });
 
     const [isLoading, setIsLoading] = useState(false);
@@ -26,12 +28,13 @@ const CreateSubject = () => {
     const handleFormSubmit = async e => {
         e.preventDefault();
 
-        const { code, name } = formData;
+        const { code, name, unit } = formData;
 
         let hasError = false;
         const formError = {
             code: "",
-            name: ""
+            name: "",
+            unit: ""
         };
 
         if (code.trim() === "") {
@@ -42,6 +45,10 @@ const CreateSubject = () => {
             formError.name = "Subject name is required";
             hasError = true;
         }
+        if (unit === "" || unit <= 0) {
+            formError.unit = "Unit is required and must be greater that zero";
+            hasError = true;
+        }
 
         if (hasError) {
             setFormError(formError);
@@ -49,13 +56,15 @@ const CreateSubject = () => {
             try {
                 setFormError({
                     code: "",
-                    name: ""
+                    name: "",
+                    unit: ""
                 });
 
                 setIsLoading(true);
                 await http.post("/api/subject", {
                     code,
                     name,
+                    unit,
                     status: "active"
                 });
 
@@ -125,6 +134,26 @@ const CreateSubject = () => {
                                     <div>
                                         <span className="has-text-danger">
                                             {formError.name}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="field">
+                                <label className="label">Unit</label>
+                                <div className="control">
+                                    <input
+                                        name="unit"
+                                        className="input"
+                                        type="number"
+                                        value={formData.unit}
+                                        onChange={handleInputChange}
+                                    />
+                                </div>
+                                {formError.unit && (
+                                    <div>
+                                        <span className="has-text-danger">
+                                            {formError.unit}
                                         </span>
                                     </div>
                                 )}

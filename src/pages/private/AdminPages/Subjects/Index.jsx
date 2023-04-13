@@ -85,14 +85,16 @@ const Subjects = () => {
                                 <tr>
                                     <th>Subject code</th>
                                     <th>Subject name</th>
+                                    <th>Unit</th>
                                     <th style={{ width: 120 }}></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {subjects.map(({ id, code, name }) => (
+                                {subjects.map(({ id, code, name, unit }) => (
                                     <tr key={id}>
                                         <td>{code}</td>
                                         <td>{name}</td>
+                                        <td>{unit}</td>
                                         <td>
                                             <Link to={`/updateSubject/${id}`}>
                                                 <button
