@@ -26,10 +26,12 @@ import UpdateSubject from "pages/private/AdminPages/Subjects/UpdateSubject";
 import Sections from "pages/private/AdminPages/Sections/Index";
 import CreateSection from "pages/private/AdminPages/Sections/CreateSection";
 import UpdateSection from "pages/private/AdminPages/Sections/UpdateSection";
-import AssignedTeachers from "pages/private/AdminPages/AssignedTeachers/Index";
-import AssignTeacher from "pages/private/AdminPages/AssignedTeachers/AssignTeacher";
-import UpdateAssignedTeacher from "pages/private/AdminPages/AssignedTeachers/UpdateAssignedTeacher";
-import ViewAssignedTeacher from "pages/private/AdminPages/AssignedTeachers/ViewAssignedTeacher";
+
+import TeacherSubjects from "pages/private/AdminPages/TeacherSubjects/Index";
+import CreateTeacherSubject from "pages/private/AdminPages/TeacherSubjects/CreateTeacherSubject";
+import UpdateTeacherSubject from "pages/private/AdminPages/TeacherSubjects/UpdateTeacherSubject";
+import ViewTeacherSubject from "pages/private/AdminPages/TeacherSubjects/ViewTeacherSubject";
+
 import SchoolYear from "pages/private/AdminPages/SchoolYears/Index";
 import CreateSchoolYear from "pages/private/AdminPages/SchoolYears/CreateSchoolYear";
 import UpdateSchoolYear from "pages/private/AdminPages/SchoolYears/UpdateSchoolYear";
@@ -38,8 +40,8 @@ import SchoolYearAddSection from "pages/private/AdminPages/SchoolYears/SchoolYea
 import Registrations from "pages/private/AdminPages/Registrations/Index";
 import ViewRegistration from "pages/private/AdminPages/Registrations/ViewRegistrations";
 import ProfileEditApprovals from "pages/private/AdminPages/ProfileEditApprovals/Index";
-import AdminViewEnrollments from "pages/private/AdminPages/Enrollments/Index";
-import AdminViewEnrollment from "pages/private/AdminPages/Enrollments/ViewEnrollment";
+import ViewEnrollments from "pages/private/AdminPages/Enrollments/Index";
+import ViewEnrollment from "pages/private/AdminPages/Enrollments/ViewEnrollment";
 import BlockChain from "pages/private/AdminPages/BlockChain/Index";
 
 //student routes
@@ -82,10 +84,10 @@ function App() {
         { path: "/sections", element: Sections },
         { path: "/createSection", element: CreateSection },
         { path: "/updateSection/:id", element: UpdateSection },
-        { path: "/assignedTeachers", element: AssignedTeachers },
-        { path: "/assignTeacher", element: AssignTeacher },
-        { path: "/updateAssignedTeacher/:id", element: UpdateAssignedTeacher },
-        { path: "/assignedTeacher/:id", element: ViewAssignedTeacher },
+        { path: "/teacherSubjects", element: TeacherSubjects },
+        { path: "/teacherSubject/:id", element: ViewTeacherSubject },
+        { path: "/createTeacherSubject", element: CreateTeacherSubject },
+        { path: "/updateTeacherSubject/:id", element: UpdateTeacherSubject },
         { path: "/schoolYears", element: SchoolYear },
         { path: "/createSchoolYear", element: CreateSchoolYear },
         { path: "/updateSchoolYear/:id", element: UpdateSchoolYear },
@@ -94,8 +96,8 @@ function App() {
         { path: "/registrations", element: Registrations },
         { path: "/registration/:id", element: ViewRegistration },
         { path: "/profileEditApprovals", element: ProfileEditApprovals },
-        { path: "/adminViewEnrollments", element: AdminViewEnrollments },
-        { path: "/adminViewEnrollment/:id", element: AdminViewEnrollment },
+        { path: "/viewEnrollments", element: ViewEnrollments },
+        { path: "/viewEnrollment/:id", element: ViewEnrollment },
         { path: "/blockchain", element: BlockChain }
     ];
 
@@ -115,11 +117,14 @@ function App() {
     const registrarRoutes = [{ path: "/TORRequests", element: TORRequests }];
 
     const deanRoutes = [
-        { path: "/approveGrades", element: ApproveGrade },
-        { path: "/assignTeacher", element: AssignTeacher }
+        { path: "/approveGrades", element: ApproveGrade }
+        //{ path: "/assignTeacher", element: AssignTeacher }
     ];
 
     const deptChairRoutes = [
+        { path: "/deptChairSections", element: Sections },
+        { path: "/deptChairCreateSection", element: CreateSection },
+        { path: "/deptChairUpdateSection/:id", element: UpdateSection },
         { path: "/deptChairSchoolYears", element: DeptChairSchoolYear },
         {
             path: "/deptChairSchoolYearSections/:id",

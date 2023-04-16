@@ -63,7 +63,7 @@ const ViewRegistration = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">
+            <h1 className="is-size-4 mb-4">
                 <button
                     className="button is-ghost"
                     onClick={() => navigate("/registrations")}

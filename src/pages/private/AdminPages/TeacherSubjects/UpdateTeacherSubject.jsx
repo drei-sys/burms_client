@@ -6,7 +6,7 @@ import Error from "components/common/Error";
 
 import http from "services/httpService";
 
-const UpdateAssignedTeacher = () => {
+const UpdateTeacherSubjects = () => {
     const [formData, setFormData] = useState({
         syId: 0,
         teacherId: 0,
@@ -23,7 +23,7 @@ const UpdateAssignedTeacher = () => {
     const [teachers, setTeachers] = useState([]);
     const [subjects, setSubjects] = useState([]);
 
-    const [assignedTeacher, setAssignedTeacher] = useState(null);
+    const [teacherSubject, setTeacherSubject] = useState(null);
 
     const [isContentLoading, setIsContentLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -38,27 +38,27 @@ const UpdateAssignedTeacher = () => {
         const getSchoolYears = async () => {
             try {
                 setIsContentLoading(true);
-                const { data } = await http.get("/api/assignTeacherFormData");
+                const { data } = await http.get("/api/teacherSubjectFormData");
                 const { schoolYears, teachers, subjects } = data;
 
                 const { data: data2 } = await http.get(
-                    `/api/assignedTeacher/${params.id}`
+                    `/api/teacherSubject/${params.id}`
                 );
 
-                const { assignedTeacher, assignedTeacherItems } = data2;
+                const { teacherSubject, teacherSubjectItems } = data2;
 
-                if (assignedTeacher) {
+                if (teacherSubject) {
                     setSchoolYears(schoolYears);
                     setTeachers(teachers);
                     setSubjects(subjects);
 
                     setFormData({
-                        syId: assignedTeacher.sy_id,
-                        teacherId: assignedTeacher.teacher_id,
-                        subjectIds: assignedTeacherItems.map(({ id }) => id)
+                        syId: teacherSubject.sy_id,
+                        teacherId: teacherSubject.teacher_id,
+                        subjectIds: teacherSubjectItems.map(({ id }) => id)
                     });
 
-                    setAssignedTeacher(assignedTeacher);
+                    setTeacherSubject(teacherSubject);
                 } else {
                     setIsNotExist(true);
                 }
@@ -144,13 +144,13 @@ const UpdateAssignedTeacher = () => {
                 });
 
                 setIsLoading(true);
-                await http.put(`/api/assignedTeacher/${params.id}`, {
+                await http.put(`/api/teacherSubject/${params.id}`, {
                     ...formData,
                     totalSubjects: formData.subjectIds.length,
-                    status: "active"
+                    status: "Active"
                 });
 
-                navigate("/assignedTeachers");
+                navigate("/teacherSubjects");
             } catch (error) {
                 setFormError({
                     ...formError,
@@ -164,18 +164,13 @@ const UpdateAssignedTeacher = () => {
         }
     };
 
-    const semesters = {
-        1: "1st",
-        2: "2nd"
-    };
-
     return (
         <>
-            <h1 className="is-size-4 mb-5">
+            <h1 className="is-size-4 mb-4">
                 <button
                     className="button is-ghost"
                     onClick={() => {
-                        navigate(`/assignedTeachers`);
+                        navigate(`/teacherSubjects`);
                     }}
                 >
                     <i className="fa-solid fa-arrow-left"></i>
@@ -185,7 +180,7 @@ const UpdateAssignedTeacher = () => {
             <div className="box mb-4">
                 <form onSubmit={handleFormSubmit}>
                     <div className="field">
-                        <label className="label">Select SY</label>
+                        <label className="label">Select school year</label>
                         <div className="control">
                             <div className="select is-fullwidth">
                                 <select
@@ -198,8 +193,7 @@ const UpdateAssignedTeacher = () => {
                                     {schoolYears.map(
                                         ({ id, year, semester }) => (
                                             <option key={id} value={id}>
-                                                {year}: {semesters[semester]}{" "}
-                                                Semester
+                                                {year}: {semester} Semester
                                             </option>
                                         )
                                     )}
@@ -271,14 +265,14 @@ const UpdateAssignedTeacher = () => {
                         )}
                     </div>
                     <hr />
-                    {assignedTeacher?.status === "active" && (
+                    {teacherSubject?.status === "Active" && (
                         <button
                             className={`button is-success  ${
                                 isLoading ? "is-loading" : ""
                             }`}
                             type="submit"
                         >
-                            Update
+                            Update teacher subjects
                         </button>
                     )}
                 </form>
@@ -287,4 +281,4 @@ const UpdateAssignedTeacher = () => {
     );
 };
 
-export default UpdateAssignedTeacher;
+export default UpdateTeacherSubjects;

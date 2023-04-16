@@ -6,7 +6,7 @@ import Error from "components/common/Error";
 
 import http from "services/httpService";
 
-const AssignTeacher = () => {
+const CreateTeacherSubjects = () => {
     const [formData, setFormData] = useState({
         syId: 0,
         teacherId: 0,
@@ -33,7 +33,7 @@ const AssignTeacher = () => {
         const getSchoolYears = async () => {
             try {
                 setIsContentLoading(true);
-                const { data } = await http.get("/api/assignTeacherFormData");
+                const { data } = await http.get("/api/teacherSubjectFormData");
                 const { schoolYears, teachers, subjects } = data;
 
                 setSchoolYears(schoolYears);
@@ -115,13 +115,13 @@ const AssignTeacher = () => {
                 });
 
                 setIsLoading(true);
-                await http.post("/api/assignTeacher", {
+                await http.post("/api/teacherSubject", {
                     ...formData,
                     totalSubjects: formData.subjectIds.length,
-                    status: "active"
+                    status: "Active"
                 });
 
-                navigate("/assignedTeachers");
+                navigate("/teacherSubjects");
             } catch (error) {
                 setFormError({
                     ...formError,
@@ -135,28 +135,23 @@ const AssignTeacher = () => {
         }
     };
 
-    const semesters = {
-        1: "1st",
-        2: "2nd"
-    };
-
     return (
         <>
-            <h1 className="is-size-4 mb-5">
+            <h1 className="is-size-4 mb-4">
                 <button
                     className="button is-ghost"
                     onClick={() => {
-                        navigate(`/assignedTeachers`);
+                        navigate(`/teacherSubjects`);
                     }}
                 >
                     <i className="fa-solid fa-arrow-left"></i>
                 </button>{" "}
-                Assign Teacher
+                Create Teacher Subject
             </h1>
             <div className="box mb-4">
                 <form onSubmit={handleFormSubmit}>
                     <div className="field">
-                        <label className="label">Select SY</label>
+                        <label className="label">Select school year</label>
                         <div className="control">
                             <div className="select is-fullwidth">
                                 <select
@@ -168,8 +163,7 @@ const AssignTeacher = () => {
                                     {schoolYears.map(
                                         ({ id, year, semester }) => (
                                             <option key={id} value={id}>
-                                                {year}: {semesters[semester]}{" "}
-                                                Semester
+                                                {year}: {semester} Semester
                                             </option>
                                         )
                                     )}
@@ -254,4 +248,4 @@ const AssignTeacher = () => {
     );
 };
 
-export default AssignTeacher;
+export default CreateTeacherSubjects;

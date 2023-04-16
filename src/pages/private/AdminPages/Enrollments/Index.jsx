@@ -118,7 +118,7 @@ const Enrollments = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">Enrollments</h1>
+            <h1 className="is-size-4 mb-4">Enrollments</h1>
             <div className="box">
                 <div className="tabs">
                     <ul>

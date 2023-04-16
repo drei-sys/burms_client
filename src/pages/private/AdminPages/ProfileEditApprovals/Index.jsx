@@ -74,7 +74,7 @@ const ProfileEditApprovals = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">Profile Edit Approvals</h1>
+            <h1 className="is-size-4 mb-4">Profile Edit Approvals</h1>
             <div className="box">
                 {users.length === 0 ? (
                     <div className="has-text-centered">

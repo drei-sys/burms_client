@@ -6,7 +6,7 @@ const InputGrade = () => {
     if (!userIsVerified) {
         return (
             <>
-                <h1 className="is-size-4 mb-5">Input Grade</h1>
+                <h1 className="is-size-4 mb-4">Input Grade</h1>
                 <div className="notification is-warning my-4">
                     Your account is pending for admin verification.
                 </div>
@@ -16,7 +16,7 @@ const InputGrade = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">Input Grade</h1>
+            <h1 className="is-size-4 mb-4">Input Grade</h1>
         </>
     );
 };

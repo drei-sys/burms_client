@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useUserStore } from "store/userStore";
+
 import http from "services/httpService";
 
 const CreateSection = () => {
@@ -14,6 +16,7 @@ const CreateSection = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
+    const { type: userType } = useUserStore(state => state);
 
     const handleInputChange = e => {
         let { name, value } = e.target;
@@ -47,10 +50,10 @@ const CreateSection = () => {
                 setIsLoading(true);
                 await http.post("/api/section", {
                     name,
-                    status: "active"
+                    status: "Active"
                 });
 
-                navigate("/sections");
+                navigate(userType === 8 ? "/deptChairSections" : "/sections");
             } catch (error) {
                 setFormError({
                     ...formError,
@@ -66,10 +69,14 @@ const CreateSection = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">
+            <h1 className="is-size-4 mb-4">
                 <button
                     className="button is-ghost"
-                    onClick={() => navigate("/sections")}
+                    onClick={() =>
+                        navigate(
+                            userType === 8 ? "/deptChairSections" : "/sections"
+                        )
+                    }
                 >
                     <i className="fa-solid fa-arrow-left"></i>
                 </button>{" "}

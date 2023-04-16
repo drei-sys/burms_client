@@ -6,9 +6,9 @@ import Error from "components/common/Error";
 
 import http from "services/httpService";
 
-const ViewAssignedTeacher = () => {
-    const [assignedTeacher, setAssignedTeacher] = useState(null);
-    const [assignedTeacherItems, setAssignedTeacherItems] = useState([]);
+const ViewTeacherSubject = () => {
+    const [teacherSubject, setTeacherSubject] = useState(null);
+    const [teacherSubjectItems, setTeacherSubjectItems] = useState([]);
 
     const [isContentLoading, setIsContentLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -22,12 +22,12 @@ const ViewAssignedTeacher = () => {
             try {
                 setIsContentLoading(true);
                 const { data } = await http.get(
-                    `/api/assignedTeacher/${params.id}`
+                    `/api/teacherSubject/${params.id}`
                 );
-                const { assignedTeacher, assignedTeacherItems } = data;
-                if (assignedTeacher) {
-                    setAssignedTeacher(assignedTeacher);
-                    setAssignedTeacherItems(assignedTeacherItems);
+                const { teacherSubject, teacherSubjectItems } = data;
+                if (teacherSubject) {
+                    setTeacherSubject(teacherSubject);
+                    setTeacherSubjectItems(teacherSubjectItems);
                 } else {
                     setIsNotExist(true);
                 }
@@ -53,49 +53,43 @@ const ViewAssignedTeacher = () => {
         return <div className="has-text-centered mt-6">Teacher not found.</div>;
     }
 
-    const semesters = {
-        1: "1st",
-        2: "2nd"
-    };
-
     return (
         <>
-            <h1 className="is-size-4 mb-5">
+            <h1 className="is-size-4 mb-4">
                 <button
                     className="button is-ghost"
                     onClick={() => {
-                        navigate(`/assignedTeachers`);
+                        navigate(`/teacherSubjects`);
                     }}
                 >
                     <i className="fa-solid fa-arrow-left"></i>
                 </button>{" "}
-                View Assigned Teacher
+                Teacher Subject
             </h1>
 
             <div className="columns">
                 <div className="column is-4">
                     <div className="box">
+                        <label className="label">School year details</label>
                         <table className="table " style={{ width: "100%" }}>
                             <tbody>
                                 <tr>
                                     <td style={{ width: "50%" }}>
                                         <span className="">Year:</span>
                                     </td>
-                                    <td>{assignedTeacher.year}</td>
+                                    <td>{teacherSubject.year}</td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <span className="">Semester:</span>
                                     </td>
-                                    <td>
-                                        {semesters[assignedTeacher.semester]}
-                                    </td>
+                                    <td>{teacherSubject.semester}</td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <span className="">Status:</span>
                                     </td>
-                                    <td>{assignedTeacher.sy_status}</td>
+                                    <td>{teacherSubject.sy_status}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -104,16 +98,16 @@ const ViewAssignedTeacher = () => {
                 <div className="column is-8">
                     <div className="box mb-4">
                         <div>
-                            <label className="label">Teacher name:</label>{" "}
+                            <label className="label">Teacher name:</label>
                         </div>
-                        <div>{assignedTeacher.teacher_name}</div>
+                        <div>{teacherSubject.teacher_name}</div>
                     </div>
                     <div className="box">
                         <div>
-                            <label className="label">Subjects:</label>{" "}
+                            <label className="label">Subjects:</label>
                         </div>
                         <div>
-                            {assignedTeacherItems.map(({ id, code, name }) => (
+                            {teacherSubjectItems.map(({ id, code, name }) => (
                                 <div key={id}>
                                     - {code}: {name}
                                 </div>
@@ -156,4 +150,4 @@ const ViewAssignedTeacher = () => {
     );
 };
 
-export default ViewAssignedTeacher;
+export default ViewTeacherSubject;

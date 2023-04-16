@@ -7,12 +7,14 @@ const CreateSubject = () => {
     const [formData, setFormData] = useState({
         code: "",
         name: "",
-        unit: 0
+        unit: 0,
+        type: "Minor"
     });
     const [formError, setFormError] = useState({
         code: "",
         name: "",
-        unit: ""
+        unit: "",
+        type: ""
     });
 
     const [isLoading, setIsLoading] = useState(false);
@@ -28,13 +30,14 @@ const CreateSubject = () => {
     const handleFormSubmit = async e => {
         e.preventDefault();
 
-        const { code, name, unit } = formData;
+        const { code, name, unit, type } = formData;
 
         let hasError = false;
         const formError = {
             code: "",
             name: "",
-            unit: ""
+            unit: "",
+            type: ""
         };
 
         if (code.trim() === "") {
@@ -49,6 +52,10 @@ const CreateSubject = () => {
             formError.unit = "Unit is required and must be greater that zero";
             hasError = true;
         }
+        if (type === "") {
+            formError.type = "Subject type is required";
+            hasError = true;
+        }
 
         if (hasError) {
             setFormError(formError);
@@ -57,7 +64,8 @@ const CreateSubject = () => {
                 setFormError({
                     code: "",
                     name: "",
-                    unit: ""
+                    unit: "",
+                    type: ""
                 });
 
                 setIsLoading(true);
@@ -65,7 +73,8 @@ const CreateSubject = () => {
                     code,
                     name,
                     unit,
-                    status: "active"
+                    type,
+                    status: "Active"
                 });
 
                 navigate("/subjects");
@@ -84,7 +93,7 @@ const CreateSubject = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">
+            <h1 className="is-size-4 mb-4">
                 <button
                     className="button is-ghost"
                     onClick={() => navigate("/subjects")}
@@ -154,6 +163,29 @@ const CreateSubject = () => {
                                     <div>
                                         <span className="has-text-danger">
                                             {formError.unit}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="field">
+                                <label className="label">Type</label>
+                                <div className="control">
+                                    <div className="select is-fullwidth">
+                                        <select
+                                            name="type"
+                                            value={formData.type}
+                                            onChange={handleInputChange}
+                                        >
+                                            <option value="Minor">Minor</option>
+                                            <option value="Major">Major</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                {formError.type && (
+                                    <div>
+                                        <span className="has-text-danger">
+                                            {formError.type}
                                         </span>
                                     </div>
                                 )}

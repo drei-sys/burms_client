@@ -148,7 +148,7 @@ const SchoolYearAddSection = () => {
                     syId: schoolYear.id,
                     ...formData,
                     subjectIds: JSON.stringify(formData.subjectIds),
-                    status: "active"
+                    status: "Active"
                 });
 
                 navigate(
@@ -173,7 +173,7 @@ const SchoolYearAddSection = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">
+            <h1 className="is-size-4 mb-4">
                 <button
                     className="button is-ghost"
                     onClick={() => {
@@ -193,6 +193,7 @@ const SchoolYearAddSection = () => {
             <div className="columns">
                 <div className="column is-4">
                     <div className="box">
+                        <label className="label">School year details</label>
                         <table className="table " style={{ width: "100%" }}>
                             <tbody>
                                 <tr>
@@ -220,7 +221,7 @@ const SchoolYearAddSection = () => {
                 <div className="column is-8">
                     <div className="box">
                         {schoolYear.status === "locked" ? (
-                            <div className="has-text-centered p-5">
+                            <div className="has-text-centered p-4">
                                 This school year has been locked.
                             </div>
                         ) : (

@@ -6,7 +6,7 @@ import http from "services/httpService";
 const CreateSchoolYear = () => {
     const [formData, setFormData] = useState({
         year: "",
-        semester: 1
+        semester: "1st"
     });
     const [formError, setFormError] = useState({
         year: "",
@@ -52,7 +52,7 @@ const CreateSchoolYear = () => {
                 await http.post("/api/schoolYear", {
                     year,
                     semester,
-                    status: "active"
+                    status: "Active"
                 });
 
                 navigate("/schoolYears");
@@ -71,7 +71,7 @@ const CreateSchoolYear = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">
+            <h1 className="is-size-4 mb-4">
                 <button
                     className="button is-ghost"
                     onClick={() => navigate("/schoolYears")}
@@ -114,8 +114,8 @@ const CreateSchoolYear = () => {
                                             value={formData.semester}
                                             onChange={handleInputChange}
                                         >
-                                            <option value={1}>1st</option>
-                                            <option value={2}>2nd</option>
+                                            <option value="1st">1st</option>
+                                            <option value="2nd">2nd</option>
                                         </select>
                                     </div>
                                 </div>

@@ -148,7 +148,7 @@ const Registrations = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">Registrations</h1>
+            <h1 className="is-size-4 mb-4">Registrations</h1>
             <div className="box">
                 <div className="tabs">
                     <ul>

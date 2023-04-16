@@ -6,7 +6,7 @@ const RequestTOR = () => {
     if (!userIsVerified) {
         return (
             <>
-                <h1 className="is-size-4 mb-5">Request TOR</h1>
+                <h1 className="is-size-4 mb-4">Request TOR</h1>
                 <div className="notification is-warning my-4">
                     Your account is pending for admin verification.
                 </div>
@@ -16,7 +16,7 @@ const RequestTOR = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">Request TOR</h1>
+            <h1 className="is-size-4 mb-4">Request TOR</h1>
         </>
     );
 };

@@ -115,7 +115,7 @@ const UpdateSchoolYear = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">
+            <h1 className="is-size-4 mb-4">
                 <button
                     className="button is-ghost"
                     onClick={() => navigate("/schoolYears")}
@@ -158,8 +158,8 @@ const UpdateSchoolYear = () => {
                                             value={formData.semester}
                                             onChange={handleInputChange}
                                         >
-                                            <option value={1}>1st</option>
-                                            <option value={2}>2nd</option>
+                                            <option value="1st">1st</option>
+                                            <option value="2nd">2nd</option>
                                         </select>
                                     </div>
                                 </div>

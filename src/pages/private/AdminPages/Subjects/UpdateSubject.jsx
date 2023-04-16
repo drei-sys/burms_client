@@ -12,12 +12,14 @@ const UpdateSubject = () => {
     const [formData, setFormData] = useState({
         code: "",
         name: "",
-        unit: 0
+        unit: 0,
+        type: ""
     });
     const [formError, setFormError] = useState({
         code: "",
         name: "",
-        unit: ""
+        unit: "",
+        type: ""
     });
 
     const [isContentLoading, setIsContentLoading] = useState(true);
@@ -39,7 +41,8 @@ const UpdateSubject = () => {
                     setFormData({
                         code: data.code,
                         name: data.name,
-                        unit: data.unit
+                        unit: data.unit,
+                        type: data.type
                     });
                 } else {
                     setIsNotExist(true);
@@ -75,13 +78,14 @@ const UpdateSubject = () => {
     const handleFormSubmit = async e => {
         e.preventDefault();
 
-        const { code, name, unit } = formData;
+        const { code, name, unit, type } = formData;
 
         let hasError = false;
         const formError = {
             code: "",
             name: "",
-            unit: ""
+            unit: "",
+            type: ""
         };
 
         if (code.trim() === "") {
@@ -104,14 +108,16 @@ const UpdateSubject = () => {
                 setFormError({
                     code: "",
                     name: "",
-                    unit: ""
+                    unit: "",
+                    type: ""
                 });
 
                 setIsLoading(true);
                 await http.put(`/api/subject/${subject.id}`, {
                     code,
                     name,
-                    unit
+                    unit,
+                    type
                 });
 
                 navigate("/subjects");
@@ -130,7 +136,7 @@ const UpdateSubject = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">
+            <h1 className="is-size-4 mb-4">
                 <button
                     className="button is-ghost"
                     onClick={() => navigate("/subjects")}
@@ -200,6 +206,29 @@ const UpdateSubject = () => {
                                     <div>
                                         <span className="has-text-danger">
                                             {formError.unit}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="field">
+                                <label className="label">Type</label>
+                                <div className="control">
+                                    <div className="select is-fullwidth">
+                                        <select
+                                            name="type"
+                                            value={formData.type}
+                                            onChange={handleInputChange}
+                                        >
+                                            <option value="Minor">Minor</option>
+                                            <option value="Major">Major</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                {formError.type && (
+                                    <div>
+                                        <span className="has-text-danger">
+                                            {formError.type}
                                         </span>
                                     </div>
                                 )}

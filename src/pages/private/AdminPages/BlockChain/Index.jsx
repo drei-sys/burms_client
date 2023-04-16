@@ -47,35 +47,39 @@ const BlockChain = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">BlockChain</h1>
+            <h1 className="is-size-4 mb-4">BlockChain</h1>
             <div className="box">
                 <table className="table is-fullwidth is-hoverable">
                     <thead>
                         <tr>
                             <th>User name</th>
                             <th>Hash</th>
+                            <th>Block hash</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map(({ id, name, user_type, hash }) => {
-                            return (
-                                <tr key={id}>
-                                    <td>
-                                        <div>
-                                            <span className="has-text-weight-medium">
-                                                {name}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <span className="is-size-6">
-                                                {userTypes[user_type]}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td>{hash}</td>
-                                </tr>
-                            );
-                        })}
+                        {users.map(
+                            ({ id, name, user_type, hash, block_hash }) => {
+                                return (
+                                    <tr key={id}>
+                                        <td>
+                                            <div>
+                                                <span className="has-text-weight-medium">
+                                                    {name}
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <span className="is-size-6">
+                                                    {userTypes[user_type]}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>{hash}</td>
+                                        <td>{block_hash || "-"}</td>
+                                    </tr>
+                                );
+                            }
+                        )}
                     </tbody>
                 </table>
             </div>

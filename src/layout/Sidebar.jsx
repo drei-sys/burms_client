@@ -12,14 +12,14 @@ const Sidebar = () => {
         { name: "Subjects", path: "/subjects", group: 2 },
         { name: "Sections", path: "/sections", group: 2 },
         { name: "School Years", path: "/schoolYears", group: 2 },
-        { name: "Assigned Teachers", path: "/assignedTeachers", group: 2 },
+        { name: "Teacher Subjects", path: "/teacherSubjects", group: 2 },
         { name: "Registrations", path: "/registrations", group: 3 },
         {
             name: "Profile Edit Approvals",
             path: "/profileEditApprovals",
             group: 3
         },
-        { name: "Enrollments", path: "/adminViewEnrollments", group: 3 },
+        { name: "Enrollments", path: "/viewEnrollments", group: 3 },
         { name: "Blockchain", path: "/blockchain", group: 5 }
     ];
     const studentMenuItems = [
@@ -35,12 +35,13 @@ const Sidebar = () => {
     const registrarMenuItems = [{ name: "TOR Requests", path: "/TORRequests" }];
 
     const deanMenuItems = [
-        { name: "Approve Grades", path: "/approveGrades" },
-        { name: "Assign Teacher", path: "/assignTeacher" }
+        { name: "Approve Grades", path: "/approveGrades" }
+        //{ name: "Assign Teacher", path: "/assignTeacher" }
     ];
 
     const deptChainMenuItems = [
-        { name: "School Year", path: "/deptChairSchoolYears" }
+        { name: "Sections", path: "/deptChairSections" },
+        { name: "School Years", path: "/deptChairSchoolYears" }
     ];
 
     const menuItems = [

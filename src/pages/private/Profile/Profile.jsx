@@ -62,7 +62,7 @@ const Profile = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">Profile</h1>
+            <h1 className="is-size-4 mb-4">Profile</h1>
             {!userIsVerified ? (
                 <div className="box mb-4">
                     <div className="notification is-warning my-4">

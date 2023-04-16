@@ -6,7 +6,7 @@ const Browse = () => {
     if (!userIsVerified) {
         return (
             <>
-                <h1 className="is-size-4 mb-5">Browse</h1>
+                <h1 className="is-size-4 mb-4">Browse</h1>
                 <div className="notification is-warning my-4">
                     Your account is pending for admin verification.
                 </div>
@@ -16,7 +16,7 @@ const Browse = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">Browse</h1>
+            <h1 className="is-size-4 mb-4">Browse</h1>
         </>
     );
 };

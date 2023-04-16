@@ -36,7 +36,7 @@ const Enrollments = () => {
     if (!userIsVerified) {
         return (
             <>
-                <h1 className="is-size-4 mb-5">Enrollments</h1>
+                <h1 className="is-size-4 mb-4">Enrollments</h1>
                 <div className="notification is-warning my-4">
                     Your account is pending for admin verification.
                 </div>
@@ -65,12 +65,10 @@ const Enrollments = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">Enrollments</h1>
+            <h1 className="is-size-4 mb-4">Enrollments</h1>
             <div className="box">
                 {enrollments.length === 0 ? (
-                    <div className="has-text-centered">
-                        No enrollment found.
-                    </div>
+                    <div className="">No enrollment found.</div>
                 ) : (
                     <table className="table is-fullwidth is-hoverable">
                         <thead>

@@ -129,7 +129,7 @@ const Enroll = () => {
     if (!userIsVerified) {
         return (
             <>
-                <h1 className="is-size-4 mb-5">Enroll</h1>
+                <h1 className="is-size-4 mb-4">Enroll</h1>
                 <div className="notification is-warning my-4">
                     Your account is pending for admin verification.
                 </div>
@@ -140,7 +140,7 @@ const Enroll = () => {
     if (!schoolYear) {
         return (
             <>
-                <h1 className="is-size-4 mb-5">Enroll</h1>
+                <h1 className="is-size-4 mb-4">Enroll</h1>
                 <div className="box">
                     No ongoing enrollment as of the moment.
                 </div>
@@ -265,11 +265,11 @@ const Enroll = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">Enroll</h1>
+            <h1 className="is-size-4 mb-4">Enroll</h1>
 
             <div className="box mb-4">
                 <div className="field">
-                    <label className="label">Select SY</label>
+                    <label className="label">Select school year</label>
                     <div className="control">
                         <div className="select is-fullwidth">
                             <select
@@ -291,7 +291,7 @@ const Enroll = () => {
             {schoolYearId === 0 ? (
                 <div></div>
             ) : isSchoolYearSectionLoading ? (
-                <div className="has-text-centered p-5">Loading...</div>
+                <div className="has-text-centered p-4">Loading...</div>
             ) : (
                 <>
                     <div className="columns">

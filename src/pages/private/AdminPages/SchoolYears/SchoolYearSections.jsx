@@ -198,7 +198,7 @@ const SchoolYearSections = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-5">
+            <h1 className="is-size-4 mb-4">
                 <button
                     className="button is-ghost"
                     onClick={() =>
@@ -219,6 +219,7 @@ const SchoolYearSections = () => {
             <div className="columns">
                 <div className="column is-4">
                     <div className="box">
+                        <label className="label">School year details</label>
                         <table className="table " style={{ width: "100%" }}>
                             <tbody>
                                 <tr>
@@ -245,109 +246,103 @@ const SchoolYearSections = () => {
                 </div>
                 <div className="column is-8">
                     <div className="box">
+                        <div className="is-flex is-justify-content-space-between">
+                            <div></div>
+                            <div>
+                                {schoolYear.status !== "Locked" && (
+                                    <Link
+                                        to={`/${
+                                            userType === 8
+                                                ? "deptChairSchoolYearAddSection"
+                                                : "schoolYearAddSection"
+                                        }/${params.id}`}
+                                    >
+                                        <button className="button is-success">
+                                            Add section
+                                        </button>
+                                    </Link>
+                                )}
+                            </div>
+                        </div>
+                        {schoolYear.status !== "Locked" && <hr />}
+
                         {schoolYear.courses.length == 0 ? (
-                            <div className="has-text-centered p-5">
+                            <div className="has-text-centered p-4">
                                 No sections found.
                             </div>
                         ) : (
-                            <div>
-                                {schoolYear.courses.map(course => {
-                                    const { course_id, name, sections } =
-                                        course;
+                            schoolYear.courses.map(course => {
+                                const { course_id, name, sections } = course;
 
-                                    const sectionsRender = sections.map(
-                                        section => {
-                                            const {
-                                                section_id,
-                                                name,
-                                                subjects,
-                                                current_slot_count,
-                                                max_slot_count
-                                            } = section;
+                                const sectionsRender = sections.map(section => {
+                                    const {
+                                        section_id,
+                                        name,
+                                        subjects,
+                                        current_slot_count,
+                                        max_slot_count
+                                    } = section;
 
-                                            const subjectsRender = subjects.map(
-                                                subject => {
-                                                    const { id, code, name } =
-                                                        subject;
-                                                    return (
-                                                        <div key={id}>
-                                                            <div className="is-size-6 ml-4">
-                                                                - {code}: {name}
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                }
-                                            );
-
+                                    const subjectsRender = subjects.map(
+                                        subject => {
+                                            const { id, code, name } = subject;
                                             return (
-                                                <div key={section_id}>
-                                                    <div className="is-size-6 ml-1 mb-1 is-flex is-justify-content-space-between	">
-                                                        <div>
-                                                            <span className="is-underlined">
-                                                                {name}
-                                                            </span>
-                                                        </div>
-                                                        <div>
-                                                            <span className="is-size-6">
-                                                                (
-                                                                {
-                                                                    current_slot_count
-                                                                }
-                                                                /
-                                                                {max_slot_count}
-                                                                )
-                                                            </span>
-                                                            <span>
-                                                                {schoolYear.status ===
-                                                                    "active" && (
-                                                                    <button
-                                                                        className="button is-ghost"
-                                                                        onClick={() =>
-                                                                            showConfirmDelete(
-                                                                                section_id
-                                                                            )
-                                                                        }
-                                                                    >
-                                                                        Delete
-                                                                    </button>
-                                                                )}
-                                                            </span>
-                                                        </div>
+                                                <div key={id}>
+                                                    <div className="is-size-6 ml-4">
+                                                        - {code}: {name}
                                                     </div>
-                                                    {subjectsRender}
                                                 </div>
                                             );
                                         }
                                     );
 
                                     return (
-                                        <div key={course_id}>
-                                            <div className="is-size-5 has-text-weight-bold">
-                                                {name}
+                                        <div key={section_id} className="mb-4">
+                                            <div className="is-size-6 ml-1 mb-1 is-flex is-justify-content-space-between	">
+                                                <div>
+                                                    Section:{" "}
+                                                    <span className="is-underlined">
+                                                        {name}
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <span className="is-size-6">
+                                                        ({current_slot_count}/
+                                                        {max_slot_count})
+                                                    </span>
+                                                    <span>
+                                                        {schoolYear.status ===
+                                                            "Active" && (
+                                                            <button
+                                                                className="button is-ghost"
+                                                                onClick={() =>
+                                                                    showConfirmDelete(
+                                                                        section_id
+                                                                    )
+                                                                }
+                                                            >
+                                                                Delete
+                                                            </button>
+                                                        )}
+                                                    </span>
+                                                </div>
                                             </div>
-                                            {sectionsRender}
-                                            <hr />
+                                            {subjectsRender}
                                         </div>
                                     );
-                                })}
-                            </div>
-                        )}
+                                });
 
-                        <div>
-                            {schoolYear.status !== "locked" && (
-                                <Link
-                                    to={`/${
-                                        userType === 8
-                                            ? "deptChairSchoolYearAddSection"
-                                            : "schoolYearAddSection"
-                                    }/${params.id}`}
-                                >
-                                    <button className="button is-success">
-                                        Add section
-                                    </button>
-                                </Link>
-                            )}
-                        </div>
+                                return (
+                                    <div key={course_id}>
+                                        <div className="is-size-5 has-text-weight-bold">
+                                            {name}
+                                        </div>
+                                        {sectionsRender}
+                                        <hr />
+                                    </div>
+                                );
+                            })
+                        )}
                     </div>
                 </div>
             </div>
