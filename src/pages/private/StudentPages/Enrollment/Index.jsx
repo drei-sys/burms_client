@@ -52,11 +52,6 @@ const Enrollments = () => {
         return <Error error={error} />;
     }
 
-    const semesters = {
-        1: "1st",
-        2: "2nd"
-    };
-
     const statuses = {
         for_approval: "Pending",
         approved: "Enrolled",
@@ -70,54 +65,59 @@ const Enrollments = () => {
                 {enrollments.length === 0 ? (
                     <div className="">No enrollment found.</div>
                 ) : (
-                    <table className="table is-fullwidth is-hoverable">
-                        <thead>
-                            <tr>
-                                <th>School Year</th>
-                                <th>Semester</th>
-                                <th>Status</th>
-                                <th>Remarks</th>
-                                <th style={{ width: 60 }}></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {enrollments.map(
-                                ({ id, year, semester, status }) => {
-                                    return (
-                                        <tr key={id}>
-                                            <td>
-                                                <div>
-                                                    <span className="has-text-weight-medium">
-                                                        {year}
-                                                    </span>
-                                                </div>
-                                            </td>
-                                            <td>{semesters[semester]}</td>
-                                            <td>{statuses[status]}</td>
-                                            <td>-</td>
-                                            <td>
-                                                <Link
-                                                    to={`/studentViewEnrollment/${id}`}
-                                                >
-                                                    <button
-                                                        className="button "
-                                                        title="View"
-                                                        // onClick={() =>
-                                                        //     showConfirmApprove(id)
-                                                        // }
-                                                    >
-                                                        <span className="icon">
-                                                            <i className="fa-solid fa-eye"></i>
+                    <>
+                        <table className="table is-fullwidth is-hoverable">
+                            <thead>
+                                <tr>
+                                    <th>School Year</th>
+                                    <th>Semester</th>
+                                    <th>Status</th>
+                                    <th>Remarks</th>
+                                    <th style={{ width: 60 }}></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {enrollments.map(
+                                    ({ id, year, semester, status }) => {
+                                        return (
+                                            <tr key={id}>
+                                                <td>
+                                                    <div>
+                                                        <span className="has-text-weight-medium">
+                                                            {year}
                                                         </span>
-                                                    </button>
-                                                </Link>
-                                            </td>
-                                        </tr>
-                                    );
-                                }
-                            )}
-                        </tbody>
-                    </table>
+                                                    </div>
+                                                </td>
+                                                <td>{semester}</td>
+                                                <td>{statuses[status]}</td>
+                                                <td>-</td>
+                                                <td>
+                                                    <Link
+                                                        to={`/studentViewEnrollment/${id}`}
+                                                    >
+                                                        <button
+                                                            className="button "
+                                                            title="View"
+                                                            // onClick={() =>
+                                                            //     showConfirmApprove(id)
+                                                            // }
+                                                        >
+                                                            <span className="icon">
+                                                                <i className="fa-solid fa-eye"></i>
+                                                            </span>
+                                                        </button>
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                        );
+                                    }
+                                )}
+                            </tbody>
+                        </table>
+                        <div className="p-4 has-text-right">
+                            {enrollments.length} total items
+                        </div>
+                    </>
                 )}
             </div>
         </>

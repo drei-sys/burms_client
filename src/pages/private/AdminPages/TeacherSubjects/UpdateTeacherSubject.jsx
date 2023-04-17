@@ -21,7 +21,7 @@ const UpdateTeacherSubjects = () => {
 
     const [schoolYears, setSchoolYears] = useState([]);
     const [teachers, setTeachers] = useState([]);
-    const [subjects, setSubjects] = useState([]);
+    const [subjectsSelection, setSubjectsSelection] = useState([]);
 
     const [teacherSubject, setTeacherSubject] = useState(null);
 
@@ -39,7 +39,12 @@ const UpdateTeacherSubjects = () => {
             try {
                 setIsContentLoading(true);
                 const { data } = await http.get("/api/teacherSubjectFormData");
-                const { schoolYears, teachers, subjects } = data;
+                const {
+                    schoolYears,
+                    teachers,
+                    schoolYearSections,
+                    subjects: subjectList
+                } = data;
 
                 const { data: data2 } = await http.get(
                     `/api/teacherSubject/${params.id}`
@@ -48,22 +53,41 @@ const UpdateTeacherSubjects = () => {
                 const { teacherSubject, teacherSubjectItems } = data2;
 
                 if (teacherSubject) {
-                    setSchoolYears(schoolYears);
-                    setTeachers(teachers);
-                    setSubjects(subjects);
+                    const syId = teacherSubject.sy_id;
+
+                    let subjectIds = [];
+                    schoolYearSections
+                        .filter(({ sy_id }) => sy_id === syId)
+                        .forEach(({ subjects: subjectsString }) => {
+                            const subjectIdsParsed = JSON.parse(subjectsString);
+                            subjectIdsParsed.forEach(subjectId => {
+                                subjectIds.push(subjectId);
+                            });
+                        });
+
+                    subjectIds = [...new Set(subjectIds)];
+
+                    const subjectsSelection = [];
+                    subjectIds.forEach(subjectId => {
+                        const subject = subjectList.find(
+                            ({ id }) => id === subjectId
+                        );
+                        subjectsSelection.push(subject);
+                    });
 
                     setFormData({
                         syId: teacherSubject.sy_id,
                         teacherId: teacherSubject.teacher_id,
                         subjectIds: teacherSubjectItems.map(({ id }) => id)
                     });
+                    setSchoolYears(schoolYears);
+                    setTeachers(teachers);
+                    setSubjectsSelection(subjectsSelection);
 
                     setTeacherSubject(teacherSubject);
                 } else {
                     setIsNotExist(true);
                 }
-
-                //setSchoolYears(data);
             } catch (error) {
                 console.log(error);
                 setError(error);
@@ -180,6 +204,34 @@ const UpdateTeacherSubjects = () => {
             <div className="box mb-4">
                 <form onSubmit={handleFormSubmit}>
                     <div className="field">
+                        <label className="label">Select teacher</label>
+                        <div className="control">
+                            <div className="select is-fullwidth">
+                                <select
+                                    name="teacherId"
+                                    value={formData.teacherId}
+                                    onChange={handleInputChange}
+                                    disabled
+                                >
+                                    <option value={0}></option>
+                                    {teachers.map(({ id, name }) => (
+                                        <option key={id} value={id}>
+                                            {name}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                        {formError.teacherId && (
+                            <div>
+                                <span className="has-text-danger">
+                                    {formError.teacherId}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="field">
                         <label className="label">Select school year</label>
                         <div className="control">
                             <div className="select is-fullwidth">
@@ -208,37 +260,11 @@ const UpdateTeacherSubjects = () => {
                             </div>
                         )}
                     </div>
-                    <div className="field">
-                        <label className="label">Select teacher</label>
-                        <div className="control">
-                            <div className="select is-fullwidth">
-                                <select
-                                    name="teacherId"
-                                    value={formData.teacherId}
-                                    onChange={handleInputChange}
-                                    disabled
-                                >
-                                    <option value={0}></option>
-                                    {teachers.map(({ id, name }) => (
-                                        <option key={id} value={id}>
-                                            {name}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
-                        {formError.teacherId && (
-                            <div>
-                                <span className="has-text-danger">
-                                    {formError.teacherId}
-                                </span>
-                            </div>
-                        )}
-                    </div>
+
                     <div className="field">
                         <label className="label">Select subjects</label>
                         <div className="control">
-                            {subjects.map(({ id, code, name }) => (
+                            {subjectsSelection.map(({ id, code, name }) => (
                                 <div key={id}>
                                     <label className="checkbox">
                                         <input

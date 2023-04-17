@@ -21,7 +21,9 @@ const CreateTeacherSubjects = () => {
 
     const [schoolYears, setSchoolYears] = useState([]);
     const [teachers, setTeachers] = useState([]);
-    const [subjects, setSubjects] = useState([]);
+    const [schoolYearSections, setSchoolYearSections] = useState([]);
+    const [subjectList, setSubjectList] = useState([]);
+    const [subjectsSelection, setSubjectsSelection] = useState([]);
 
     const [isContentLoading, setIsContentLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -34,12 +36,14 @@ const CreateTeacherSubjects = () => {
             try {
                 setIsContentLoading(true);
                 const { data } = await http.get("/api/teacherSubjectFormData");
-                const { schoolYears, teachers, subjects } = data;
+                const { schoolYears, teachers, schoolYearSections, subjects } =
+                    data;
 
                 setSchoolYears(schoolYears);
                 setTeachers(teachers);
-                setSubjects(subjects);
-                //setSchoolYears(data);
+                setSchoolYearSections(schoolYearSections);
+                setSubjectList(subjects);
+                //setSubjects(subjects);
             } catch (error) {
                 console.log(error);
                 setError(error);
@@ -63,6 +67,34 @@ const CreateTeacherSubjects = () => {
         let { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
         setFormError({ ...formError, [name]: "" });
+    };
+
+    const handleSchoolYearChange = e => {
+        let { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+        setFormError({ ...formError, [name]: "" });
+
+        const syId = Number(value);
+
+        let subjectIds = [];
+        schoolYearSections
+            .filter(({ sy_id }) => sy_id === syId)
+            .forEach(({ subjects: subjectsString }) => {
+                const subjectIdsParsed = JSON.parse(subjectsString);
+                subjectIdsParsed.forEach(subjectId => {
+                    subjectIds.push(subjectId);
+                });
+            });
+
+        subjectIds = [...new Set(subjectIds)];
+
+        const subjectsSelection = [];
+        subjectIds.forEach(subjectId => {
+            const subject = subjectList.find(({ id }) => id === subjectId);
+            subjectsSelection.push(subject);
+        });
+
+        setSubjectsSelection(subjectsSelection);
     };
 
     const handleCheckboxChange = subjectId => {
@@ -151,34 +183,6 @@ const CreateTeacherSubjects = () => {
             <div className="box mb-4">
                 <form onSubmit={handleFormSubmit}>
                     <div className="field">
-                        <label className="label">Select school year</label>
-                        <div className="control">
-                            <div className="select is-fullwidth">
-                                <select
-                                    name="syId"
-                                    value={formData.syId}
-                                    onChange={handleInputChange}
-                                >
-                                    <option value={0}></option>
-                                    {schoolYears.map(
-                                        ({ id, year, semester }) => (
-                                            <option key={id} value={id}>
-                                                {year}: {semester} Semester
-                                            </option>
-                                        )
-                                    )}
-                                </select>
-                            </div>
-                        </div>
-                        {formError.syId && (
-                            <div>
-                                <span className="has-text-danger">
-                                    {formError.syId}
-                                </span>
-                            </div>
-                        )}
-                    </div>
-                    <div className="field">
                         <label className="label">Select teacher</label>
                         <div className="control">
                             <div className="select is-fullwidth">
@@ -204,10 +208,40 @@ const CreateTeacherSubjects = () => {
                             </div>
                         )}
                     </div>
+
+                    <div className="field">
+                        <label className="label">Select school year</label>
+                        <div className="control">
+                            <div className="select is-fullwidth">
+                                <select
+                                    name="syId"
+                                    value={formData.syId}
+                                    onChange={handleSchoolYearChange}
+                                >
+                                    <option value={0}></option>
+                                    {schoolYears.map(
+                                        ({ id, year, semester }) => (
+                                            <option key={id} value={id}>
+                                                {year}: {semester} Semester
+                                            </option>
+                                        )
+                                    )}
+                                </select>
+                            </div>
+                        </div>
+                        {formError.syId && (
+                            <div>
+                                <span className="has-text-danger">
+                                    {formError.syId}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+
                     <div className="field">
                         <label className="label">Select subjects</label>
                         <div className="control">
-                            {subjects.map(({ id, code, name }) => (
+                            {subjectsSelection.map(({ id, code, name }) => (
                                 <div key={id}>
                                     <label className="checkbox">
                                         <input

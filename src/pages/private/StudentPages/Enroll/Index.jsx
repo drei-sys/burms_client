@@ -13,6 +13,8 @@ const Enroll = () => {
     const [schoolYearId, setSchoolYearId] = useState(0);
     const [schoolYearSections, setSchoolYearSections] = useState(null);
 
+    const [student, setStudent] = useState(null);
+
     const [subjectsSelection, setSubjectsSelection] = useState([]);
     const [sectionsSelection, setSectionsSelection] = useState([]);
 
@@ -64,7 +66,8 @@ const Enroll = () => {
                     const {
                         courses: coursesList,
                         sections: sectionList,
-                        subjects: subjectList
+                        subjects: subjectList,
+                        student
                     } = data;
                     let { schoolYearSections } = data;
 
@@ -88,11 +91,24 @@ const Enroll = () => {
                     const subjectsSelection = [];
                     let subjectIds = [];
                     schoolYearSections.forEach(schoolYearSection => {
-                        const { subjects: subjectsString } = schoolYearSection;
+                        const { course_id, subjects: subjectsString } =
+                            schoolYearSection;
 
                         const subjectIdsParsed = JSON.parse(subjectsString);
                         subjectIdsParsed.forEach(subjectId => {
-                            subjectIds.push(subjectId);
+                            //remove major subjects from other courses.. retain minor subjects
+                            const subject = subjectList.find(
+                                ({ id }) => id === subjectId
+                            );
+
+                            if (
+                                !(
+                                    course_id !== student.course_id &&
+                                    subject.type === "Major"
+                                )
+                            ) {
+                                subjectIds.push(subjectId);
+                            }
                         });
                     });
 
@@ -107,6 +123,7 @@ const Enroll = () => {
 
                     setSubjectsSelection(subjectsSelection);
                     setSchoolYearSections(schoolYearSections);
+                    setStudent(student);
                 } catch (error) {
                     console.log(error);
                     setError(error);
@@ -147,11 +164,6 @@ const Enroll = () => {
             </>
         );
     }
-
-    const semesters = {
-        1: "1st",
-        2: "2nd"
-    };
 
     const handleSYChange = id => {
         setSchoolYearSections(null);
@@ -209,17 +221,20 @@ const Enroll = () => {
             setSelectedSection(null);
             setSelectedSubject(null);
 
+            console.log(selectedSubject);
+
             const enrollmentItem = {
                 sy_id: schoolYear.id,
                 sy_year: schoolYear.year,
-                sy_semester: semesters[schoolYear.semester],
+                sy_semester: schoolYear.semester,
                 course_id: selectedCourse.id,
                 course_name: selectedCourse.name,
                 section_id: selectedSection.id,
                 section_name: selectedSection.name,
                 subject_id: selectedSubject.id,
                 subject_code: selectedSubject.code,
-                subject_name: selectedSubject.name
+                subject_name: selectedSubject.name,
+                subject_unit: selectedSubject.unit
             };
 
             setEnrollmentItems([...enrollmentItems, enrollmentItem]);
@@ -263,6 +278,11 @@ const Enroll = () => {
         }
     };
 
+    const totalUnits = enrollmentItems.reduce(
+        (acc, item) => (acc += item.subject_unit),
+        0
+    );
+
     return (
         <>
             <h1 className="is-size-4 mb-4">Enroll</h1>
@@ -279,8 +299,8 @@ const Enroll = () => {
                             >
                                 <option value={0}></option>
                                 <option value={schoolYear.id}>
-                                    {schoolYear.year}:{" "}
-                                    {semesters[schoolYear.semester]} Semester
+                                    {schoolYear.year}: {schoolYear.semester}{" "}
+                                    Semester
                                 </option>
                             </select>
                         </div>
@@ -294,6 +314,10 @@ const Enroll = () => {
                 <div className="has-text-centered p-4">Loading...</div>
             ) : (
                 <>
+                    <div className="box mb-4">
+                        <label className="label">Course</label>
+                        <div>{student.course_name}</div>
+                    </div>
                     <div className="columns">
                         <div className="column is-6">
                             <div className="box">
@@ -400,6 +424,7 @@ const Enroll = () => {
                                         <th>Course</th>
                                         <th>Section</th>
                                         <th>Subject</th>
+                                        <th>Unit</th>
                                         <th style={{ width: 60 }}></th>
                                     </tr>
                                 </thead>
@@ -412,7 +437,8 @@ const Enroll = () => {
                                             course_name,
                                             section_name,
                                             subject_code,
-                                            subject_name
+                                            subject_name,
+                                            subject_unit
                                         } = enrollmentItem;
 
                                         return (
@@ -425,6 +451,7 @@ const Enroll = () => {
                                                     {subject_code}:{" "}
                                                     {subject_name}
                                                 </td>
+                                                <td>{subject_unit}</td>
                                                 <td>
                                                     <button
                                                         className="button is-danger"
@@ -445,6 +472,15 @@ const Enroll = () => {
                                     })}
                                 </tbody>
                             </table>
+                            <div className="p-4 has-text-right">
+                                <span className="mr-4">
+                                    {totalUnits} total units
+                                </span>{" "}
+                                -{" "}
+                                <span className="ml-4">
+                                    {enrollmentItems.length} total items
+                                </span>
+                            </div>
                             <hr />
                             <button
                                 className="button is-success"
