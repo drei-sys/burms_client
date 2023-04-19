@@ -1,1059 +1,732 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+
+import StudentForm from "components/common/StudentForm";
+import NonTeachingForm from "components/common/NonTeachingForm";
+
 import http from "services/httpService";
 
 const Register = () => {
-    const [formData, setFormData] = useState({
-        userType: 3,
-        name: "",
+    const [userType, setUserType] = useState(3);
+
+    const [studentFormData, setStudentFormData] = useState({
+        lastname: "",
+        firstname: "",
+        middlename: "",
+        extname: "",
+        birth_date: "",
+        gender: "",
+        address: "",
+        civil_status: "Single",
+        contact: "",
+        is_cabuyeno: "",
+        is_registered_voter: "",
+        is_fully_vaccinated: "",
+        father_name: "",
+        father_occupation: "",
+        father_contact: "",
+        is_father_voter_of_cabuyao: "",
+        mother_name: "",
+        mother_occupation: "",
+        mother_contact: "",
+        is_mother_voter_of_cabuyao: "",
+        is_living_with_parents: "",
+        education_attained: "Graduate",
+        last_school_attended: "",
+        school_address: "",
+        award_received: "",
+        sh_school_strand: "",
+        course_id: 1,
         email: "",
         password: "",
-        confirmPassword: ""
+        password_confirmation: ""
     });
 
-    const [formError, setFormError] = useState({
-        name: "",
+    const [studentFormError, setStudentFormError] = useState({
+        lastname: "",
+        firstname: "",
+        middlename: "",
+        extname: "",
+        birth_date: "",
+        gender: "",
+        address: "",
+        civil_status: "",
+        contact: "",
+        is_cabuyeno: "",
+        is_registered_voter: "",
+        is_fully_vaccinated: "",
+        father_name: "",
+        father_occupation: "",
+        father_contact: "",
+        is_father_voter_of_cabuyao: "",
+        mother_name: "",
+        mother_occupation: "",
+        mother_contact: "",
+        is_mother_voter_of_cabuyao: "",
+        is_living_with_parents: "",
+        education_attained: "",
+        last_school_attended: "",
+        school_address: "",
+        award_received: "",
+        sh_school_strand: "",
+        course_id: "",
         email: "",
         password: "",
-        confirmPassword: ""
+        password_confirmation: ""
+    });
+
+    const [nonTeachingFormData, setNonTeachingFormData] = useState({
+        lastname: "",
+        firstname: "",
+        middlename: "",
+        birth_date: "",
+        birth_place: "",
+        gender: "",
+        civil_status: "Single",
+        citizenship: "Filipino",
+        house_number: "",
+        street: "",
+        subdivision: "",
+        barangay: "",
+        city: "",
+        province: "",
+        zipcode: "",
+        gsis: "",
+        pagibig: "",
+        philhealth: "",
+        sss: "",
+        tin: "",
+        agency_employee_no: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+
+        elementary_school: "",
+        elementary_remarks: "",
+        secondary_school: "",
+        secondary_remarks: "",
+        vocational_school: "",
+        vocational_remarks: "",
+        college_school: "",
+        college_remarks: "",
+        graduate_studies_school: "",
+        graduate_studies_remarks: "",
+        we_from_1: "",
+        we_to_1: "",
+        we_position_1: "",
+        we_designation_1: "",
+        we_monthly_salary_1: "",
+        we_from_2: "",
+        we_to_2: "",
+        we_position_2: "",
+        we_designation_2: "",
+        we_monthly_salary_2: "",
+        we_from_3: "",
+        we_to_3: "",
+        we_position_3: "",
+        we_designation_3: "",
+        we_monthly_salary_3: "",
+        we_from_4: "",
+        we_to_4: "",
+        we_position_4: "",
+        we_designation_4: "",
+        we_monthly_salary_4: "",
+        we_from_5: "",
+        we_to_5: "",
+        we_position_5: "",
+        we_designation_5: "",
+        we_monthly_salary_5: ""
+    });
+
+    const [nonTeachingFormError, setNonTeachingFormError] = useState({
+        lastname: "",
+        firstname: "",
+        middlename: "",
+        birth_date: "",
+        birth_place: "",
+        gender: "",
+        civil_status: "",
+        citizenship: "",
+        house_number: "",
+        street: "",
+        subdivision: "",
+        barangay: "",
+        city: "",
+        province: "",
+        zipcode: "",
+        gsis: "",
+        pagibig: "",
+        philhealth: "",
+        sss: "",
+        tin: "",
+        agency_employee_no: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+
+        elementary_school: "",
+        elementary_remarks: "",
+        secondary_school: "",
+        secondary_remarks: "",
+        vocational_school: "",
+        vocational_remarks: "",
+        college_school: "",
+        college_remarks: "",
+        graduate_studies_school: "",
+        graduate_studies_remarks: "",
+        we_from_1: "",
+        we_to_1: "",
+        we_position_1: "",
+        we_designation_1: "",
+        we_monthly_salary_1: "",
+        we_from_2: "",
+        we_to_2: "",
+        we_position_2: "",
+        we_designation_2: "",
+        we_monthly_salary_2: "",
+        we_from_3: "",
+        we_to_3: "",
+        we_position_3: "",
+        we_designation_3: "",
+        we_monthly_salary_3: "",
+        we_from_4: "",
+        we_to_4: "",
+        we_position_4: "",
+        we_designation_4: "",
+        we_monthly_salary_4: "",
+        we_from_5: "",
+        we_to_5: "",
+        we_position_5: "",
+        we_designation_5: "",
+        we_monthly_salary_5: ""
     });
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleInputChange = e => {
+    const handleStudentInputChange = e => {
         let { name, value } = e.target;
-        if (name === "userType") {
-            value = Number(value);
-        }
-        setFormData({ ...formData, [name]: value });
-        setFormError({ ...formError, [name]: "" });
+        setStudentFormData({ ...studentFormData, [name]: value });
+        setStudentFormError({ ...studentFormError, [name]: "" });
+    };
+
+    const handleNonTeachingInputChange = e => {
+        let { name, value } = e.target;
+        setNonTeachingFormData({ ...nonTeachingFormData, [name]: value });
+        setNonTeachingFormError({ ...nonTeachingFormError, [name]: "" });
     };
 
     const handleFormSubmit = async e => {
         e.preventDefault();
 
-        const { userType, name, email, password, confirmPassword } = formData;
+        if (userType === 3) {
+            const {
+                lastname,
+                firstname,
+                birth_date,
+                gender,
+                address,
+                civil_status,
+                contact,
+                is_cabuyeno,
+                is_registered_voter,
+                is_fully_vaccinated,
+                father_name,
+                father_occupation,
+                father_contact,
+                is_father_voter_of_cabuyao,
+                mother_name,
+                mother_occupation,
+                mother_contact,
+                is_mother_voter_of_cabuyao,
+                is_living_with_parents,
+                education_attained,
+                last_school_attended,
+                school_address,
+                award_received,
+                sh_school_strand,
+                course_id,
+                email,
+                password,
+                password_confirmation
+            } = studentFormData;
 
-        let hasError = false;
-        const formError = {
-            name: "",
-            email: "",
-            password: "",
-            confirmPassword: ""
-        };
+            let hasError = false;
+            const studentFormError = {
+                lastname: "",
+                firstname: "",
+                birth_date: "",
+                gender: "",
+                address: "",
+                civil_status: "",
+                contact: "",
+                is_cabuyeno: "",
+                is_registered_voter: "",
+                is_fully_vaccinated: "",
+                father_name: "",
+                father_occupation: "",
+                father_contact: "",
+                is_father_voter_of_cabuyao: "",
+                mother_name: "",
+                mother_occupation: "",
+                mother_contact: "",
+                is_mother_voter_of_cabuyao: "",
+                is_living_with_parents: "",
+                education_attained: "",
+                last_school_attended: "",
+                school_address: "",
+                award_received: "",
+                sh_school_strand: "",
+                course_id: "",
+                email: "",
+                password: "",
+                password_confirmation: ""
+            };
 
-        if (name.trim() === "") {
-            formError.name = "Name is required";
-            hasError = true;
-        }
-        if (email.trim() === "") {
-            formError.email = "Email is required";
-            hasError = true;
-        }
-        if (password.trim() === "") {
-            formError.password = "Password is required";
-            hasError = true;
-        }
-        if (confirmPassword.trim() === "") {
-            formError.confirmPassword = "Confirm password is required";
-            hasError = true;
-        }
-        if (password !== confirmPassword) {
-            formError.confirmPassword = "Password not match";
-            hasError = true;
-        }
+            if (lastname.trim() === "") {
+                studentFormError.lastname = "This is required";
+                hasError = true;
+            }
+            if (firstname.trim() === "") {
+                studentFormError.firstname = "This is required";
+                hasError = true;
+            }
+            if (birth_date.trim() === "") {
+                studentFormError.birth_date = "This is required";
+                hasError = true;
+            }
+            if (gender.trim() === "") {
+                studentFormError.gender = "This is required";
+                hasError = true;
+            }
+            if (address.trim() === "") {
+                studentFormError.address = "This is required";
+                hasError = true;
+            }
+            if (civil_status.trim() === "") {
+                studentFormError.civil_status = "This is required";
+                hasError = true;
+            }
+            if (contact.trim() === "") {
+                studentFormError.contact = "This is required";
+                hasError = true;
+            }
+            if (is_cabuyeno.trim() === "") {
+                studentFormError.is_cabuyeno = "This is required";
+                hasError = true;
+            }
+            if (is_registered_voter.trim() === "") {
+                studentFormError.is_registered_voter = "This is required";
+                hasError = true;
+            }
+            if (is_fully_vaccinated.trim() === "") {
+                studentFormError.is_fully_vaccinated = "This is required";
+                hasError = true;
+            }
+            if (father_name.trim() === "") {
+                studentFormError.father_name = "This is required";
+                hasError = true;
+            }
+            if (father_occupation.trim() === "") {
+                studentFormError.father_occupation = "This is required";
+                hasError = true;
+            }
+            if (father_contact.trim() === "") {
+                studentFormError.father_contact = "This is required";
+                hasError = true;
+            }
+            if (is_father_voter_of_cabuyao.trim() === "") {
+                studentFormError.is_father_voter_of_cabuyao =
+                    "This is required";
+                hasError = true;
+            }
+            if (mother_name.trim() === "") {
+                studentFormError.mother_name = "This is required";
+                hasError = true;
+            }
+            if (mother_occupation.trim() === "") {
+                studentFormError.mother_occupation = "This is required";
+                hasError = true;
+            }
+            if (mother_contact.trim() === "") {
+                studentFormError.mother_contact = "This is required";
+                hasError = true;
+            }
+            if (is_mother_voter_of_cabuyao.trim() === "") {
+                studentFormError.is_mother_voter_of_cabuyao =
+                    "This is required";
+                hasError = true;
+            }
+            if (is_living_with_parents.trim() === "") {
+                studentFormError.is_living_with_parents = "This is required";
+                hasError = true;
+            }
+            if (education_attained.trim() === "") {
+                studentFormError.education_attained = "This is required";
+                hasError = true;
+            }
+            if (last_school_attended.trim() === "") {
+                studentFormError.last_school_attended = "This is required";
+                hasError = true;
+            }
+            if (school_address.trim() === "") {
+                studentFormError.school_address = "This is required";
+                hasError = true;
+            }
+            if (award_received.trim() === "") {
+                studentFormError.award_received = "This is required";
+                hasError = true;
+            }
+            if (sh_school_strand.trim() === "") {
+                studentFormError.sh_school_strand = "This is required";
+                hasError = true;
+            }
+            if (course_id === 0) {
+                studentFormError.course_id = "This is required";
+                hasError = true;
+            }
+            if (email.trim() === "") {
+                studentFormError.email = "This is required";
+                hasError = true;
+            }
+            if (password.trim() === "") {
+                studentFormError.password = "This is required";
+                hasError = true;
+            }
+            if (password_confirmation.trim() === "") {
+                studentFormError.password_confirmation = "This is required";
+                hasError = true;
+            }
+            if (password !== password_confirmation) {
+                studentFormError.password_confirmation = "Password not match";
+                hasError = true;
+            }
 
-        if (hasError) {
-            setFormError(formError);
-            alert("has error");
+            if (hasError) {
+                setStudentFormError(studentFormError);
+                alert("There's an error in the form. Please check.");
+            } else {
+                try {
+                    setStudentFormError({
+                        lastname: "",
+                        firstname: "",
+                        birth_date: "",
+                        gender: "",
+                        address: "",
+                        civil_status: "",
+                        contact: "",
+                        is_cabuyeno: "",
+                        is_registered_voter: "",
+                        is_fully_vaccinated: "",
+                        father_name: "",
+                        father_occupation: "",
+                        father_contact: "",
+                        is_father_voter_of_cabuyao: "",
+                        mother_name: "",
+                        mother_occupation: "",
+                        mother_contact: "",
+                        is_mother_voter_of_cabuyao: "",
+                        is_living_with_parents: "",
+                        education_attained: "",
+                        last_school_attended: "",
+                        school_address: "",
+                        award_received: "",
+                        sh_school_strand: "",
+                        course_id: "",
+                        email: "",
+                        password: "",
+                        password_confirmation: ""
+                    });
+
+                    setIsLoading(true);
+                    await http.get("/sanctum/csrf-cookie");
+                    await http.post("/register", {
+                        ...studentFormData,
+                        user_type: userType
+                    });
+
+                    window.location = "/login";
+                } catch (error) {
+                    setStudentFormError({
+                        ...studentFormError,
+                        ...(error?.response?.data?.errors || {
+                            password_confirmation: "Something went wrong!"
+                        })
+                    });
+                } finally {
+                    setIsLoading(false);
+                }
+            }
         } else {
-            try {
-                setFormError({
-                    name: "",
-                    email: "",
-                    password: "",
-                    confirmPassword: ""
-                });
+            const {
+                lastname,
+                firstname,
+                middlename,
+                birth_date,
+                birth_place,
+                gender,
+                civil_status,
+                citizenship,
+                house_number,
+                street,
+                subdivision,
+                barangay,
+                city,
+                province,
+                zipcode,
+                gsis,
+                pagibig,
+                philhealth,
+                sss,
+                tin,
+                agency_employee_no,
+                email,
+                password,
+                password_confirmation,
 
-                setIsLoading(true);
-                await http.get("/sanctum/csrf-cookie");
-                await http.post("/register", {
-                    user_type: userType,
-                    name,
-                    email,
-                    password,
-                    password_confirmation: confirmPassword
-                });
+                elementary_school,
+                elementary_remarks,
+                secondary_school,
+                secondary_remarks,
+                vocational_school,
+                vocational_remarks,
+                college_school,
+                college_remarks,
+                graduate_studies_school,
+                graduate_studies_remarks,
+                we_from_1,
+                we_to_1,
+                we_position_1,
+                we_designation_1,
+                we_monthly_salary_1,
+                we_from_2,
+                we_to_2,
+                we_position_2,
+                we_designation_2,
+                we_monthly_salary_2,
+                we_from_3,
+                we_to_3,
+                we_position_3,
+                we_designation_3,
+                we_monthly_salary_3,
+                we_from_4,
+                we_to_4,
+                we_position_4,
+                we_designation_4,
+                we_monthly_salary_4,
+                we_from_5,
+                we_to_5,
+                we_position_5,
+                we_designation_5,
+                we_monthly_salary_5
+            } = nonTeachingFormData;
 
-                setFormData({
-                    userType: 3,
-                    name: "",
-                    email: "",
-                    password: "",
-                    confirmPassword: ""
-                });
+            let hasError = false;
+            const nonTeachingFormError = {
+                lastname: "",
+                firstname: "",
+                middlename: "",
+                birth_date: "",
+                birth_place: "",
+                gender: "",
+                civil_status: "",
+                citizenship: "",
+                house_number: "",
+                street: "",
+                subdivision: "",
+                barangay: "",
+                city: "",
+                province: "",
+                zipcode: "",
+                gsis: "",
+                pagibig: "",
+                philhealth: "",
+                sss: "",
+                tin: "",
+                email: "",
+                password: "",
+                password_confirmation: ""
+            };
 
-                window.location = "/login";
-            } catch (error) {
-                setFormError({
-                    ...formError,
-                    ...(error?.response?.data?.errors || {
-                        confirmPassword: "Something went wrong!"
-                    })
-                });
-            } finally {
-                setIsLoading(false);
+            if (lastname.trim() === "") {
+                nonTeachingFormError.lastname = "This is required";
+                hasError = true;
+            }
+            if (firstname.trim() === "") {
+                nonTeachingFormError.firstname = "This is required";
+                hasError = true;
+            }
+            if (birth_date.trim() === "") {
+                nonTeachingFormError.birth_date = "This is required";
+                hasError = true;
+            }
+            if (birth_place.trim() === "") {
+                nonTeachingFormError.birth_place = "This is required";
+                hasError = true;
+            }
+            if (gender.trim() === "") {
+                nonTeachingFormError.gender = "This is required";
+                hasError = true;
+            }
+            if (civil_status.trim() === "") {
+                nonTeachingFormError.civil_status = "This is required";
+                hasError = true;
+            }
+            if (citizenship.trim() === "") {
+                nonTeachingFormError.citizenship = "This is required";
+                hasError = true;
+            }
+            if (house_number.trim() === "") {
+                nonTeachingFormError.house_number = "This is required";
+                hasError = true;
+            }
+            if (street.trim() === "") {
+                nonTeachingFormError.street = "This is required";
+                hasError = true;
+            }
+            if (subdivision.trim() === "") {
+                nonTeachingFormError.subdivision = "This is required";
+                hasError = true;
+            }
+            if (barangay.trim() === "") {
+                nonTeachingFormError.barangay = "This is required";
+                hasError = true;
+            }
+            if (city.trim() === "") {
+                nonTeachingFormError.city = "This is required";
+                hasError = true;
+            }
+            if (province.trim() === "") {
+                nonTeachingFormError.province = "This is required";
+                hasError = true;
+            }
+            if (zipcode.trim() === "") {
+                nonTeachingFormError.zipcode = "This is required";
+                hasError = true;
+            }
+            if (gsis.trim() === "") {
+                nonTeachingFormError.gsis = "This is required";
+                hasError = true;
+            }
+            if (pagibig.trim() === "") {
+                nonTeachingFormError.pagibig = "This is required";
+                hasError = true;
+            }
+            if (philhealth.trim() === "") {
+                nonTeachingFormError.philhealth = "This is required";
+                hasError = true;
+            }
+            if (sss.trim() === "") {
+                nonTeachingFormError.sss = "This is required";
+                hasError = true;
+            }
+            if (tin.trim() === "") {
+                nonTeachingFormError.tin = "This is required";
+                hasError = true;
+            }
+            if (email.trim() === "") {
+                nonTeachingFormError.email = "This is required";
+                hasError = true;
+            }
+            if (password.trim() === "") {
+                nonTeachingFormError.password = "This is required";
+                hasError = true;
+            }
+            if (password_confirmation.trim() === "") {
+                nonTeachingFormError.password_confirmation = "This is required";
+                hasError = true;
+            }
+
+            if (hasError) {
+                setNonTeachingFormError(nonTeachingFormError);
+                alert("There's an error in the form. Please check.");
+            } else {
+                try {
+                    setNonTeachingFormError({
+                        lastname: "",
+                        firstname: "",
+                        middlename: "",
+                        birth_date: "",
+                        birth_place: "",
+                        gender: "",
+                        civil_status: "",
+                        citizenship: "",
+                        house_number: "",
+                        street: "",
+                        subdivision: "",
+                        barangay: "",
+                        city: "",
+                        province: "",
+                        zipcode: "",
+                        gsis: "",
+                        pagibig: "",
+                        philhealth: "",
+                        sss: "",
+                        tin: "",
+                        email: "",
+                        password: "",
+                        password_confirmation: ""
+                    });
+
+                    setIsLoading(true);
+
+                    const work_experiences = [
+                        {
+                            we_from_1,
+                            we_to_1,
+                            we_position_1,
+                            we_designation_1,
+                            we_monthly_salary_1
+                        },
+                        {
+                            we_from_2,
+                            we_to_2,
+                            we_position_2,
+                            we_designation_2,
+                            we_monthly_salary_2
+                        },
+                        {
+                            we_from_3,
+                            we_to_3,
+                            we_position_3,
+                            we_designation_3,
+                            we_monthly_salary_3
+                        },
+                        {
+                            we_from_4,
+                            we_to_4,
+                            we_position_4,
+                            we_designation_4,
+                            we_monthly_salary_4
+                        },
+                        {
+                            we_from_5,
+                            we_to_5,
+                            we_position_5,
+                            we_designation_5,
+                            we_monthly_salary_5
+                        }
+                    ];
+
+                    await http.get("/sanctum/csrf-cookie");
+                    await http.post("/register", {
+                        ...nonTeachingFormData,
+                        work_experiences: JSON.stringify(work_experiences),
+                        user_type: userType
+                    });
+
+                    window.location = "/login";
+                } catch (error) {
+                    setNonTeachingFormError({
+                        ...studentFormError,
+                        ...(error?.response?.data?.errors || {
+                            password_confirmation: "Something went wrong!"
+                        })
+                    });
+                } finally {
+                    setIsLoading(false);
+                }
             }
         }
-    };
-
-    const StudentForm = () => {
-        return (
-            <div className="columns">
-                <div className="column is-6">
-                    <div className="is-size-5 mb-2">Personal Info</div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span> Last
-                                name
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="lastname"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Enter last name"
-                                        //value={formData.lastname}
-                                        //onChange={handleInputChange}
-                                    />
-                                </div>
-                                {formError.lastname && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.lastname}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span> First
-                                name
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="firstname"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Enter first name"
-                                        //value={formData.firstname}
-                                        //onChange={handleInputChange}
-                                    />
-                                    {formError.firstname && (
-                                        <div>
-                                            <span className="has-text-danger">
-                                                {formError.firstname}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">Middle name</label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="middlename"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Enter middle name"
-                                        //value={formData.middlename}
-                                        //onChange={handleInputChange}
-                                    />
-                                    {formError.middlename && (
-                                        <div>
-                                            <span className="has-text-danger">
-                                                {formError.middlename}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">Extension name</label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="extname"
-                                        className="input"
-                                        type="text"
-                                        placeholder="JR., SR., III"
-                                        //value={formData.extname}
-                                        //onChange={handleInputChange}
-                                    />
-                                    {formError.extname && (
-                                        <div>
-                                            <span className="has-text-danger">
-                                                {formError.extname}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span> Date
-                                of Birth
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="birthdate"
-                                        className="input"
-                                        type="date"
-                                        //value={formData.birthdate}
-                                        //onChange={handleInputChange}
-                                    />
-                                    {formError.birthdate && (
-                                        <div>
-                                            <span className="has-text-danger">
-                                                {formError.birthdate}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span>{" "}
-                                Gender
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <label className="radio">
-                                        <input type="radio" name="gender" />
-                                        Male
-                                    </label>
-                                    <label className="radio">
-                                        <input type="radio" name="gender" />
-                                        Female
-                                    </label>
-                                    {formError.gender && (
-                                        <div>
-                                            <span className="has-text-danger">
-                                                {formError.gender}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span>{" "}
-                                Address
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="address"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Address for Cabuyeños"
-                                        //value={formData.address}
-                                        //onChange={handleInputChange}
-                                    />
-                                    {formError.address && (
-                                        <div>
-                                            <span className="has-text-danger">
-                                                {formError.address}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span> Civil
-                                status
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <div className="select is-fullwidth">
-                                        <select name="civilStatus">
-                                            <option value="Single">
-                                                Single
-                                            </option>
-                                            <option value="Married">
-                                                Married
-                                            </option>
-                                        </select>
-                                    </div>
-                                    {formError.civilStatus && (
-                                        <div>
-                                            <span className="has-text-danger">
-                                                {formError.civilStatus}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span>{" "}
-                                Contact no.
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="contact"
-                                        className="input"
-                                        type="text"
-                                        placeholder="09XX XXXX XXX"
-                                        //value={formData.contact}
-                                        //onChange={handleInputChange}
-                                    />
-                                    {formError.contact && (
-                                        <div>
-                                            <span className="has-text-danger">
-                                                {formError.contact}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span> A
-                                Cabuye&ntilde;o?
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <label className="radio">
-                                        <input
-                                            type="radio"
-                                            name="is_cabuyeno"
-                                        />
-                                        Yes
-                                    </label>
-                                    <label className="radio">
-                                        <input
-                                            type="radio"
-                                            name="is_cabuyeno"
-                                        />
-                                        No
-                                    </label>
-                                    {formError.is_cabuyeno && (
-                                        <div>
-                                            <span className="has-text-danger">
-                                                {formError.is_cabuyeno}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span>{" "}
-                                Registered Voter
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <label className="radio">
-                                        <input
-                                            type="radio"
-                                            name="is_registered_voter"
-                                        />
-                                        Yes
-                                    </label>
-                                    <label className="radio">
-                                        <input
-                                            type="radio"
-                                            name="is_registered_voter"
-                                        />
-                                        No
-                                    </label>
-                                    {formError.is_registered_voter && (
-                                        <div>
-                                            <span className="has-text-danger">
-                                                {formError.is_registered_voter}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span> Fully
-                                Vaccinated?
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <label className="radio">
-                                        <input
-                                            type="radio"
-                                            name="is_fully_vaccinated"
-                                        />
-                                        Yes
-                                    </label>
-                                    <label className="radio">
-                                        <input
-                                            type="radio"
-                                            name="is_fully_vaccinated"
-                                        />
-                                        No
-                                    </label>
-                                    {formError.is_fully_vaccinated && (
-                                        <div>
-                                            <span className="has-text-danger">
-                                                {formError.is_fully_vaccinated}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="is-size-5 mt-6 mb-2">Family Background</div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span>{" "}
-                                Father's name
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="father_name"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Last name, First name, Middle name"
-                                        //value={formData.father_name}
-                                        //onChange={handleInputChange}
-                                    />
-                                </div>
-                                {formError.father_name && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.father_name}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span>{" "}
-                                Occupation
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="father_occupation"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Enter father occupation"
-                                        //value={formData.father_occupation}
-                                        //onChange={handleInputChange}
-                                    />
-                                </div>
-                                {formError.father_occupation && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.father_occupation}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span>{" "}
-                                Contact No.
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="father_contact"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Enter father contact no."
-                                        //value={formData.father_contact}
-                                        //onChange={handleInputChange}
-                                    />
-                                </div>
-                                {formError.father_contact && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.father_contact}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span>{" "}
-                                Registered voter of Cabuyao
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <label className="radio">
-                                        <input
-                                            type="radio"
-                                            name="is_father_voter_of_cabuyao"
-                                        />
-                                        Yes
-                                    </label>
-                                    <label className="radio">
-                                        <input
-                                            type="radio"
-                                            name="is_father_voter_of_cabuyao"
-                                        />
-                                        No
-                                    </label>
-                                </div>
-                                {formError.is_father_voter_of_cabuyao && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {
-                                                formError.is_father_voter_of_cabuyao
-                                            }
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span>{" "}
-                                Mother's maiden name
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="mother_name"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Last name, First name, Middle name"
-                                        //value={formData.mother_name}
-                                        //onChange={handleInputChange}
-                                    />
-                                </div>
-                                {formError.mother_name && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.mother_name}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span>{" "}
-                                Occupation
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="mother_occupation"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Enter mother occupation"
-                                        //value={formData.mother_occupation}
-                                        //onChange={handleInputChange}
-                                    />
-                                </div>
-                                {formError.mother_occupation && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.mother_occupation}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span>{" "}
-                                Contact No.
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="mother_contact"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Enter mother contact no."
-                                        //value={formData.mother_contact}
-                                        //onChange={handleInputChange}
-                                    />
-                                </div>
-                                {formError.mother_contact && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.mother_contact}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span>{" "}
-                                Registered voter of Cabuyao
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <label className="radio">
-                                        <input
-                                            type="radio"
-                                            name="is_mother_voter_of_cabuyao"
-                                        />
-                                        Yes
-                                    </label>
-                                    <label className="radio">
-                                        <input
-                                            type="radio"
-                                            name="is_mother_voter_of_cabuyao"
-                                        />
-                                        No
-                                    </label>
-                                </div>
-                                {formError.is_mother_voter_of_cabuyao && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {
-                                                formError.is_mother_voter_of_cabuyao
-                                            }
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span>{" "}
-                                Living with parents
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="control">
-                                <label className="radio">
-                                    <input
-                                        type="radio"
-                                        name="is_mother_voter_of_cabuyao"
-                                    />
-                                    Yes
-                                </label>
-                                <label className="radio">
-                                    <input
-                                        type="radio"
-                                        name="is_mother_voter_of_cabuyao"
-                                    />
-                                    No
-                                </label>
-                            </div>
-                            {formError.is_mother_voter_of_cabuyao && (
-                                <div>
-                                    <span className="has-text-danger">
-                                        {formError.is_mother_voter_of_cabuyao}
-                                    </span>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-                <div className="column is-6">
-                    <div className="is-size-5 mb-2">Educational Background</div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span>{" "}
-                                Highest educational attainment
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <div className="select is-fullwidth">
-                                        <select name="education_attained">
-                                            <option value="Graduate">
-                                                Graduate
-                                            </option>
-                                            <option value="Bachelor Degree">
-                                                Bachelor Degree
-                                            </option>
-                                            <option value="Senior High School">
-                                                Senior High School
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                                {formError.education_attained && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.education_attained}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span> Last
-                                school attended
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="last_school_attended"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Enter school"
-                                        //value={formData.last_school_attended}
-                                        //onChange={handleInputChange}
-                                    />
-                                </div>
-                                {formError.last_school_attended && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.last_school_attended}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span>{" "}
-                                School address
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="school_address"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Enter school address"
-                                        //value={formData.school_address}
-                                        //onChange={handleInputChange}
-                                    />
-                                </div>
-                                {formError.school_address && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.school_address}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">Awards received</label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="award_received"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Enter award received"
-                                        //value={formData.award_received}
-                                        //onChange={handleInputChange}
-                                    />
-                                </div>
-                                {formError.award_received && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.award_received}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span> Your
-                                taken Senior High School Strand
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="sh_school_strand"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Enter senior high school strand"
-                                        //value={formData.sh_school_strand}
-                                        //onChange={handleInputChange}
-                                    />
-                                </div>
-                                {formError.sh_school_strand && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.sh_school_strand}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span>{" "}
-                                Desired program
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <div className="select is-fullwidth">
-                                        <select name="course_id">
-                                            <option value="BSIT">BSIT</option>
-                                            <option value="BSCpE">BSCpE</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                {formError.name && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.name}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="is-size-5 mt-6 mb-2">Account Info</div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span> Email
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="email"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Enter email address"
-                                        //value={formData.email}
-                                        //onChange={handleInputChange}
-                                    />
-                                </div>
-                                {formError.email && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.email}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span> Last
-                                name
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="name"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Enter last name"
-                                        //value={formData.name}
-                                        //onChange={handleInputChange}
-                                    />
-                                </div>
-                                {formError.name && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.name}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="field is-horizontal">
-                        <div className="field-label is-normal is-flex-grow-3">
-                            <label className="label">
-                                <span className="has-text-danger">*</span> Last
-                                name
-                            </label>
-                        </div>
-                        <div className="field-body">
-                            <div className="field">
-                                <div className="control">
-                                    <input
-                                        name="name"
-                                        className="input"
-                                        type="text"
-                                        placeholder="Enter last name"
-                                        //value={formData.name}
-                                        //onChange={handleInputChange}
-                                    />
-                                </div>
-                                {formError.name && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.name}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
     };
 
     return (
@@ -1070,9 +743,10 @@ const Register = () => {
                             <div className="control">
                                 <div className="select is-fullwidth">
                                     <select
-                                        name="userType"
-                                        value={formData.userType}
-                                        onChange={handleInputChange}
+                                        value={userType}
+                                        onChange={e =>
+                                            setUserType(Number(e.target.value))
+                                        }
                                     >
                                         <option value={3}>Student</option>
                                         <option value={4}>Teacher</option>
@@ -1088,7 +762,21 @@ const Register = () => {
                         </div>
                     </div>
                     <div className="box">
-                        <StudentForm />
+                        {userType === 3 ? (
+                            <StudentForm
+                                formData={studentFormData}
+                                formError={studentFormError}
+                                onInputChange={handleStudentInputChange}
+                            />
+                        ) : (
+                            <NonTeachingForm
+                                formData={nonTeachingFormData}
+                                formError={nonTeachingFormError}
+                                onInputChange={handleNonTeachingInputChange}
+                            />
+                        )}
+
+                        {/* <NonTeachingForm /> */}
 
                         <hr />
 
