@@ -13,7 +13,7 @@ import NotFound from "pages/public/NotFound";
 
 import Layout from "layout/Layout";
 import Dashboard from "pages/private/Dashboard";
-import Profile from "pages/private/Profile/Profile";
+import Profile from "pages/private/Profile/Index";
 import UpdateProfile from "pages/private/Profile/UpdateProfile";
 
 //admin routes

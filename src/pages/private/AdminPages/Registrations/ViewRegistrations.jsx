@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
+import StudentDetails from "components/common/StudentDetails";
+import NonTeachingDetails from "components/common/NonTeachingDetails";
 
 import http from "services/httpService";
 
@@ -123,7 +125,13 @@ const ViewRegistration = () => {
                     )}
                 </div>
                 <hr />
-                <div>Name: {user.lastname}</div>
+                <div>
+                    {user.user_type === "Student" ? (
+                        <StudentDetails data={user} />
+                    ) : (
+                        <NonTeachingDetails data={user} />
+                    )}
+                </div>
             </div>
         </>
     );

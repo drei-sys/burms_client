@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
@@ -215,7 +215,7 @@ const Register = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        const getCourse = async () => {
+        const getCourses = async () => {
             try {
                 setIsContentLoading(true);
                 const { data } = await http.get("/api/courses");
@@ -227,7 +227,7 @@ const Register = () => {
             }
         };
 
-        getCourse();
+        getCourses();
     }, []);
 
     if (isContentLoading) {
@@ -745,7 +745,7 @@ const Register = () => {
                     window.location = "/login";
                 } catch (error) {
                     setNonTeachingFormError({
-                        ...studentFormError,
+                        ...nonTeachingFormError,
                         ...(error?.response?.data?.errors || {
                             password_confirmation: "Something went wrong!"
                         })

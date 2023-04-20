@@ -221,8 +221,6 @@ const Enroll = () => {
             setSelectedSection(null);
             setSelectedSubject(null);
 
-            console.log(selectedSubject);
-
             const enrollmentItem = {
                 sy_id: schoolYear.id,
                 sy_year: schoolYear.year,

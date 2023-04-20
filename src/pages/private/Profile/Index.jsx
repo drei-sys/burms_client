@@ -5,6 +5,9 @@ import Loader from "components/common/Loader";
 import Error from "components/common/Error";
 import ChangePassword from "./components/ChangePassword";
 
+import StudentDetails from "components/common/StudentDetails";
+import NonTeachingDetails from "components/common/NonTeachingDetails";
+
 import { useUserStore } from "store/userStore";
 
 import http from "services/httpService";
@@ -17,7 +20,7 @@ const Profile = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const { status: userStatus } = useUserStore(state => state);
+    const { status: userStatus, type: userType } = useUserStore(state => state);
 
     useEffect(() => {
         const getUserDetails = async () => {
@@ -69,6 +72,12 @@ const Profile = () => {
                         Your account is pending for admin verification.
                     </div>
                 </div>
+            ) : userType === "Admin" ? (
+                <div className="box mb-4">
+                    <div className="notification is-info my-4">
+                        You are an Admin
+                    </div>
+                </div>
             ) : (
                 <div className="box mb-4">
                     <div className="has-text-right">
@@ -99,7 +108,13 @@ const Profile = () => {
                         )}
                     </div>
                     <hr />
-                    <div>Welcome {userDetails.lastname}</div>
+                    <div>
+                        {userType === "Student" ? (
+                            <StudentDetails data={userDetails} />
+                        ) : (
+                            <NonTeachingDetails data={userDetails} />
+                        )}
+                    </div>
                 </div>
             )}
 

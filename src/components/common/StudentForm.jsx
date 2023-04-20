@@ -1,4 +1,4 @@
-const StudentForm = ({ formData, formError, courses, onInputChange }) => {
+const StudentForm = ({ formData, formError, courses, mode, onInputChange }) => {
     return (
         <div className="columns">
             <div className="column is-6">
@@ -205,7 +205,7 @@ const StudentForm = ({ formData, formError, courses, onInputChange }) => {
                                     <input
                                         type="radio"
                                         name="gender"
-                                        checked={FormData.gender === "Female"}
+                                        checked={formData.gender === "Female"}
                                         onChange={() =>
                                             onInputChange({
                                                 target: {
@@ -1051,95 +1051,105 @@ const StudentForm = ({ formData, formError, courses, onInputChange }) => {
                     </div>
                 </div>
 
-                <div className="is-size-5 mt-6 mb-2">Account Info</div>
+                {mode !== "update" && (
+                    <>
+                        <div className="is-size-5 mt-6 mb-2">Account Info</div>
 
-                <div className="field is-horizontal">
-                    <div className="field-label is-normal is-flex-grow-3">
-                        <label className="label">
-                            <span className="has-text-danger">*</span> Email
-                        </label>
-                    </div>
-                    <div className="field-body">
-                        <div className="field">
-                            <div className="control">
-                                <input
-                                    name="email"
-                                    className="input"
-                                    type="email"
-                                    placeholder="Enter email address"
-                                    value={formData.email}
-                                    onChange={onInputChange}
-                                />
+                        <div className="field is-horizontal">
+                            <div className="field-label is-normal is-flex-grow-3">
+                                <label className="label">
+                                    <span className="has-text-danger">*</span>{" "}
+                                    Email
+                                </label>
                             </div>
-                            {formError.email && (
-                                <div>
-                                    <span className="has-text-danger">
-                                        {formError.email}
-                                    </span>
+                            <div className="field-body">
+                                <div className="field">
+                                    <div className="control">
+                                        <input
+                                            name="email"
+                                            className="input"
+                                            type="email"
+                                            placeholder="Enter email address"
+                                            value={formData.email}
+                                            onChange={onInputChange}
+                                        />
+                                    </div>
+                                    {formError.email && (
+                                        <div>
+                                            <span className="has-text-danger">
+                                                {formError.email}
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div className="field is-horizontal">
-                    <div className="field-label is-normal is-flex-grow-3">
-                        <label className="label">
-                            <span className="has-text-danger">*</span> Password
-                        </label>
-                    </div>
-                    <div className="field-body">
-                        <div className="field">
-                            <div className="control">
-                                <input
-                                    name="password"
-                                    className="input"
-                                    type="password"
-                                    placeholder="Enter password"
-                                    value={formData.password}
-                                    onChange={onInputChange}
-                                />
+                        <div className="field is-horizontal">
+                            <div className="field-label is-normal is-flex-grow-3">
+                                <label className="label">
+                                    <span className="has-text-danger">*</span>{" "}
+                                    Password
+                                </label>
                             </div>
-                            {formError.password && (
-                                <div>
-                                    <span className="has-text-danger">
-                                        {formError.password}
-                                    </span>
+                            <div className="field-body">
+                                <div className="field">
+                                    <div className="control">
+                                        <input
+                                            name="password"
+                                            className="input"
+                                            type="password"
+                                            placeholder="Enter password"
+                                            value={formData.password}
+                                            onChange={onInputChange}
+                                        />
+                                    </div>
+                                    {formError.password && (
+                                        <div>
+                                            <span className="has-text-danger">
+                                                {formError.password}
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div className="field is-horizontal">
-                    <div className="field-label is-normal is-flex-grow-3">
-                        <label className="label">
-                            <span className="has-text-danger">*</span> Confirm
-                            password
-                        </label>
-                    </div>
-                    <div className="field-body">
-                        <div className="field">
-                            <div className="control">
-                                <input
-                                    name="password_confirmation"
-                                    className="input"
-                                    type="password"
-                                    placeholder="Confirm password"
-                                    value={formData.password_confirmation}
-                                    onChange={onInputChange}
-                                />
+                        <div className="field is-horizontal">
+                            <div className="field-label is-normal is-flex-grow-3">
+                                <label className="label">
+                                    <span className="has-text-danger">*</span>{" "}
+                                    Confirm password
+                                </label>
                             </div>
-                            {formError.password_confirmation && (
-                                <div>
-                                    <span className="has-text-danger">
-                                        {formError.password_confirmation}
-                                    </span>
+                            <div className="field-body">
+                                <div className="field">
+                                    <div className="control">
+                                        <input
+                                            name="password_confirmation"
+                                            className="input"
+                                            type="password"
+                                            placeholder="Confirm password"
+                                            value={
+                                                formData.password_confirmation
+                                            }
+                                            onChange={onInputChange}
+                                        />
+                                    </div>
+                                    {formError.password_confirmation && (
+                                        <div>
+                                            <span className="has-text-danger">
+                                                {
+                                                    formError.password_confirmation
+                                                }
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
-                            )}
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </>
+                )}
             </div>
         </div>
     );
