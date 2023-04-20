@@ -1,13 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
+import Loader from "components/common/Loader";
+import Error from "components/common/Error";
 import StudentForm from "components/common/StudentForm";
 import NonTeachingForm from "components/common/NonTeachingForm";
 
 import http from "services/httpService";
 
 const Register = () => {
-    const [userType, setUserType] = useState(3);
+    const [userType, setUserType] = useState("Student");
+
+    const [courses, setCourses] = useState([]);
+
+    const [isContentLoading, setIsContentLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     const [studentFormData, setStudentFormData] = useState({
         lastname: "",
@@ -15,6 +22,7 @@ const Register = () => {
         middlename: "",
         extname: "",
         birth_date: "",
+        birth_place: "",
         gender: "",
         address: "",
         civil_status: "Single",
@@ -36,7 +44,7 @@ const Register = () => {
         school_address: "",
         award_received: "",
         sh_school_strand: "",
-        course_id: 1,
+        course_id: 0,
         email: "",
         password: "",
         password_confirmation: ""
@@ -48,6 +56,7 @@ const Register = () => {
         middlename: "",
         extname: "",
         birth_date: "",
+        birth_place: "",
         gender: "",
         address: "",
         civil_status: "",
@@ -79,6 +88,7 @@ const Register = () => {
         lastname: "",
         firstname: "",
         middlename: "",
+        extname: "",
         birth_date: "",
         birth_place: "",
         gender: "",
@@ -142,6 +152,7 @@ const Register = () => {
         lastname: "",
         firstname: "",
         middlename: "",
+        extname: "",
         birth_date: "",
         birth_place: "",
         gender: "",
@@ -203,6 +214,30 @@ const Register = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
+    useEffect(() => {
+        const getCourse = async () => {
+            try {
+                setIsContentLoading(true);
+                const { data } = await http.get("/api/courses");
+                setCourses(data);
+            } catch (error) {
+                setError(error);
+            } finally {
+                setIsContentLoading(false);
+            }
+        };
+
+        getCourse();
+    }, []);
+
+    if (isContentLoading) {
+        return <Loader />;
+    }
+
+    if (error) {
+        return <Error error={error} />;
+    }
+
     const handleStudentInputChange = e => {
         let { name, value } = e.target;
         setStudentFormData({ ...studentFormData, [name]: value });
@@ -218,11 +253,12 @@ const Register = () => {
     const handleFormSubmit = async e => {
         e.preventDefault();
 
-        if (userType === 3) {
+        if (userType === "Student") {
             const {
                 lastname,
                 firstname,
                 birth_date,
+                birth_place,
                 gender,
                 address,
                 civil_status,
@@ -255,6 +291,7 @@ const Register = () => {
                 lastname: "",
                 firstname: "",
                 birth_date: "",
+                birth_place: "",
                 gender: "",
                 address: "",
                 civil_status: "",
@@ -292,6 +329,10 @@ const Register = () => {
             }
             if (birth_date.trim() === "") {
                 studentFormError.birth_date = "This is required";
+                hasError = true;
+            }
+            if (birth_place.trim() === "") {
+                studentFormError.birth_place = "This is required";
                 hasError = true;
             }
             if (gender.trim() === "") {
@@ -380,7 +421,7 @@ const Register = () => {
                 studentFormError.sh_school_strand = "This is required";
                 hasError = true;
             }
-            if (course_id === 0) {
+            if (Number(course_id) === 0) {
                 studentFormError.course_id = "This is required";
                 hasError = true;
             }
@@ -410,6 +451,7 @@ const Register = () => {
                         lastname: "",
                         firstname: "",
                         birth_date: "",
+                        birth_place: "",
                         gender: "",
                         address: "",
                         civil_status: "",
@@ -460,7 +502,6 @@ const Register = () => {
             const {
                 lastname,
                 firstname,
-                middlename,
                 birth_date,
                 birth_place,
                 gender,
@@ -478,21 +519,10 @@ const Register = () => {
                 philhealth,
                 sss,
                 tin,
-                agency_employee_no,
                 email,
                 password,
                 password_confirmation,
 
-                elementary_school,
-                elementary_remarks,
-                secondary_school,
-                secondary_remarks,
-                vocational_school,
-                vocational_remarks,
-                college_school,
-                college_remarks,
-                graduate_studies_school,
-                graduate_studies_remarks,
                 we_from_1,
                 we_to_1,
                 we_position_1,
@@ -524,7 +554,6 @@ const Register = () => {
             const nonTeachingFormError = {
                 lastname: "",
                 firstname: "",
-                middlename: "",
                 birth_date: "",
                 birth_place: "",
                 gender: "",
@@ -644,7 +673,6 @@ const Register = () => {
                     setNonTeachingFormError({
                         lastname: "",
                         firstname: "",
-                        middlename: "",
                         birth_date: "",
                         birth_place: "",
                         gender: "",
@@ -745,15 +773,19 @@ const Register = () => {
                                     <select
                                         value={userType}
                                         onChange={e =>
-                                            setUserType(Number(e.target.value))
+                                            setUserType(e.target.value)
                                         }
                                     >
-                                        <option value={3}>Student</option>
-                                        <option value={4}>Teacher</option>
-                                        <option value={5}>Non Teaching</option>
-                                        <option value={6}>Registrar</option>
-                                        <option value={7}>Dean</option>
-                                        <option value={8}>
+                                        <option value="Student">Student</option>
+                                        <option value="Teacher">Teacher</option>
+                                        <option value="Non Teaching">
+                                            Non Teaching
+                                        </option>
+                                        <option value="Registrar">
+                                            Registrar
+                                        </option>
+                                        <option value="Dean">Dean</option>
+                                        <option value="DeptChair">
                                             Department Chair
                                         </option>
                                     </select>
@@ -762,10 +794,11 @@ const Register = () => {
                         </div>
                     </div>
                     <div className="box">
-                        {userType === 3 ? (
+                        {userType === "Student" ? (
                             <StudentForm
                                 formData={studentFormData}
                                 formError={studentFormError}
+                                courses={courses}
                                 onInputChange={handleStudentInputChange}
                             />
                         ) : (

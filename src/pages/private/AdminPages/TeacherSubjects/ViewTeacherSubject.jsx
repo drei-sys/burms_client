@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
+import UserName from "components/common/UserName";
 
 import http from "services/httpService";
 
@@ -100,7 +101,9 @@ const ViewTeacherSubject = () => {
                         <div>
                             <label className="label">Teacher name:</label>
                         </div>
-                        <div>{teacherSubject.teacher_name}</div>
+                        <div>
+                            <UserName user={teacherSubject} />
+                        </div>
                     </div>
                     <div className="box">
                         <div>

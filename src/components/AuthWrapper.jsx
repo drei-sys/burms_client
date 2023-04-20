@@ -18,9 +18,9 @@ const AuthWrapper = () => {
                 const { data } = await http.get("/api/user");
                 setUser({
                     id: data.id,
-                    name: data.name,
+                    name: `${data.lastname}, ${data.firstname}`,
                     type: data.user_type,
-                    is_verified: data.is_verified
+                    status: data.status
                 });
             } catch (error) {
                 if (error.message !== "Request failed with status code 401") {

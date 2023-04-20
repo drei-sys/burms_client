@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
+import UserName from "components/common/UserName";
 
 import http from "services/httpService";
 
@@ -214,9 +215,9 @@ const UpdateTeacherSubjects = () => {
                                     disabled
                                 >
                                     <option value={0}></option>
-                                    {teachers.map(({ id, name }) => (
+                                    {teachers.map(({ id, ...rest }) => (
                                         <option key={id} value={id}>
-                                            {name}
+                                            <UserName user={rest} />
                                         </option>
                                     ))}
                                 </select>

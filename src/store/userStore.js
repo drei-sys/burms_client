@@ -3,7 +3,7 @@ import { create } from "zustand";
 export const useUserStore = create(set => ({
     id: null,
     name: "",
-    type: 0,
-    is_verified: 0,
+    type: "",
+    status: "For Verification",
     setUser: user => set(state => ({ ...state, ...user }))
 }));

@@ -14,7 +14,7 @@ const SchoolYear = () => {
     const [isContentLoading, setIsContentLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const { is_verified: userIsVerified } = useUserStore(state => state);
+    const { status: userStatus } = useUserStore(state => state);
 
     useEffect(() => {
         const getSchoolYears = async () => {
@@ -44,7 +44,7 @@ const SchoolYear = () => {
         return <Error error={error} />;
     }
 
-    if (!userIsVerified) {
+    if (userStatus === "For Verification") {
         return (
             <>
                 <h1 className="is-size-4 mb-4">School Years</h1>

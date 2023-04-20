@@ -13,7 +13,8 @@ const ViewRegistration = () => {
     const [error, setError] = useState(null);
     const [isNotExist, setIsNotExist] = useState(false);
 
-    const [isLoading, setIsLoading] = useState(false);
+    const [isVerifyLoading, setIsVerifyLoading] = useState(false);
+    const [isRejectLoading, setIsRejectLoading] = useState(false);
 
     const params = useParams();
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ const ViewRegistration = () => {
         const getUser = async () => {
             try {
                 const { data } = await http.get(`/api/user/${params.id}`);
-                if (data?.name) {
+                if (data?.lastname) {
                     setUser(data);
                 } else {
                     setIsNotExist(true);
@@ -51,13 +52,25 @@ const ViewRegistration = () => {
 
     const handleVerify = async () => {
         try {
-            setIsLoading(true);
+            setIsVerifyLoading(true);
             await http.put(`/api/verifyUser/${params.id}`);
             navigate("/registrations");
         } catch (error) {
             setError(error);
         } finally {
-            setIsLoading(false);
+            setIsVerifyLoading(false);
+        }
+    };
+
+    const handleReject = async () => {
+        try {
+            setIsRejectLoading(true);
+            await http.put(`/api/rejectUser/${params.id}`);
+            navigate("/registrations");
+        } catch (error) {
+            setError(error);
+        } finally {
+            setIsRejectLoading(false);
         }
     };
 
@@ -74,26 +87,43 @@ const ViewRegistration = () => {
             </h1>
             <div className="box">
                 <div className="has-text-right">
-                    {user.is_verified ? (
+                    {user.user_status === "Verified" ? (
                         <span className="has-text-success">
                             <span className="icon">
                                 <i className="fa-solid fa-check"></i>
                             </span>{" "}
                             Verified
                         </span>
+                    ) : user.user_status === "Rejected" ? (
+                        <span className="has-text-danger">
+                            <span className="icon">
+                                <i className="fa-solid fa-xmark-to-slot"></i>
+                            </span>{" "}
+                            Rejected
+                        </span>
                     ) : (
-                        <button
-                            className={`button is-success  ${
-                                isLoading ? "is-loading" : ""
-                            }`}
-                            onClick={handleVerify}
-                        >
-                            Verify
-                        </button>
+                        <>
+                            <button
+                                className={`button is-success mr-1  ${
+                                    isVerifyLoading ? "is-loading" : ""
+                                }`}
+                                onClick={handleVerify}
+                            >
+                                Verify
+                            </button>
+                            <button
+                                className={`button is-danger mr-1  ${
+                                    isRejectLoading ? "is-loading" : ""
+                                }`}
+                                onClick={handleReject}
+                            >
+                                Reject
+                            </button>
+                        </>
                     )}
                 </div>
                 <hr />
-                <div>Name: {user.name}</div>
+                <div>Name: {user.lastname}</div>
             </div>
         </>
     );

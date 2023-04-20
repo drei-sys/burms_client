@@ -1,9 +1,9 @@
 import { useUserStore } from "store/userStore";
 
 const RequestTOR = () => {
-    const { is_verified: userIsVerified } = useUserStore(state => state);
+    const { status: userStatus } = useUserStore(state => state);
 
-    if (!userIsVerified) {
+    if (userStatus === "For Verification") {
         return (
             <>
                 <h1 className="is-size-4 mb-4">Request TOR</h1>

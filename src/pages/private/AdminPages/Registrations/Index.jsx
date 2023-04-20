@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
 import ConfirmModal from "components/common/ConfirmModal";
+import UserName from "components/common/UserName";
 
 import http from "services/httpService";
 
@@ -18,7 +19,10 @@ const Registrations = () => {
     const [error, setError] = useState(null);
 
     const [isOpenConfirmVerify, setIsOpenConfirmVerify] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isVerifyLoading, setIsVerifyLoading] = useState(false);
+
+    const [isOpenConfirmReject, setIsOpenConfirmReject] = useState(false);
+    const [isRejectLoading, setIsRejectLoading] = useState(false);
 
     useEffect(() => {
         const getUsers = async () => {
@@ -49,9 +53,14 @@ const Registrations = () => {
         setIsOpenConfirmVerify(true);
     };
 
+    const showConfirmReject = selectedId => {
+        setSelectedUser(users.find(({ id }) => id === selectedId));
+        setIsOpenConfirmReject(true);
+    };
+
     const handleVerify = async () => {
         try {
-            setIsLoading(true);
+            setIsVerifyLoading(true);
             await http.put(`/api/verifyUser/${selectedUser.id}`);
             setRefetchUsersRef(Math.random());
         } catch (error) {
@@ -60,22 +69,30 @@ const Registrations = () => {
             );
         } finally {
             setIsOpenConfirmVerify(false);
-            setIsLoading(false);
+            setIsVerifyLoading(false);
         }
     };
 
-    const forApproveUser = users.filter(({ is_verified }) => is_verified === 0);
-    const approvedUser = users.filter(({ is_verified }) => is_verified === 1);
-
-    const userTypes = {
-        1: "Admin",
-        3: "Student",
-        4: "Teacher",
-        5: "Non Teaching",
-        6: "Registrar",
-        7: "Dean",
-        8: "Department Chair"
+    const handleReject = async () => {
+        try {
+            setIsRejectLoading(true);
+            await http.put(`/api/rejectUser/${selectedUser.id}`);
+            setRefetchUsersRef(Math.random());
+        } catch (error) {
+            alert(
+                "An error occured while verifying the user. Please try again."
+            );
+        } finally {
+            setIsOpenConfirmReject(false);
+            setIsRejectLoading(false);
+        }
     };
+
+    const forVerificationUsers = users.filter(
+        ({ status }) => status === "For Verification"
+    );
+    const verifiedUsers = users.filter(({ status }) => status === "Verified");
+    const rejectedUsers = users.filter(({ status }) => status === "Rejected");
 
     const Table = ({ users }) => {
         if (users.length === 0) {
@@ -87,53 +104,83 @@ const Registrations = () => {
                 <thead>
                     <tr>
                         <th>User name</th>
-                        <th style={{ width: 120 }}></th>
+                        <th style={{ width: 180 }}></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map(({ id, name, user_type, is_verified }) => {
-                        return (
-                            <tr key={id}>
-                                <td>
-                                    <div>
-                                        <span className="has-text-weight-medium">
-                                            {name}
-                                        </span>
-                                    </div>
-                                    <div>
-                                        <span className="is-size-6">
-                                            {userTypes[user_type]}
-                                        </span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <Link to={`/registration/${id}`}>
-                                        <button
-                                            className="button mr-1"
-                                            title="View profile"
-                                        >
-                                            <span className="icon">
-                                                <i className="fa-solid fa-eye"></i>
+                    {users.map(
+                        ({
+                            id,
+                            lastname,
+                            firstname,
+                            middlename,
+                            extname,
+                            user_type,
+                            status
+                        }) => {
+                            return (
+                                <tr key={id}>
+                                    <td>
+                                        <div>
+                                            <span className="has-text-weight-medium">
+                                                <UserName
+                                                    user={{
+                                                        lastname,
+                                                        firstname,
+                                                        middlename,
+                                                        extname
+                                                    }}
+                                                />
                                             </span>
-                                        </button>
-                                    </Link>
-                                    {!is_verified ? (
-                                        <button
-                                            className="button is-success mr-1"
-                                            title="Verify"
-                                            onClick={() =>
-                                                showConfirmVerify(id)
-                                            }
-                                        >
-                                            <span className="icon">
-                                                <i className="fa-solid fa-check"></i>
+                                        </div>
+                                        <div>
+                                            <span className="is-size-6">
+                                                {user_type}
                                             </span>
-                                        </button>
-                                    ) : null}
-                                </td>
-                            </tr>
-                        );
-                    })}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <Link to={`/registration/${id}`}>
+                                            <button
+                                                className="button mr-1"
+                                                title="View profile"
+                                            >
+                                                <span className="icon">
+                                                    <i className="fa-solid fa-eye"></i>
+                                                </span>
+                                            </button>
+                                        </Link>
+                                        {status === "For Verification" ? (
+                                            <button
+                                                className="button is-success mr-1"
+                                                title="Verify"
+                                                onClick={() =>
+                                                    showConfirmVerify(id)
+                                                }
+                                            >
+                                                <span className="icon">
+                                                    <i className="fa-solid fa-check"></i>
+                                                </span>
+                                            </button>
+                                        ) : null}
+                                        {status === "For Verification" ? (
+                                            <button
+                                                className="button is-danger mr-1"
+                                                title="Reject"
+                                                onClick={() =>
+                                                    showConfirmReject(id)
+                                                }
+                                            >
+                                                <span className="icon">
+                                                    <i className="fa-solid fa-trash"></i>
+                                                </span>
+                                            </button>
+                                        ) : null}
+                                    </td>
+                                </tr>
+                            );
+                        }
+                    )}
                 </tbody>
             </table>
         );
@@ -141,9 +188,11 @@ const Registrations = () => {
 
     let TabContent = () => null;
     if (activeTab === 1) {
-        TabContent = () => <Table users={forApproveUser} />;
+        TabContent = () => <Table users={forVerificationUsers} />;
     } else if (activeTab === 2) {
-        TabContent = () => <Table users={approvedUser} />;
+        TabContent = () => <Table users={verifiedUsers} />;
+    } else if (activeTab === 3) {
+        TabContent = () => <Table users={rejectedUsers} />;
     }
 
     return (
@@ -156,13 +205,21 @@ const Registrations = () => {
                             className={activeTab === 1 ? "is-active" : ""}
                             onClick={() => setActiveTab(1)}
                         >
-                            <a>For Verification ({forApproveUser.length})</a>
+                            <a>
+                                For Verification ({forVerificationUsers.length})
+                            </a>
                         </li>
                         <li
                             className={activeTab === 2 ? "is-active" : ""}
                             onClick={() => setActiveTab(2)}
                         >
-                            <a>Verified ({approvedUser.length})</a>
+                            <a>Verified ({verifiedUsers.length})</a>
+                        </li>
+                        <li
+                            className={activeTab === 3 ? "is-active" : ""}
+                            onClick={() => setActiveTab(3)}
+                        >
+                            <a>Rejected ({rejectedUsers.length})</a>
                         </li>
                     </ul>
                 </div>
@@ -173,15 +230,28 @@ const Registrations = () => {
             </div>
 
             <ConfirmModal
-                title="Confirm User"
-                description={`Are you sure do you want to verify the account of ${selectedUser?.name}?`}
+                title="Verify User"
+                description={`Are you sure do you want to verify the account of ${selectedUser?.lastname}?`}
                 isOpen={isOpenConfirmVerify}
-                isLoading={isLoading}
+                isLoading={isVerifyLoading}
                 onOk={() => {
                     handleVerify();
                 }}
                 onClose={() => {
                     setIsOpenConfirmVerify(false);
+                }}
+            />
+
+            <ConfirmModal
+                title="Reject User"
+                description={`Are you sure do you want to reject the account of ${selectedUser?.lastname}?`}
+                isOpen={isOpenConfirmReject}
+                isLoading={isRejectLoading}
+                onOk={() => {
+                    handleReject();
+                }}
+                onClose={() => {
+                    setIsOpenConfirmReject(false);
                 }}
             />
         </>

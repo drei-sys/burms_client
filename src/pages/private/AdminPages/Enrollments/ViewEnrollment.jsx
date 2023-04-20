@@ -4,12 +4,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
 import ConfirmModal from "components/common/ConfirmModal";
+import UserName from "components/common/UserName";
 
 import http from "services/httpService";
 
 const ViewEnrollment = () => {
     const [enrollment, setEnrollment] = useState({ status: "" });
     const [enrollmentItems, setEnrollmentItems] = useState([]);
+    const [student, setStudent] = useState(null);
 
     const [isContentLoading, setIsContentLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -30,12 +32,13 @@ const ViewEnrollment = () => {
                 const { data } = await http.get(
                     `/api/enrollmentItems/${params.id}`
                 );
-                const { enrollment, enrollmentItems } = data;
+                const { student, enrollment, enrollmentItems } = data;
                 if (data.length === 0) {
                     setIsNotExist(true);
                 } else {
                     setEnrollment(enrollment);
                     setEnrollmentItems(enrollmentItems);
+                    setStudent(student);
                 }
             } catch (error) {
                 setError(error);
@@ -65,7 +68,7 @@ const ViewEnrollment = () => {
         try {
             setIsApproveLoading(true);
             await http.put(`/api/approveEnrollment/${params.id}`);
-            navigate("/adminViewEnrollments");
+            navigate("/viewEnrollments");
         } catch (error) {
             console.log(error);
             alert(
@@ -81,7 +84,7 @@ const ViewEnrollment = () => {
         try {
             setIsRejectLoading(true);
             await http.put(`/api/rejectEnrollment/${params.id}`);
-            navigate("/adminViewEnrollments");
+            navigate("/viewEnrollments");
         } catch (error) {
             console.log(error);
             alert(
@@ -93,22 +96,25 @@ const ViewEnrollment = () => {
         }
     };
 
-    const semesters = {
-        1: "1st",
-        2: "2nd"
-    };
-
     return (
         <>
             <h1 className="is-size-4 mb-4">
                 <button
                     className="button is-ghost"
-                    onClick={() => navigate("/adminViewEnrollments")}
+                    onClick={() => navigate("/viewEnrollments")}
                 >
                     <i className="fa-solid fa-arrow-left"></i>
                 </button>{" "}
                 View Enrollment
             </h1>
+            <div className="box mb-4">
+                <div>
+                    <span className="label">Student name:</span>
+                </div>
+                <div>
+                    <UserName user={student} />
+                </div>
+            </div>
             <div className="box">
                 <table className="table " style={{ width: "100%" }}>
                     <thead>
@@ -135,7 +141,7 @@ const ViewEnrollment = () => {
                             return (
                                 <tr key={subject_id}>
                                     <td>{year}</td>
-                                    <td>{semesters[semester]}</td>
+                                    <td>{semester}</td>
                                     <td>{course_name}</td>
                                     <td>{section_name}</td>
                                     <td>
@@ -146,7 +152,7 @@ const ViewEnrollment = () => {
                         })}
                     </tbody>
                 </table>
-                {enrollment.status === "for_approval" && (
+                {enrollment.status === "For Approval" && (
                     <>
                         <hr />
                         <div>

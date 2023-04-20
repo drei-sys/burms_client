@@ -142,12 +142,12 @@ function App() {
         { path: "/profile", element: Profile },
         { path: "/updateProfile", element: UpdateProfile },
 
-        ...adminRoutes.map(i => ({ ...i, userType: 1 })),
-        ...studentRoutes.map(i => ({ ...i, userType: 3 })),
-        ...teacherRoutes.map(i => ({ ...i, userType: 4 })),
-        ...registrarRoutes.map(i => ({ ...i, userType: 6 })),
-        ...deanRoutes.map(i => ({ ...i, userType: 7 })),
-        ...deptChairRoutes.map(i => ({ ...i, userType: 8 }))
+        ...adminRoutes.map(i => ({ ...i, userType: "Admin" })),
+        ...studentRoutes.map(i => ({ ...i, userType: "Student" })),
+        ...teacherRoutes.map(i => ({ ...i, userType: "Teacher" })),
+        ...registrarRoutes.map(i => ({ ...i, userType: "Registrar" })),
+        ...deanRoutes.map(i => ({ ...i, userType: "Dean" })),
+        ...deptChairRoutes.map(i => ({ ...i, userType: "DeptChair" }))
     ];
 
     return (
@@ -175,9 +175,12 @@ function App() {
                                     element={<Element />}
                                 />
                             ))}
-                        <Route path="/" element={<RoleRoutes userType={1} />}>
+                        <Route
+                            path="/"
+                            element={<RoleRoutes userType="Admin" />}
+                        >
                             {privateRoutes
-                                .filter(({ userType }) => userType === 1)
+                                .filter(({ userType }) => userType === "Admin")
                                 .map(({ path, element: Element }) => (
                                     <Route
                                         key={path}
@@ -186,9 +189,14 @@ function App() {
                                     />
                                 ))}
                         </Route>
-                        <Route path="/" element={<RoleRoutes userType={3} />}>
+                        <Route
+                            path="/"
+                            element={<RoleRoutes userType="Student" />}
+                        >
                             {privateRoutes
-                                .filter(({ userType }) => userType === 3)
+                                .filter(
+                                    ({ userType }) => userType === "Student"
+                                )
                                 .map(({ path, element: Element }) => (
                                     <Route
                                         key={path}
@@ -197,9 +205,14 @@ function App() {
                                     />
                                 ))}
                         </Route>
-                        <Route path="/" element={<RoleRoutes userType={4} />}>
+                        <Route
+                            path="/"
+                            element={<RoleRoutes userType="Teacher" />}
+                        >
                             {privateRoutes
-                                .filter(({ userType }) => userType === 4)
+                                .filter(
+                                    ({ userType }) => userType === "Teacher"
+                                )
                                 .map(({ path, element: Element }) => (
                                     <Route
                                         key={path}
@@ -208,9 +221,14 @@ function App() {
                                     />
                                 ))}
                         </Route>
-                        <Route path="/" element={<RoleRoutes userType={6} />}>
+                        <Route
+                            path="/"
+                            element={<RoleRoutes userType="Registrar" />}
+                        >
                             {privateRoutes
-                                .filter(({ userType }) => userType === 6)
+                                .filter(
+                                    ({ userType }) => userType === "Registrar"
+                                )
                                 .map(({ path, element: Element }) => (
                                     <Route
                                         key={path}
@@ -219,9 +237,12 @@ function App() {
                                     />
                                 ))}
                         </Route>
-                        <Route path="/" element={<RoleRoutes userType={7} />}>
+                        <Route
+                            path="/"
+                            element={<RoleRoutes userType="Dean" />}
+                        >
                             {privateRoutes
-                                .filter(({ userType }) => userType === 7)
+                                .filter(({ userType }) => userType === "Dean")
                                 .map(({ path, element: Element }) => (
                                     <Route
                                         key={path}
@@ -230,9 +251,14 @@ function App() {
                                     />
                                 ))}
                         </Route>
-                        <Route path="/" element={<RoleRoutes userType={8} />}>
+                        <Route
+                            path="/"
+                            element={<RoleRoutes userType="DeptChair" />}
+                        >
                             {privateRoutes
-                                .filter(({ userType }) => userType === 8)
+                                .filter(
+                                    ({ userType }) => userType === "DeptChair"
+                                )
                                 .map(({ path, element: Element }) => (
                                     <Route
                                         key={path}

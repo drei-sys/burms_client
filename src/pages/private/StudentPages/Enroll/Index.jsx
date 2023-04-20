@@ -33,7 +33,7 @@ const Enroll = () => {
     const [isEnrollLoading, setIsEnrollLoading] = useState(false);
 
     const navigate = useNavigate();
-    const { is_verified: userIsVerified } = useUserStore(state => state);
+    const { status: userStatus } = useUserStore(state => state);
 
     useEffect(() => {
         const getPublishedSchoolYear = async () => {
@@ -143,7 +143,7 @@ const Enroll = () => {
         return <Error error={error} />;
     }
 
-    if (!userIsVerified) {
+    if (userStatus === "For Verification") {
         return (
             <>
                 <h1 className="is-size-4 mb-4">Enroll</h1>
@@ -260,7 +260,7 @@ const Enroll = () => {
             setIsEnrollLoading(true);
             await http.post("/api/enrollment", {
                 sy_id: schoolYear.id,
-                status: "for_approval",
+                status: "For Approval",
                 items: enrollmentItems
             });
 

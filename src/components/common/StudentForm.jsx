@@ -1,4 +1,4 @@
-const StudentForm = ({ formData, formError, onInputChange }) => {
+const StudentForm = ({ formData, formError, courses, onInputChange }) => {
     return (
         <div className="columns">
             <div className="column is-6">
@@ -138,6 +138,36 @@ const StudentForm = ({ formData, formError, onInputChange }) => {
                                     <div>
                                         <span className="has-text-danger">
                                             {formError.birth_date}
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="field is-horizontal">
+                    <div className="field-label is-normal is-flex-grow-3">
+                        <label className="label">
+                            <span className="has-text-danger">*</span> Birth
+                            place name
+                        </label>
+                    </div>
+                    <div className="field-body">
+                        <div className="field">
+                            <div className="control">
+                                <input
+                                    name="birth_place"
+                                    className="input"
+                                    type="text"
+                                    placeholder="Enter birth place"
+                                    value={formData.birth_place}
+                                    onChange={onInputChange}
+                                />
+                                {formError.birth_place && (
+                                    <div>
+                                        <span className="has-text-danger">
+                                            {formError.birth_place}
                                         </span>
                                     </div>
                                 )}
@@ -1001,8 +1031,12 @@ const StudentForm = ({ formData, formError, onInputChange }) => {
                                         value={formData.course_id}
                                         onChange={onInputChange}
                                     >
-                                        <option value={1}>BSIT</option>
-                                        <option value={2}>BSCpE</option>
+                                        <option value={0}></option>
+                                        {courses.map(({ id, name }) => (
+                                            <option key={id} value={id}>
+                                                {name}
+                                            </option>
+                                        ))}
                                     </select>
                                 </div>
                             </div>

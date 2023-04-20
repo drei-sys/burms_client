@@ -91,7 +91,11 @@ const UpdateSection = () => {
                 setIsLoading(true);
                 await http.put(`/api/section/${section.id}`, { name });
 
-                navigate(userType === 8 ? "/deptChairSections" : "/sections");
+                navigate(
+                    userType === "DeptChair"
+                        ? "/deptChairSections"
+                        : "/sections"
+                );
             } catch (error) {
                 setFormError({
                     ...formError,
@@ -112,7 +116,9 @@ const UpdateSection = () => {
                     className="button is-ghost"
                     onClick={() =>
                         navigate(
-                            userType === 8 ? "/deptChairSections" : "/sections"
+                            userType === "DeptChair"
+                                ? "/deptChairSections"
+                                : "/sections"
                         )
                     }
                 >

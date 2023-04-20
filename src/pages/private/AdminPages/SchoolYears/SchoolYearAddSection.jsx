@@ -153,7 +153,7 @@ const SchoolYearAddSection = () => {
 
                 navigate(
                     `/${
-                        userType === 8
+                        userType === "DeptChair"
                             ? "deptChairSchoolYearSections"
                             : "schoolYearSections"
                     }/${schoolYear.id}`
@@ -179,7 +179,7 @@ const SchoolYearAddSection = () => {
                     onClick={() => {
                         navigate(
                             `/${
-                                userType === 8
+                                userType === "DeptChair"
                                     ? "deptChairSchoolYearSections"
                                     : "schoolYearSections"
                             }/${schoolYear.id}`

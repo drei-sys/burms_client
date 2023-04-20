@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
 import ConfirmModal from "components/common/ConfirmModal";
+import UserName from "components/common/UserName";
 
 import http from "services/httpService";
 
@@ -51,7 +52,7 @@ const ProfileEditApprovals = () => {
             setIsLoading(true);
             await http.put(
                 `/api/userDetailsStatus/${selectedUser.id}/${selectedUser.user_type}`,
-                { status: "editable" }
+                { status: "Editable" }
             );
             setRefetchUsersRef(Math.random());
         } catch (error) {
@@ -62,14 +63,6 @@ const ProfileEditApprovals = () => {
             setIsOpenConfirmApprove(false);
             setIsLoading(false);
         }
-    };
-
-    const userTypes = {
-        1: "Admin",
-        3: "Student",
-        4: "Teacher",
-        5: "Non Teaching",
-        6: "Registrar"
     };
 
     return (
@@ -89,45 +82,61 @@ const ProfileEditApprovals = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {users.map(({ id, name, user_type }) => {
-                                return (
-                                    <tr key={id}>
-                                        <td>
-                                            <div>
-                                                <span className="has-text-weight-medium">
-                                                    {name}
-                                                </span>
-                                            </div>
-                                            <div>
-                                                <span className="is-size-6">
-                                                    {userTypes[user_type]}
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <button
-                                                className="button is-success mr-1"
-                                                title="Approve"
-                                                onClick={() =>
-                                                    showConfirmApprove(id)
-                                                }
-                                            >
-                                                <span className="icon">
-                                                    <i className="fa-solid fa-check"></i>
-                                                </span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
+                            {users.map(
+                                ({
+                                    id,
+                                    lastname,
+                                    firstname,
+                                    middlename,
+                                    extname,
+                                    user_type
+                                }) => {
+                                    return (
+                                        <tr key={id}>
+                                            <td>
+                                                <div>
+                                                    <span className="has-text-weight-medium">
+                                                        <UserName
+                                                            user={{
+                                                                lastname,
+                                                                firstname,
+                                                                middlename,
+                                                                extname
+                                                            }}
+                                                        />
+                                                    </span>
+                                                </div>
+                                                <div>
+                                                    <span className="is-size-6">
+                                                        {user_type}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <button
+                                                    className="button is-success mr-1"
+                                                    title="Approve"
+                                                    onClick={() =>
+                                                        showConfirmApprove(id)
+                                                    }
+                                                >
+                                                    <span className="icon">
+                                                        <i className="fa-solid fa-check"></i>
+                                                    </span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    );
+                                }
+                            )}
                         </tbody>
                     </table>
                 )}
             </div>
 
             <ConfirmModal
-                title="Confirm User"
-                description={`Are you sure do you want to approve the profile edit of ${selectedUser?.name}?`}
+                title="Approve Edit Profile"
+                description={`Are you sure do you want to approve the profile edit of ${selectedUser?.lastname}?`}
                 isOpen={isOpenConfirmApprove}
                 isLoading={isLoading}
                 onOk={() => {

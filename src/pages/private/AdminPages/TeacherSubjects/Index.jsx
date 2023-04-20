@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
 import ConfirmModal from "components/common/ConfirmModal";
+import UserName from "components/common/UserName";
 
 import http from "services/httpService";
 
@@ -160,11 +161,13 @@ const TeacherSubjects = () => {
                                         {teacherSubjects.map(
                                             ({
                                                 id,
-                                                teacher_name,
-                                                total_subjects
+                                                total_subjects,
+                                                ...rest
                                             }) => (
                                                 <tr key={id}>
-                                                    <td>{teacher_name}</td>
+                                                    <td>
+                                                        <UserName user={rest} />
+                                                    </td>
                                                     <td>{total_subjects}</td>
                                                     <td>
                                                         <Link

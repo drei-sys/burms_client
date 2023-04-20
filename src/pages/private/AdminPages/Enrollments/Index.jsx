@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
 import ConfirmModal from "components/common/ConfirmModal";
+import UserName from "components/common/UserName";
 
 import http from "services/httpService";
 
@@ -43,13 +44,13 @@ const Enrollments = () => {
     }
 
     const forApproveEnrollments = enrollments.filter(
-        ({ status }) => status === "for_approval"
+        ({ status }) => status === "For Approval"
     );
     const approvedEnrollments = enrollments.filter(
-        ({ status }) => status === "approved"
+        ({ status }) => status === "Enrolled"
     );
     const rejectedEnrollments = enrollments.filter(
-        ({ status }) => status === "rejected"
+        ({ status }) => status === "Rejected"
     );
 
     const Table = ({ enrollments }) => {
@@ -58,11 +59,6 @@ const Enrollments = () => {
                 <div className="has-text-centered">No enrollments found.</div>
             );
         }
-
-        const semesters = {
-            1: "1st",
-            2: "2nd"
-        };
 
         return (
             <table className="table is-fullwidth is-hoverable">
@@ -75,7 +71,7 @@ const Enrollments = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {enrollments.map(({ id, year, semester, student_name }) => {
+                    {enrollments.map(({ id, year, semester, ...rest }) => {
                         return (
                             <tr key={id}>
                                 <td>
@@ -86,9 +82,11 @@ const Enrollments = () => {
                                     </div>
                                 </td>
                                 <td>{semester}</td>
-                                <td>{student_name}</td>
                                 <td>
-                                    <Link to={`/adminViewEnrollment/${id}`}>
+                                    <UserName user={rest} />
+                                </td>
+                                <td>
+                                    <Link to={`/viewEnrollment/${id}`}>
                                         <button
                                             className="button mr-1"
                                             title="View enrollment"

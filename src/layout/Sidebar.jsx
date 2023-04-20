@@ -48,11 +48,11 @@ const Sidebar = () => {
         //defaul routes
         { name: "Dashboard", path: "/dashboard", userType: undefined },
         { name: "Profile", path: "/profile", userType: undefined },
-        ...studentMenuItems.map(i => ({ ...i, userType: 3 })),
-        ...teacherMenuItems.map(i => ({ ...i, userType: 4 })),
-        ...registrarMenuItems.map(i => ({ ...i, userType: 6 })),
-        ...deanMenuItems.map(i => ({ ...i, userType: 7 })),
-        ...deptChainMenuItems.map(i => ({ ...i, userType: 8 }))
+        ...studentMenuItems.map(i => ({ ...i, userType: "Student" })),
+        ...teacherMenuItems.map(i => ({ ...i, userType: "Teacher" })),
+        ...registrarMenuItems.map(i => ({ ...i, userType: "Registrar" })),
+        ...deanMenuItems.map(i => ({ ...i, userType: "Dean" })),
+        ...deptChainMenuItems.map(i => ({ ...i, userType: "DeptChair" }))
     ];
 
     const AdminMenuItems = () => {
@@ -158,7 +158,7 @@ const Sidebar = () => {
                 top: 0
             }}
         >
-            {userType === 1 ? (
+            {userType === "Admin" ? (
                 <AdminMenuItems />
             ) : (
                 <>

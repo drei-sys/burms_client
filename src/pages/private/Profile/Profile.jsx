@@ -17,7 +17,7 @@ const Profile = () => {
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const { is_verified: userIsVerified } = useUserStore(state => state);
+    const { status: userStatus } = useUserStore(state => state);
 
     useEffect(() => {
         const getUserDetails = async () => {
@@ -49,7 +49,7 @@ const Profile = () => {
             await http.put(
                 `/api/userDetailsStatus/${userDetails.id}/${userDetails.user_type}`,
                 {
-                    status: "for_approval"
+                    status: "For Approval"
                 }
             );
             setRefetchUserDetailsRef(Math.random());
@@ -63,7 +63,7 @@ const Profile = () => {
     return (
         <>
             <h1 className="is-size-4 mb-4">Profile</h1>
-            {!userIsVerified ? (
+            {userStatus === "For Verification" ? (
                 <div className="box mb-4">
                     <div className="notification is-warning my-4">
                         Your account is pending for admin verification.
@@ -72,7 +72,7 @@ const Profile = () => {
             ) : (
                 <div className="box mb-4">
                     <div className="has-text-right">
-                        {userDetails.status === "uneditable" && (
+                        {userDetails.status === "Uneditable" && (
                             <button
                                 className={`button is-success ${
                                     isLoading ? "is-loading" : ""
@@ -82,7 +82,7 @@ const Profile = () => {
                                 Request for profile edit
                             </button>
                         )}
-                        {userDetails.status === "for_approval" && (
+                        {userDetails.status === "For Approval" && (
                             <span className="has-text-success">
                                 <span className="icon">
                                     <i className="fa-solid fa-check"></i>
@@ -90,7 +90,7 @@ const Profile = () => {
                                 Update requested
                             </span>
                         )}
-                        {userDetails.status === "editable" && (
+                        {userDetails.status === "Editable" && (
                             <Link to="/updateProfile">
                                 <button className="button is-success">
                                     Update profile
@@ -99,7 +99,7 @@ const Profile = () => {
                         )}
                     </div>
                     <hr />
-                    <div>Welcome {userDetails.name}</div>
+                    <div>Welcome {userDetails.lastname}</div>
                 </div>
             )}
 

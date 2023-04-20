@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
+import UserName from "components/common/UserName";
 
 import http from "services/httpService";
 
@@ -35,16 +36,6 @@ const BlockChain = () => {
         return <Error error={error} />;
     }
 
-    const userTypes = {
-        1: "Admin",
-        3: "Student",
-        4: "Teacher",
-        5: "Non Teaching",
-        6: "Registrar",
-        7: "Dean",
-        8: "Department Chair"
-    };
-
     return (
         <>
             <h1 className="is-size-4 mb-4">BlockChain</h1>
@@ -59,18 +50,34 @@ const BlockChain = () => {
                     </thead>
                     <tbody>
                         {users.map(
-                            ({ id, name, user_type, hash, block_hash }) => {
+                            ({
+                                id,
+                                lastname,
+                                firstname,
+                                middlename,
+                                extname,
+                                user_type,
+                                hash,
+                                block_hash
+                            }) => {
                                 return (
                                     <tr key={id}>
                                         <td>
                                             <div>
                                                 <span className="has-text-weight-medium">
-                                                    {name}
+                                                    <UserName
+                                                        user={{
+                                                            lastname,
+                                                            firstname,
+                                                            middlename,
+                                                            extname
+                                                        }}
+                                                    />
                                                 </span>
                                             </div>
                                             <div>
                                                 <span className="is-size-6">
-                                                    {userTypes[user_type]}
+                                                    {user_type}
                                                 </span>
                                             </div>
                                         </td>

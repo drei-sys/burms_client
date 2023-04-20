@@ -94,6 +94,33 @@ const NonTeachingForm = ({ formData, formError, onInputChange }) => {
 
                     <div className="field is-horizontal">
                         <div className="field-label is-normal is-flex-grow-3">
+                            <label className="label">Extension name</label>
+                        </div>
+                        <div className="field-body">
+                            <div className="field">
+                                <div className="control">
+                                    <input
+                                        name="extname"
+                                        className="input"
+                                        type="text"
+                                        placeholder="JR., SR., III"
+                                        value={formData.extname}
+                                        onChange={onInputChange}
+                                    />
+                                    {formError.extname && (
+                                        <div>
+                                            <span className="has-text-danger">
+                                                {formError.extname}
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="field is-horizontal">
+                        <div className="field-label is-normal is-flex-grow-3">
                             <label className="label">
                                 <span className="has-text-danger">*</span> Date
                                 of Birth

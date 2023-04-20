@@ -204,7 +204,7 @@ const SchoolYearSections = () => {
                     onClick={() =>
                         navigate(
                             `/${
-                                userType === 8
+                                userType === "DeptChair"
                                     ? "deptChairSchoolYears"
                                     : "schoolYears"
                             }`
@@ -252,7 +252,7 @@ const SchoolYearSections = () => {
                                 {schoolYear.status !== "Locked" && (
                                     <Link
                                         to={`/${
-                                            userType === 8
+                                            userType === "DeptChair"
                                                 ? "deptChairSchoolYearAddSection"
                                                 : "schoolYearAddSection"
                                         }/${params.id}`}

@@ -20,9 +20,7 @@ const Sections = () => {
     const [isOpenConfirmDelete, setIsOpenConfirmDelete] = useState(false);
     const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
-    const { type: userType, is_verified: userIsVerified } = useUserStore(
-        state => state
-    );
+    const { type: userType, status: userStatus } = useUserStore(state => state);
 
     useEffect(() => {
         const getSections = async () => {
@@ -48,7 +46,7 @@ const Sections = () => {
         return <Error error={error} />;
     }
 
-    if (!userIsVerified) {
+    if (userStatus === "For Verification") {
         return (
             <>
                 <h1 className="is-size-4 mb-4">Sections</h1>
@@ -86,7 +84,7 @@ const Sections = () => {
                     <div>
                         <Link
                             to={`/${
-                                userType === 8
+                                userType === "DeptChair"
                                     ? "deptChairCreateSection"
                                     : "createSection"
                             }`}
@@ -119,7 +117,7 @@ const Sections = () => {
                                             <td>
                                                 <Link
                                                     to={`/${
-                                                        userType === 8
+                                                        userType === "DeptChair"
                                                             ? "deptChairUpdateSection"
                                                             : "updateSection"
                                                     }/${id}`}

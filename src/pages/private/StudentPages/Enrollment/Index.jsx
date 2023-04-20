@@ -13,9 +13,7 @@ const Enrollments = () => {
     const [isContentLoading, setIsContentLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const { id: userId, is_verified: userIsVerified } = useUserStore(
-        state => state
-    );
+    const { id: userId, status: userStatus } = useUserStore(state => state);
 
     useEffect(() => {
         const getEnrollments = async () => {
@@ -33,7 +31,7 @@ const Enrollments = () => {
         getEnrollments();
     }, []);
 
-    if (!userIsVerified) {
+    if (userStatus === "For Verification") {
         return (
             <>
                 <h1 className="is-size-4 mb-4">Enrollments</h1>
@@ -51,12 +49,6 @@ const Enrollments = () => {
     if (error) {
         return <Error error={error} />;
     }
-
-    const statuses = {
-        for_approval: "Pending",
-        approved: "Enrolled",
-        rejected: "Rejected"
-    };
 
     return (
         <>
@@ -89,7 +81,7 @@ const Enrollments = () => {
                                                     </div>
                                                 </td>
                                                 <td>{semester}</td>
-                                                <td>{statuses[status]}</td>
+                                                <td>{status}</td>
                                                 <td>-</td>
                                                 <td>
                                                     <Link

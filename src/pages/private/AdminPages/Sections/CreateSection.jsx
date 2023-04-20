@@ -53,7 +53,11 @@ const CreateSection = () => {
                     status: "Active"
                 });
 
-                navigate(userType === 8 ? "/deptChairSections" : "/sections");
+                navigate(
+                    userType === "DeptChair"
+                        ? "/deptChairSections"
+                        : "/sections"
+                );
             } catch (error) {
                 setFormError({
                     ...formError,
@@ -74,7 +78,9 @@ const CreateSection = () => {
                     className="button is-ghost"
                     onClick={() =>
                         navigate(
-                            userType === 8 ? "/deptChairSections" : "/sections"
+                            userType === "DeptChair"
+                                ? "/deptChairSections"
+                                : "/sections"
                         )
                     }
                 >

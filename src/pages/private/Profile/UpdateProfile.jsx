@@ -26,13 +26,13 @@ const UpdateProfile = () => {
 
     const params = useParams();
     const navigate = useNavigate();
-    const { is_verified: userIsVerified } = useUserStore(state => state);
+    const { status: userStatus } = useUserStore(state => state);
 
     useEffect(() => {
         const getProfile = async () => {
             try {
                 const { data } = await http.get(`/api/userDetails`);
-                if (data.status !== "editable") {
+                if (data.status !== "Editable") {
                     setIsNotEditable(true);
                 } else {
                     setProfile(data);
@@ -64,7 +64,7 @@ const UpdateProfile = () => {
         );
     }
 
-    if (!userIsVerified) {
+    if (userStatus === "For Verification") {
         return (
             <div className="notification is-warning my-4">
                 Your account is pending for admin verification.
