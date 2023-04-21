@@ -53,8 +53,8 @@ import GradingSheet from "pages/private/StudentPages/GradingSheet";
 import RequestTOR from "pages/private/StudentPages/RequestTOR";
 
 //teacher
-import Browse from "pages/private/TeacherPages/Browse";
-import InputGrade from "pages/private/TeacherPages/InputGrade";
+import TeacherBrowseStudent from "pages/private/TeacherPages/BrowseStudent/Index";
+import InputGrade from "pages/private/TeacherPages/InputGrade/Index";
 
 //registrar
 import TORRequests from "pages/private/Registrar/TORRequests";
@@ -110,7 +110,7 @@ function App() {
     ];
 
     const teacherRoutes = [
-        { path: "/browse", element: Browse },
+        { path: "/teacherBrowseStudent", element: TeacherBrowseStudent },
         { path: "/inputGrade", element: InputGrade }
     ];
 

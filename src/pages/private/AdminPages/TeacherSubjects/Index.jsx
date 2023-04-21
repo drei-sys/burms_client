@@ -17,9 +17,9 @@ const TeacherSubjects = () => {
     const [selectedTeacherSubject, setSelectedTeacherSubject] = useState(null);
 
     const [isContentLoading, setIsContentLoading] = useState(true);
-    const [isTeacherSubjectsLoading, setIsTeacherSubjectsLoading] =
-        useState(true);
     const [error, setError] = useState(null);
+    const [isTeacherSubjectsLoading, setIsTeacherSubjectsLoading] =
+        useState(false);
 
     const [isOpenConfirmDelete, setIsOpenConfirmDelete] = useState(false);
     const [isDeleteLoading, setIsDeleteLoading] = useState(false);

@@ -29,7 +29,7 @@ const Sidebar = () => {
         { name: "Request TOR", path: "/requestTOR" }
     ];
     const teacherMenuItems = [
-        { name: "Browse", path: "/browse" },
+        { name: "My Students", path: "/teacherBrowseStudent" },
         { name: "Input Grade", path: "/inputGrade" }
     ];
     const registrarMenuItems = [{ name: "TOR Requests", path: "/TORRequests" }];
