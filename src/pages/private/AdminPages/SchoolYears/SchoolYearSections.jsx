@@ -68,10 +68,10 @@ const SchoolYearSections = () => {
                     const {
                         course_id,
                         section_id,
+                        subject_id,
                         current_slot_count,
                         max_slot_count,
-                        is_slot_full,
-                        subjects: subjIds
+                        is_slot_full
                     } = schoolYearSection;
 
                     const course = courses.find(
@@ -81,32 +81,60 @@ const SchoolYearSections = () => {
                     if (course) {
                         courses = courses.map(course => {
                             if (course.course_id === course_id) {
-                                const section = sectionList.find(
-                                    ({ id }) => id === section_id
+                                let courseSection = course.sections.find(
+                                    ({ section_id: secId }) =>
+                                        secId === section_id
                                 );
 
-                                const subjectIds = JSON.parse(subjIds);
-                                const subjects = subjectIds.map(subjectId => {
+                                if (courseSection) {
                                     const subject = subjectList.find(
-                                        ({ id }) => id === subjectId
+                                        ({ id }) => id === subject_id
                                     );
-                                    return subject;
-                                });
 
-                                return {
-                                    ...course,
-                                    sections: [
-                                        ...course.sections,
-                                        {
-                                            section_id: section.id,
-                                            name: section.name,
-                                            current_slot_count,
-                                            max_slot_count,
-                                            is_slot_full,
-                                            subjects: subjects
-                                        }
-                                    ]
-                                };
+                                    courseSection.subjects.push({
+                                        ...subject,
+                                        current_slot_count,
+                                        max_slot_count,
+                                        is_slot_full
+                                    });
+
+                                    return {
+                                        ...course,
+                                        sections: course.sections.map(
+                                            section => {
+                                                if (
+                                                    section.section_id ===
+                                                    section_id
+                                                ) {
+                                                    return courseSection;
+                                                }
+                                                return section;
+                                            }
+                                        )
+                                    };
+                                } else {
+                                    const section = sectionList.find(
+                                        ({ id }) => id === section_id
+                                    );
+                                    const subject = subjectList.find(
+                                        ({ id }) => id === subject_id
+                                    );
+
+                                    course.sections.push({
+                                        section_id: section.id,
+                                        name: section.name,
+                                        subjects: [
+                                            {
+                                                ...subject,
+                                                current_slot_count,
+                                                max_slot_count,
+                                                is_slot_full
+                                            }
+                                        ]
+                                    });
+
+                                    return course;
+                                }
                             }
                             return course;
                         });
@@ -117,14 +145,9 @@ const SchoolYearSections = () => {
                         const section = sectionList.find(
                             ({ id }) => id === section_id
                         );
-
-                        const subjectIds = JSON.parse(subjIds);
-                        const subjects = subjectIds.map(subjectId => {
-                            const subject = subjectList.find(
-                                ({ id }) => id === subjectId
-                            );
-                            return subject;
-                        });
+                        const subject = subjectList.find(
+                            ({ id }) => id === subject_id
+                        );
 
                         courses.push({
                             course_id,
@@ -133,15 +156,21 @@ const SchoolYearSections = () => {
                                 {
                                     section_id: section.id,
                                     name: section.name,
-                                    current_slot_count,
-                                    max_slot_count,
-                                    is_slot_full,
-                                    subjects: subjects
+                                    subjects: [
+                                        {
+                                            ...subject,
+                                            current_slot_count,
+                                            max_slot_count,
+                                            is_slot_full
+                                        }
+                                    ]
                                 }
                             ]
                         });
                     }
                 });
+
+                console.log({ courses });
 
                 if (schoolYear) {
                     setSchoolYear({
@@ -275,21 +304,33 @@ const SchoolYearSections = () => {
                                 const { course_id, name, sections } = course;
 
                                 const sectionsRender = sections.map(section => {
-                                    const {
-                                        section_id,
-                                        name,
-                                        subjects,
-                                        current_slot_count,
-                                        max_slot_count
-                                    } = section;
+                                    const { section_id, name, subjects } =
+                                        section;
 
                                     const subjectsRender = subjects.map(
                                         subject => {
-                                            const { id, code, name } = subject;
+                                            const {
+                                                id,
+                                                code,
+                                                name,
+                                                current_slot_count,
+                                                max_slot_count
+                                            } = subject;
                                             return (
                                                 <div key={id}>
                                                     <div className="is-size-6 ml-4">
-                                                        - {code}: {name}
+                                                        <div className="is-size-6 ml-1 mb-1 is-flex is-justify-content-space-between">
+                                                            <div>
+                                                                - {code}: {name}{" "}
+                                                            </div>
+                                                            <div>
+                                                                {
+                                                                    current_slot_count
+                                                                }
+                                                                /
+                                                                {max_slot_count}
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             );
@@ -298,7 +339,7 @@ const SchoolYearSections = () => {
 
                                     return (
                                         <div key={section_id} className="mb-4">
-                                            <div className="is-size-6 ml-1 mb-1 is-flex is-justify-content-space-between	">
+                                            <div className="is-size-6 ml-1 mb-1 is-flex is-justify-content-space-between">
                                                 <div>
                                                     Section:{" "}
                                                     <span className="is-underlined">
@@ -306,10 +347,6 @@ const SchoolYearSections = () => {
                                                     </span>
                                                 </div>
                                                 <div>
-                                                    <span className="is-size-6">
-                                                        ({current_slot_count}/
-                                                        {max_slot_count})
-                                                    </span>
                                                     <span>
                                                         {schoolYear.status ===
                                                             "Active" && (

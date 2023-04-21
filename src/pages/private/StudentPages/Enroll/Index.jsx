@@ -73,17 +73,23 @@ const Enroll = () => {
 
                     schoolYearSections = schoolYearSections.map(
                         schoolYearSection => {
-                            const { course_id, section_id } = schoolYearSection;
+                            const { course_id, section_id, subject_id } =
+                                schoolYearSection;
                             const course = coursesList.find(
                                 ({ id }) => id === course_id
                             );
                             const section = sectionList.find(
                                 ({ id }) => id === section_id
                             );
+                            const subject = subjectList.find(
+                                ({ id }) => id === subject_id
+                            );
+
                             return {
                                 ...schoolYearSection,
                                 course,
-                                section
+                                section,
+                                subject
                             };
                         }
                     );
@@ -91,25 +97,16 @@ const Enroll = () => {
                     const subjectsSelection = [];
                     let subjectIds = [];
                     schoolYearSections.forEach(schoolYearSection => {
-                        const { course_id, subjects: subjectsString } =
+                        const { course_id, subject_id, subject } =
                             schoolYearSection;
 
-                        const subjectIdsParsed = JSON.parse(subjectsString);
-                        subjectIdsParsed.forEach(subjectId => {
-                            //remove major subjects from other courses.. retain minor subjects
-                            const subject = subjectList.find(
-                                ({ id }) => id === subjectId
-                            );
-
-                            if (
-                                !(
-                                    course_id !== student.course_id &&
-                                    subject.type === "Major"
-                                )
-                            ) {
-                                subjectIds.push(subjectId);
-                            }
-                        });
+                        //remove major subjects from other courses.. retain minor subjects
+                        if (
+                            course_id === student.course_id ||
+                            subject.type === "Minor"
+                        ) {
+                            subjectIds.push(subject_id);
+                        }
                     });
 
                     subjectIds = [...new Set(subjectIds)];
@@ -121,8 +118,8 @@ const Enroll = () => {
                         subjectsSelection.push(subject);
                     });
 
-                    setSubjectsSelection(subjectsSelection);
                     setSchoolYearSections(schoolYearSections);
+                    setSubjectsSelection(subjectsSelection);
                     setStudent(student);
                 } catch (error) {
                     console.log(error);
@@ -180,24 +177,9 @@ const Enroll = () => {
     };
 
     const handleSubjectsSelectionChange = subject => {
-        const sectionsSelection = [];
-
-        schoolYearSections
-            .filter(({ subjects: subjectsString }) => {
-                const subjectIdsParsed = JSON.parse(subjectsString);
-                if (subjectIdsParsed.includes(subject.id)) {
-                    return true;
-                }
-
-                return false;
-            })
-            .forEach(({ course, section, ...props }) => {
-                sectionsSelection.push({
-                    ...props,
-                    course,
-                    section
-                });
-            });
+        const sectionsSelection = schoolYearSections.filter(
+            ({ subject_id }) => subject_id === subject.id
+        );
 
         setSelectedSubject(subject);
         setSectionsSelection(sectionsSelection);
@@ -384,9 +366,15 @@ const Enroll = () => {
                                                                         section
                                                                     )
                                                                 }
+                                                                disabled={
+                                                                    !selectedSubject
+                                                                }
                                                             />{" "}
                                                             {course.name} |{" "}
-                                                            {name} |{" "}
+                                                            <strong>
+                                                                {name}
+                                                            </strong>{" "}
+                                                            |{" "}
                                                             {current_slot_count}
                                                             /{max_slot_count}
                                                         </label>

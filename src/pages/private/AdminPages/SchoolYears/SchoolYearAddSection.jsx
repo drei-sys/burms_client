@@ -147,7 +147,7 @@ const SchoolYearAddSection = () => {
                 await http.post("/api/schoolYearSection", {
                     syId: schoolYear.id,
                     ...formData,
-                    subjectIds: JSON.stringify(formData.subjectIds),
+                    slots: Number(formData.slots),
                     status: "Active"
                 });
 
@@ -284,26 +284,6 @@ const SchoolYearAddSection = () => {
                                 </div>
 
                                 <div className="field">
-                                    <label className="label">Slots</label>
-                                    <div className="control">
-                                        <input
-                                            name="slots"
-                                            className="input"
-                                            type="number"
-                                            value={formData.slots}
-                                            onChange={handleInputChange}
-                                        />
-                                    </div>
-                                    {formError.slots && (
-                                        <div>
-                                            <span className="has-text-danger">
-                                                {formError.slots}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="field">
                                     <label className="label">Subjects</label>
                                     <div className="control">
                                         {subjects.map(({ id, code, name }) => (
@@ -327,6 +307,26 @@ const SchoolYearAddSection = () => {
                                         <div>
                                             <span className="has-text-danger">
                                                 {formError.subjectIds}
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="field">
+                                    <label className="label">Slots</label>
+                                    <div className="control">
+                                        <input
+                                            name="slots"
+                                            className="input"
+                                            type="number"
+                                            value={formData.slots}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                    {formError.slots && (
+                                        <div>
+                                            <span className="has-text-danger">
+                                                {formError.slots}
                                             </span>
                                         </div>
                                     )}

@@ -80,11 +80,8 @@ const CreateTeacherSubjects = () => {
         let subjectIds = [];
         schoolYearSections
             .filter(({ sy_id }) => sy_id === syId)
-            .forEach(({ subjects: subjectsString }) => {
-                const subjectIdsParsed = JSON.parse(subjectsString);
-                subjectIdsParsed.forEach(subjectId => {
-                    subjectIds.push(subjectId);
-                });
+            .forEach(({ subject_id }) => {
+                subjectIds.push(subject_id);
             });
 
         subjectIds = [...new Set(subjectIds)];
