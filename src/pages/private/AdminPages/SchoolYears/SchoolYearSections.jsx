@@ -170,8 +170,6 @@ const SchoolYearSections = () => {
                     }
                 });
 
-                console.log({ courses });
-
                 if (schoolYear) {
                     setSchoolYear({
                         ...schoolYear,

@@ -4,12 +4,15 @@ import Loader from "components/common/Loader";
 import Error from "components/common/Error";
 import UserName from "components/common/UserName";
 import Drawer from "components/common/Drawer";
+import GradeDetails from "./components/GradeDetails/Index";
 
 import http from "services/httpService";
 
 import { useUserStore } from "store/userStore";
 
 const InputGrade = () => {
+    const [refetchTeacherStudents, setRefetchTeacherStudents] = useState(0);
+
     const [schoolYears, setSchoolYears] = useState([]);
     const [schoolYearId, setSchoolYearId] = useState(0);
 
@@ -24,11 +27,13 @@ const InputGrade = () => {
     const [enrollmentItems, setEnrollmentItems] = useState([]);
     const [filteredEnrollmentItems, setFilteredEnrollmentItems] = useState([]);
 
+    const [selectedEnrollmentItem, setSelectedEnrollmentItem] = useState(null);
+
     const [isContentLoading, setIsContentLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isStudentsLoading, setIsStudentsLoading] = useState(false);
 
-    const [isOpenGradingSheet, setIsOpenGradingSheet] = useState(false);
+    const [isOpenGradeDetails, setIsOpenGradeDetails] = useState(false);
 
     const { id: userId, status: userStatus } = useUserStore(state => state);
 
@@ -58,11 +63,59 @@ const InputGrade = () => {
                         `/api/teacherStudents/${schoolYearId}/${userId}`
                     );
 
-                    const { teacherSubjectItems, enrollmentItems } = data;
+                    const {
+                        teacherSubjectItems,
+                        enrollmentItems,
+                        courses,
+                        grades
+                    } = data;
+
+                    const newFilteredenrollmentItems = enrollmentItems.map(
+                        enrollmentItem => {
+                            const {
+                                student_id: studentId,
+                                subject_id: subjectId,
+                                student_course_id
+                            } = enrollmentItem;
+
+                            const grade = grades.find(
+                                ({ student_id, subject_id }) =>
+                                    student_id === studentId &&
+                                    subject_id === subjectId
+                            );
+
+                            const student_course_name = courses.find(
+                                ({ id }) => id === student_course_id
+                            ).name;
+
+                            return {
+                                ...enrollmentItem,
+                                student_course_name,
+                                grade
+                            };
+                        }
+                    );
+
+                    const filteredEnrollmentItems = newFilteredenrollmentItems
+                        .filter(
+                            ({ subject_id }) =>
+                                subject_id === selectedSubjectId ||
+                                selectedSubjectId === 0
+                        )
+                        .filter(
+                            ({ course_id }) =>
+                                course_id === selectedCourseId ||
+                                selectedCourseId === 0
+                        )
+                        .filter(
+                            ({ section_id }) =>
+                                section_id === selectedSectionId ||
+                                selectedSectionId === 0
+                        );
 
                     setSubjectsSelection(teacherSubjectItems);
-                    setEnrollmentItems(enrollmentItems);
-                    setFilteredEnrollmentItems(enrollmentItems);
+                    setEnrollmentItems(newFilteredenrollmentItems);
+                    setFilteredEnrollmentItems(filteredEnrollmentItems);
                 } catch (error) {
                     console.log(error);
                     setError(error);
@@ -73,7 +126,7 @@ const InputGrade = () => {
 
             getTeacherStudents();
         }
-    }, [schoolYearId]);
+    }, [schoolYearId, refetchTeacherStudents]);
 
     if (isContentLoading) {
         return <Loader />;
@@ -173,6 +226,16 @@ const InputGrade = () => {
         setFilteredEnrollmentItems(filteredEnrollmentItems);
     };
 
+    const handleGradingDetailsRefetch = () => {
+        setIsOpenGradeDetails(false);
+        setRefetchTeacherStudents(Math.random());
+    };
+
+    const showGradeDetails = enrollmentItem => {
+        setSelectedEnrollmentItem(enrollmentItem);
+        setIsOpenGradeDetails(true);
+    };
+
     return (
         <>
             <h1 className="is-size-4 mb-4">My Students</h1>
@@ -235,7 +298,7 @@ const InputGrade = () => {
                                 <div className="columns">
                                     <div className="column is-6">
                                         <label className="label">
-                                            Select course
+                                            Select enrolled course
                                         </label>
 
                                         <div className="select is-fullwidth">
@@ -310,18 +373,35 @@ const InputGrade = () => {
                                                 <th>Student name</th>
                                                 <th>Prelim Grade</th>
                                                 <th>Midterm Grade</th>
-                                                <th>Finals Grade</th>
                                                 <th>Final Grade</th>
+                                                <th>Grade</th>
                                                 <th style={{ width: 120 }}></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {filteredEnrollmentItems.map(
-                                                ({
-                                                    student_id,
-                                                    user_type,
-                                                    ...rest
-                                                }) => {
+                                                enrollmentItem => {
+                                                    const {
+                                                        student_id,
+                                                        user_type,
+                                                        grade
+                                                    } = enrollmentItem;
+
+                                                    let {
+                                                        prelim_grade,
+                                                        midterm_grade,
+                                                        final_grade,
+                                                        grade: g
+                                                    } = grade || {};
+
+                                                    prelim_grade =
+                                                        prelim_grade || 0;
+                                                    midterm_grade =
+                                                        midterm_grade || 0;
+                                                    final_grade =
+                                                        final_grade || 0;
+                                                    g = g || 0;
+
                                                     return (
                                                         <tr key={student_id}>
                                                             <td>
@@ -329,7 +409,7 @@ const InputGrade = () => {
                                                                     <span className="has-text-weight-medium">
                                                                         <UserName
                                                                             user={
-                                                                                rest
+                                                                                enrollmentItem
                                                                             }
                                                                         />
                                                                     </span>
@@ -342,17 +422,23 @@ const InputGrade = () => {
                                                                     </span>
                                                                 </div>
                                                             </td>
-                                                            <td>0.00</td>
-                                                            <td>0.00</td>
-                                                            <td>0.00</td>
-                                                            <td>0.00</td>
+                                                            <td>
+                                                                {prelim_grade}
+                                                            </td>
+                                                            <td>
+                                                                {midterm_grade}
+                                                            </td>
+                                                            <td>
+                                                                {final_grade}
+                                                            </td>
+                                                            <td>{g}</td>
                                                             <td>
                                                                 <button
                                                                     className="button is-success"
                                                                     title="Input Grade"
                                                                     onClick={() =>
-                                                                        setIsOpenGradingSheet(
-                                                                            true
+                                                                        showGradeDetails(
+                                                                            enrollmentItem
                                                                         )
                                                                     }
                                                                 >
@@ -374,13 +460,21 @@ const InputGrade = () => {
                 </>
             )}
 
-            <Drawer
-                title="Input Grade"
-                isOpen={isOpenGradingSheet}
-                onOk={() => setIsOpenGradingSheet(false)}
-                onClose={() => setIsOpenGradingSheet(false)}
-                content={<div>Grading sheet </div>}
-            />
+            {isOpenGradeDetails && (
+                <Drawer
+                    title="Input Grades"
+                    isOpen={isOpenGradeDetails}
+                    onOk={() => setIsOpenGradeDetails(false)}
+                    onClose={() => setIsOpenGradeDetails(false)}
+                    content={
+                        <GradeDetails
+                            teacherId={userId}
+                            enrollmentItem={selectedEnrollmentItem}
+                            onRefetch={handleGradingDetailsRefetch}
+                        />
+                    }
+                />
+            )}
         </>
     );
 };

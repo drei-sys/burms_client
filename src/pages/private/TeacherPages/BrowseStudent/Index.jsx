@@ -232,7 +232,7 @@ const BrowseStudent = () => {
                                 <div className="columns">
                                     <div className="column is-6">
                                         <label className="label">
-                                            Select course
+                                            Select enrolled course
                                         </label>
 
                                         <div className="select is-fullwidth">

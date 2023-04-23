@@ -12,13 +12,14 @@ const Drawer = ({ title, content, isLoading, isOpen, onOk, onClose }) => {
                 <div
                     className="box"
                     style={{
-                        position: "absolute",
+                        position: "fixed",
                         top: 0,
                         right: 0,
                         width: 700,
                         zIndex: 6,
                         height: "100%",
-                        overflow: "auto"
+                        overflow: "auto",
+                        borderRadius: 0
                     }}
                 >
                     <div className="is-flex is-justify-content-space-between">
@@ -27,7 +28,7 @@ const Drawer = ({ title, content, isLoading, isOpen, onOk, onClose }) => {
                         </div>
                         <div>
                             <button
-                                className="button is-light"
+                                className="button is-light is-small"
                                 title="close"
                                 onClick={onClose}
                             >
@@ -42,14 +43,14 @@ const Drawer = ({ title, content, isLoading, isOpen, onOk, onClose }) => {
 
                     {content}
 
-                    <hr />
+                    {/* <hr />
                     <button
                         className="button is-success"
                         title="OK"
                         onClick={onOk}
                     >
                         Ok
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </div>
