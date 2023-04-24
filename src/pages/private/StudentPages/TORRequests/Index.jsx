@@ -10,7 +10,7 @@ import { useUserStore } from "store/userStore";
 import http from "services/httpService";
 
 const TORRequests = () => {
-    const [refetchCoursesRef, setRefetchCoursesRef] = useState(0);
+    const [refetchTORRequestsRef, setRefetchTORRequestsRef] = useState(0);
     const [TORRequests, setTORRequests] = useState([]);
     const [selectedTORRequest, setSelectedTORRequest] = useState(null);
 
@@ -23,11 +23,11 @@ const TORRequests = () => {
     const { status: userStatus } = useUserStore(state => state);
 
     useEffect(() => {
-        const getCourses = async () => {
+        const getTORRequests = async () => {
             try {
                 setIsContentLoading(true);
-                // const { data } = await http.get("/api/courses");
-                // setTORRequests(data);
+                const { data } = await http.get("/api/torRequests");
+                setTORRequests(data);
             } catch (error) {
                 setError(error);
             } finally {
@@ -35,8 +35,8 @@ const TORRequests = () => {
             }
         };
 
-        getCourses();
-    }, [refetchCoursesRef]);
+        getTORRequests();
+    }, [refetchTORRequestsRef]);
 
     if (isContentLoading) {
         return <Loader />;
@@ -57,6 +57,24 @@ const TORRequests = () => {
         );
     }
 
+    const showConfirmDelete = selectedId => {
+        setSelectedTORRequest(TORRequests.find(({ id }) => id === selectedId));
+        setIsOpenConfirmDelete(true);
+    };
+
+    const handleDelete = async () => {
+        try {
+            setIsDeleteLoading(true);
+            await http.delete(`/api/torRequest/${selectedTORRequest.id}`);
+            setRefetchTORRequestsRef(Math.random());
+        } catch (error) {
+            alert("An error occured while deleting. Please try again.");
+        } finally {
+            setIsOpenConfirmDelete(false);
+            setIsDeleteLoading(false);
+        }
+    };
+
     return (
         <>
             <h1 className="is-size-4 mb-4">TOR Requests</h1>
@@ -65,7 +83,7 @@ const TORRequests = () => {
                 <div className="is-flex is-justify-content-space-between">
                     <div></div>
                     <div>
-                        <Link to="/createCourse">
+                        <Link to="/createTORRequest">
                             <button className="button is-success">
                                 Request TOR
                             </button>
@@ -76,7 +94,7 @@ const TORRequests = () => {
                 <div>
                     {TORRequests.length == 0 ? (
                         <div className="has-text-centered p-4">
-                            No requrests found.
+                            No TOR request found.
                         </div>
                     ) : (
                         <>
@@ -91,36 +109,62 @@ const TORRequests = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {TORRequests.map(({ id, name }) => (
-                                        <tr key={id}>
-                                            <td>{name}</td>
-                                            <td>
-                                                <Link
-                                                    to={`/updateCourse/${id}`}
-                                                >
-                                                    <button
-                                                        className="button mr-1"
-                                                        title="Update"
-                                                    >
-                                                        <span className="icon">
-                                                            <i className="fa-solid fa-pen-to-square"></i>
-                                                        </span>
-                                                    </button>
-                                                </Link>
-                                                <button
-                                                    className="button is-danger"
-                                                    title="Delete"
-                                                    // onClick={() =>
-                                                    //     showConfirmDelete(id)
-                                                    // }
-                                                >
-                                                    <span className="icon">
-                                                        <i className="fa-solid fa-trash"></i>
-                                                    </span>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    {TORRequests.map(
+                                        ({
+                                            id,
+                                            reason,
+                                            status,
+                                            created_at
+                                        }) => {
+                                            let d = new Date(created_at);
+                                            const datestring =
+                                                d.getDate() +
+                                                "-" +
+                                                (d.getMonth() + 1) +
+                                                "-" +
+                                                d.getFullYear() +
+                                                " " +
+                                                d.getHours() +
+                                                ":" +
+                                                d.getMinutes();
+
+                                            return (
+                                                <tr key={id}>
+                                                    <td>{reason}</td>
+                                                    <td>{datestring}</td>
+                                                    <td>-</td>
+                                                    <td>{status}</td>
+                                                    <td>
+                                                        <Link
+                                                            to={`/updateTORRequest/${id}`}
+                                                        >
+                                                            <button
+                                                                className="button mr-1"
+                                                                title="Update"
+                                                            >
+                                                                <span className="icon">
+                                                                    <i className="fa-solid fa-pen-to-square"></i>
+                                                                </span>
+                                                            </button>
+                                                        </Link>
+                                                        <button
+                                                            className="button is-danger"
+                                                            title="Delete"
+                                                            onClick={() =>
+                                                                showConfirmDelete(
+                                                                    id
+                                                                )
+                                                            }
+                                                        >
+                                                            <span className="icon">
+                                                                <i className="fa-solid fa-trash"></i>
+                                                            </span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        }
+                                    )}
                                 </tbody>
                             </table>
                             <div className="p-4 has-text-right">
@@ -130,6 +174,19 @@ const TORRequests = () => {
                     )}
                 </div>
             </div>
+
+            <ConfirmModal
+                title="Delete TOR Request"
+                description={`Are you sure do you want to delete TOR Request?`}
+                isOpen={isOpenConfirmDelete}
+                isLoading={isDeleteLoading}
+                onOk={() => {
+                    handleDelete();
+                }}
+                onClose={() => {
+                    setIsOpenConfirmDelete(false);
+                }}
+            />
         </>
     );
 };

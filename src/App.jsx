@@ -48,16 +48,17 @@ import BlockChain from "pages/private/AdminPages/BlockChain/Index";
 import Enroll from "pages/private/StudentPages/Enroll/Index";
 import StudentViewEnrollments from "pages/private/StudentPages/Enrollment/Index";
 import StudentViewEnrollment from "pages/private/StudentPages/Enrollment/ViewEnrollment";
-
 import MyGrade from "pages/private/StudentPages/MyGrade/Index";
-import RequestTOR from "pages/private/StudentPages/TORRequests/Index";
+import TORRequests from "pages/private/StudentPages/TORRequests/Index";
+import CreateTORRequest from "pages/private/StudentPages/TORRequests/CreateTORRequest";
+import UpdateTORRequest from "pages/private/StudentPages/TORRequests/UpdateTORRequest";
 
 //teacher
 import MyStudents from "pages/private/TeacherPages/MyStudents/Index";
 import InputGrade from "pages/private/TeacherPages/InputGrade/Index";
 
 //registrar
-import TORRequests from "pages/private/Registrar/TORRequests";
+//import RequestTOR from "pages/private/Registrar/RequestTOR";
 
 //dean routes
 import ApproveGrade from "pages/private/Dean/ApproveGrade";
@@ -106,7 +107,9 @@ function App() {
         { path: "/studentViewEnrollments", element: StudentViewEnrollments },
         { path: "/studentViewEnrollment/:id", element: StudentViewEnrollment },
         { path: "/myGrade", element: MyGrade },
-        { path: "/requestTOR", element: RequestTOR }
+        { path: "/torRequests", element: TORRequests },
+        { path: "/createTORRequest", element: CreateTORRequest },
+        { path: "/updateTORRequest/:id", element: UpdateTORRequest }
     ];
 
     const teacherRoutes = [
@@ -114,7 +117,7 @@ function App() {
         { path: "/inputGrade", element: InputGrade }
     ];
 
-    const registrarRoutes = [{ path: "/TORRequests", element: TORRequests }];
+    const registrarRoutes = [];
 
     const deanRoutes = [
         { path: "/deanTeacherSubjects", element: TeacherSubjects },

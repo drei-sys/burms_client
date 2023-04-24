@@ -26,7 +26,7 @@ const Sidebar = () => {
         { name: "Enroll", path: "/enroll" },
         { name: "Enrollments", path: "/studentViewEnrollments" },
         { name: "My Grade", path: "/myGrade" },
-        { name: "Request TOR", path: "/requestTOR" }
+        { name: "TOR Requests", path: "/TORRequests" }
     ];
     const teacherMenuItems = [
         { name: "My Students", path: "/myStudents" },
