@@ -25,18 +25,19 @@ const Sidebar = () => {
     const studentMenuItems = [
         { name: "Enroll", path: "/enroll" },
         { name: "Enrollments", path: "/studentViewEnrollments" },
-        { name: "Grading Sheet", path: "/gradingSheet" },
+        { name: "My Grade", path: "/myGrade" },
         { name: "Request TOR", path: "/requestTOR" }
     ];
     const teacherMenuItems = [
-        { name: "My Students", path: "/teacherBrowseStudent" },
+        { name: "My Students", path: "/myStudents" },
         { name: "Input Grade", path: "/inputGrade" }
     ];
+
     const registrarMenuItems = [{ name: "TOR Requests", path: "/TORRequests" }];
 
     const deanMenuItems = [
-        { name: "Approve Grades", path: "/approveGrades" }
-        //{ name: "Assign Teacher", path: "/assignTeacher" }
+        { name: "Teacher Subjects", path: "/deanTeacherSubjects" }
+        //{ name: "Approve Grades", path: "/approveGrades" }
     ];
 
     const deptChainMenuItems = [

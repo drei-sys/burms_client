@@ -5,6 +5,8 @@ import Loader from "components/common/Loader";
 import Error from "components/common/Error";
 import UserName from "components/common/UserName";
 
+import { useUserStore } from "store/userStore";
+
 import http from "services/httpService";
 
 const ViewTeacherSubject = () => {
@@ -17,6 +19,8 @@ const ViewTeacherSubject = () => {
 
     const params = useParams();
     const navigate = useNavigate();
+
+    const { type: userType } = useUserStore(state => state);
 
     useEffect(() => {
         const getUsers = async () => {
@@ -60,7 +64,13 @@ const ViewTeacherSubject = () => {
                 <button
                     className="button is-ghost"
                     onClick={() => {
-                        navigate(`/teacherSubjects`);
+                        navigate(
+                            `/${
+                                userType === "Dean"
+                                    ? "deanTeacherSubjects"
+                                    : "teacherSubjects"
+                            }`
+                        );
                     }}
                 >
                     <i className="fa-solid fa-arrow-left"></i>
@@ -119,36 +129,6 @@ const ViewTeacherSubject = () => {
                     </div>
                 </div>
             </div>
-
-            {/* <table className="table is-fullwidth is-hoverable">
-                    <thead>
-                        <tr>
-                            <th>User name</th>
-                            <th>Hash</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {users.map(({ id, name, user_type, hash }) => {
-                            return (
-                                <tr key={id}>
-                                    <td>
-                                        <div>
-                                            <span className="has-text-weight-medium">
-                                                {name}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <span className="is-size-6">
-                                                {userTypes[user_type]}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td>{hash}</td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table> */}
         </>
     );
 };

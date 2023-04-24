@@ -84,6 +84,10 @@ const FormGrade = ({ target, grade, readOnly, onSubmit }) => {
 
         value = Number(value);
 
+        if (value > 10) {
+            value = 10;
+        }
+
         setFormData({
             ...formData,
             attendance: value
@@ -248,16 +252,20 @@ const FormGrade = ({ target, grade, readOnly, onSubmit }) => {
                 </div>
                 <div className="column is-8">
                     <div className="mb-2">
-                        <input
-                            name="attendance"
-                            type="number"
-                            min={0}
-                            max={10}
-                            className="input"
-                            placeholder="Enter attendance percentage"
-                            value={formData.attendance}
-                            onChange={handleAttendanceInputChange}
-                        />
+                        {readOnly ? (
+                            formData.attendance
+                        ) : (
+                            <input
+                                name="attendance"
+                                type="number"
+                                min={0}
+                                max={10}
+                                className="input"
+                                placeholder="Enter attendance percentage"
+                                value={formData.attendance}
+                                onChange={handleAttendanceInputChange}
+                            />
+                        )}
                     </div>
                     <div className="is-flex is-justify-content-space-between">
                         <div>
@@ -290,93 +298,125 @@ const FormGrade = ({ target, grade, readOnly, onSubmit }) => {
                             <tr>
                                 <td>Quiz 1</td>
                                 <td>
-                                    <input
-                                        name="quiz1Score"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.quiz1Score}
-                                        onChange={handleQuizInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.quiz1Score
+                                    ) : (
+                                        <input
+                                            name="quiz1Score"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.quiz1Score}
+                                            onChange={handleQuizInputChange}
+                                        />
+                                    )}
                                 </td>
                                 <td>
-                                    <input
-                                        name="quiz1Item"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.quiz1Item}
-                                        onChange={handleQuizInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.quiz1Item
+                                    ) : (
+                                        <input
+                                            name="quiz1Item"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.quiz1Item}
+                                            onChange={handleQuizInputChange}
+                                        />
+                                    )}
                                 </td>
                             </tr>
                             <tr>
                                 <td>Quiz 2</td>
                                 <td>
-                                    <input
-                                        name="quiz2Score"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.quiz2Score}
-                                        onChange={handleQuizInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.quiz2Score
+                                    ) : (
+                                        <input
+                                            name="quiz2Score"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.quiz2Score}
+                                            onChange={handleQuizInputChange}
+                                        />
+                                    )}
                                 </td>
                                 <td>
-                                    <input
-                                        name="quiz2Item"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.quiz2Item}
-                                        onChange={handleQuizInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.quiz2Item
+                                    ) : (
+                                        <input
+                                            name="quiz2Item"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.quiz2Item}
+                                            onChange={handleQuizInputChange}
+                                        />
+                                    )}
                                 </td>
                             </tr>
                             <tr>
                                 <td>Quiz 3</td>
                                 <td>
-                                    <input
-                                        name="quiz3Score"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.quiz3Score}
-                                        onChange={handleQuizInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.quiz3Score
+                                    ) : (
+                                        <input
+                                            name="quiz3Score"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.quiz3Score}
+                                            onChange={handleQuizInputChange}
+                                        />
+                                    )}
                                 </td>
                                 <td>
-                                    <input
-                                        name="quiz3Item"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.quiz3Item}
-                                        onChange={handleQuizInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.quiz3Item
+                                    ) : (
+                                        <input
+                                            name="quiz3Item"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.quiz3Item}
+                                            onChange={handleQuizInputChange}
+                                        />
+                                    )}
                                 </td>
                             </tr>
                             <tr>
                                 <td>Quiz 4</td>
                                 <td>
-                                    <input
-                                        name="quiz4Score"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.quiz4Score}
-                                        onChange={handleQuizInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.quiz4Score
+                                    ) : (
+                                        <input
+                                            name="quiz4Score"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.quiz4Score}
+                                            onChange={handleQuizInputChange}
+                                        />
+                                    )}
                                 </td>
                                 <td>
-                                    <input
-                                        name="quiz4Item"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.quiz4Item}
-                                        onChange={handleQuizInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.quiz4Item
+                                    ) : (
+                                        <input
+                                            name="quiz4Item"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.quiz4Item}
+                                            onChange={handleQuizInputChange}
+                                        />
+                                    )}
                                 </td>
                             </tr>
                             <tr>
@@ -416,93 +456,125 @@ const FormGrade = ({ target, grade, readOnly, onSubmit }) => {
                             <tr>
                                 <td>Activity 1</td>
                                 <td>
-                                    <input
-                                        name="activity1Score"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.activity1Score}
-                                        onChange={handleActivityInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.activity1Score
+                                    ) : (
+                                        <input
+                                            name="activity1Score"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.activity1Score}
+                                            onChange={handleActivityInputChange}
+                                        />
+                                    )}
                                 </td>
                                 <td>
-                                    <input
-                                        name="activity1Item"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.activity1Item}
-                                        onChange={handleActivityInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.activity1Item
+                                    ) : (
+                                        <input
+                                            name="activity1Item"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.activity1Item}
+                                            onChange={handleActivityInputChange}
+                                        />
+                                    )}
                                 </td>
                             </tr>
                             <tr>
                                 <td>Activity 2</td>
                                 <td>
-                                    <input
-                                        name="activity2Score"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.activity2Score}
-                                        onChange={handleActivityInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.activity2Score
+                                    ) : (
+                                        <input
+                                            name="activity2Score"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.activity2Score}
+                                            onChange={handleActivityInputChange}
+                                        />
+                                    )}
                                 </td>
                                 <td>
-                                    <input
-                                        name="activity2Item"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.activity2Item}
-                                        onChange={handleActivityInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.activity2Item
+                                    ) : (
+                                        <input
+                                            name="activity2Item"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.activity2Item}
+                                            onChange={handleActivityInputChange}
+                                        />
+                                    )}
                                 </td>
                             </tr>
                             <tr>
                                 <td>Activity 3</td>
                                 <td>
-                                    <input
-                                        name="activity3Score"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.activity3Score}
-                                        onChange={handleActivityInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.activity3Score
+                                    ) : (
+                                        <input
+                                            name="activity3Score"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.activity3Score}
+                                            onChange={handleActivityInputChange}
+                                        />
+                                    )}
                                 </td>
                                 <td>
-                                    <input
-                                        name="activity3Item"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.activity3Item}
-                                        onChange={handleActivityInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.activity3Item
+                                    ) : (
+                                        <input
+                                            name="activity3Item"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.activity3Item}
+                                            onChange={handleActivityInputChange}
+                                        />
+                                    )}
                                 </td>
                             </tr>
                             <tr>
                                 <td>Activity 4</td>
                                 <td>
-                                    <input
-                                        name="activity4Score"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.activity4Score}
-                                        onChange={handleActivityInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.activity4Score
+                                    ) : (
+                                        <input
+                                            name="activity4Score"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.activity4Score}
+                                            onChange={handleActivityInputChange}
+                                        />
+                                    )}
                                 </td>
                                 <td>
-                                    <input
-                                        name="activity4Item"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.activity4Item}
-                                        onChange={handleActivityInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.activity4Item
+                                    ) : (
+                                        <input
+                                            name="activity4Item"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.activity4Item}
+                                            onChange={handleActivityInputChange}
+                                        />
+                                    )}
                                 </td>
                             </tr>
                             <tr>
@@ -540,24 +612,32 @@ const FormGrade = ({ target, grade, readOnly, onSubmit }) => {
                         <tbody>
                             <tr>
                                 <td>
-                                    <input
-                                        name="examScore"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.examScore}
-                                        onChange={handleExamInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.examScore
+                                    ) : (
+                                        <input
+                                            name="examScore"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.examScore}
+                                            onChange={handleExamInputChange}
+                                        />
+                                    )}
                                 </td>
                                 <td>
-                                    <input
-                                        name="examItem"
-                                        type="number"
-                                        min={0}
-                                        className="input"
-                                        value={formData.examItem}
-                                        onChange={handleExamInputChange}
-                                    />
+                                    {readOnly ? (
+                                        formData.examItem
+                                    ) : (
+                                        <input
+                                            name="examItem"
+                                            type="number"
+                                            min={0}
+                                            className="input"
+                                            value={formData.examItem}
+                                            onChange={handleExamInputChange}
+                                        />
+                                    )}
                                 </td>
                             </tr>
                             <tr>
@@ -590,12 +670,14 @@ const FormGrade = ({ target, grade, readOnly, onSubmit }) => {
                         {computedGrade}
                     </div>
                     <div className="is-size-5 has-text-right">
-                        <button
-                            className="button is-success"
-                            onClick={handleSubmit}
-                        >
-                            Save
-                        </button>
+                        {!readOnly && (
+                            <button
+                                className="button is-success"
+                                onClick={handleSubmit}
+                            >
+                                Save
+                            </button>
+                        )}
                     </div>
                 </div>
             </div>

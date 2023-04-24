@@ -6,6 +6,8 @@ import Error from "components/common/Error";
 import ConfirmModal from "components/common/ConfirmModal";
 import UserName from "components/common/UserName";
 
+import { useUserStore } from "store/userStore";
+
 import http from "services/httpService";
 
 const TeacherSubjects = () => {
@@ -23,6 +25,8 @@ const TeacherSubjects = () => {
 
     const [isOpenConfirmDelete, setIsOpenConfirmDelete] = useState(false);
     const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+
+    const { type: userType } = useUserStore(state => state);
 
     useEffect(() => {
         const getSchoolYears = async () => {
@@ -132,7 +136,13 @@ const TeacherSubjects = () => {
                 <>
                     <div className="box">
                         <div className="has-text-right">
-                            <Link to={`/createTeacherSubject`}>
+                            <Link
+                                to={`/${
+                                    userType === "Dean"
+                                        ? "deanCreateTeacherSubject"
+                                        : "createTeacherSubject"
+                                }`}
+                            >
                                 <button className="button is-success">
                                     Create teacher subjects
                                 </button>
@@ -171,7 +181,12 @@ const TeacherSubjects = () => {
                                                     <td>{total_subjects}</td>
                                                     <td>
                                                         <Link
-                                                            to={`/teacherSubject/${id}`}
+                                                            to={`/${
+                                                                userType ===
+                                                                "Dean"
+                                                                    ? "deanTeacherSubject"
+                                                                    : "teacherSubject"
+                                                            }/${id}`}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
                                                         >
@@ -187,7 +202,12 @@ const TeacherSubjects = () => {
                                                         {schoolYear?.status ===
                                                             "Active" && (
                                                             <Link
-                                                                to={`/updateTeacherSubject/${id}`}
+                                                                to={`/${
+                                                                    userType ===
+                                                                    "Dean"
+                                                                        ? "deanUpdateTeacherSubject"
+                                                                        : "updateTeacherSubject"
+                                                                }/${id}`}
                                                             >
                                                                 <button
                                                                     className="button mr-1"

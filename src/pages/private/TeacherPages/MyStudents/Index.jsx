@@ -8,16 +8,14 @@ import http from "services/httpService";
 
 import { useUserStore } from "store/userStore";
 
-const BrowseStudent = () => {
+const MyStudents = () => {
     const [schoolYears, setSchoolYears] = useState([]);
     const [schoolYearId, setSchoolYearId] = useState(0);
 
     const [subjectsSelection, setSubjectsSelection] = useState([]);
-    const [coursesSelection, setCoursesSelection] = useState([]);
     const [sectionsSelection, setSectionsSelection] = useState([]);
 
     const [selectedSubjectId, setSelectedSubjectId] = useState(0);
-    const [selectedCourseId, setSelectedCourseId] = useState(0);
     const [selectedSectionId, setSelectedSectionId] = useState(0);
 
     const [enrollmentItems, setEnrollmentItems] = useState([]);
@@ -94,7 +92,6 @@ const BrowseStudent = () => {
     const handleSYChange = syId => {
         setSchoolYearId(syId);
         setSelectedSubjectId(0);
-        setSelectedCourseId(0);
         setSelectedSectionId(0);
     };
 
@@ -103,38 +100,10 @@ const BrowseStudent = () => {
             ({ subject_id }) => subject_id === subjectId
         );
 
-        const coursesSelection = [];
+        const sectionsSelection = [];
+
         enrollmentItems
             .filter(({ subject_id }) => subject_id === subjectId)
-            .forEach(enrollmentItem => {
-                const { course_id, course_name } = enrollmentItem;
-
-                const course = coursesSelection.find(
-                    ({ course_id: courseId }) => courseId === course_id
-                );
-                if (!course) {
-                    coursesSelection.push({ course_id, course_name });
-                }
-            });
-
-        setSelectedSubjectId(subjectId);
-        setSelectedCourseId(0);
-        setSelectedSectionId(0);
-        setCoursesSelection(coursesSelection);
-        setFilteredEnrollmentItems(filteredEnrollmentItems);
-    };
-
-    const handleCourseChange = courseId => {
-        const filteredEnrollmentItems = enrollmentItems
-            .filter(({ subject_id }) => subject_id === selectedSubjectId)
-            .filter(
-                ({ course_id }) => course_id === courseId || courseId === 0
-            );
-
-        const sectionsSelection = [];
-        enrollmentItems
-            .filter(({ subject_id }) => subject_id === selectedSubjectId)
-            .filter(({ course_id }) => course_id === courseId)
             .forEach(enrollmentItem => {
                 const { section_id, section_name } = enrollmentItem;
 
@@ -150,7 +119,7 @@ const BrowseStudent = () => {
                 }
             });
 
-        setSelectedCourseId(courseId);
+        setSelectedSubjectId(subjectId);
         setSelectedSectionId(0);
         setSectionsSelection(sectionsSelection);
         setFilteredEnrollmentItems(filteredEnrollmentItems);
@@ -159,10 +128,6 @@ const BrowseStudent = () => {
     const handleSectionChange = sectionId => {
         const filteredEnrollmentItems = enrollmentItems
             .filter(({ subject_id }) => subject_id === selectedSubjectId)
-            .filter(
-                ({ course_id }) =>
-                    course_id === selectedCourseId || selectedCourseId === 0
-            )
             .filter(
                 ({ section_id }) => section_id === sectionId || sectionId === 0
             );
@@ -229,69 +194,30 @@ const BrowseStudent = () => {
                         <>
                             <div className="box mb-4">
                                 <div className="is-size-5 mb-2">Filters</div>
-                                <div className="columns">
-                                    <div className="column is-6">
-                                        <label className="label">
-                                            Select enrolled course
-                                        </label>
 
-                                        <div className="select is-fullwidth">
-                                            <select
-                                                value={selectedCourseId}
-                                                onChange={e =>
-                                                    handleCourseChange(
-                                                        Number(e.target.value)
-                                                    )
-                                                }
-                                            >
-                                                <option value={0}></option>
-                                                {coursesSelection.map(
-                                                    ({
-                                                        course_id,
-                                                        course_name
-                                                    }) => (
-                                                        <option
-                                                            key={course_id}
-                                                            value={course_id}
-                                                        >
-                                                            {course_name}
-                                                        </option>
-                                                    )
-                                                )}
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div className="column is-6">
-                                        <label className="label">
-                                            Select section
-                                        </label>
+                                <label className="label">Select section</label>
 
-                                        <div className="select is-fullwidth">
-                                            <select
-                                                value={selectedSectionId}
-                                                onChange={e =>
-                                                    handleSectionChange(
-                                                        Number(e.target.value)
-                                                    )
-                                                }
-                                            >
-                                                <option value={0}></option>
-                                                {sectionsSelection.map(
-                                                    ({
-                                                        section_id,
-                                                        section_name
-                                                    }) => (
-                                                        <option
-                                                            key={section_id}
-                                                            value={section_id}
-                                                        >
-                                                            {section_name}
-                                                        </option>
-                                                    )
-                                                )}
-                                            </select>
-                                        </div>
-                                    </div>
+                                <div className="select is-fullwidth">
+                                    <select
+                                        value={selectedSectionId}
+                                        onChange={e =>
+                                            handleSectionChange(
+                                                Number(e.target.value)
+                                            )
+                                        }
+                                    >
+                                        <option value={0}></option>
+                                        {sectionsSelection.map(
+                                            ({ section_id, section_name }) => (
+                                                <option
+                                                    key={section_id}
+                                                    value={section_id}
+                                                >
+                                                    {section_name}
+                                                </option>
+                                            )
+                                        )}
+                                    </select>
                                 </div>
                             </div>
 
@@ -350,4 +276,4 @@ const BrowseStudent = () => {
     );
 };
 
-export default BrowseStudent;
+export default MyStudents;

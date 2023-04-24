@@ -49,11 +49,11 @@ import Enroll from "pages/private/StudentPages/Enroll/Index";
 import StudentViewEnrollments from "pages/private/StudentPages/Enrollment/Index";
 import StudentViewEnrollment from "pages/private/StudentPages/Enrollment/ViewEnrollment";
 
-import GradingSheet from "pages/private/StudentPages/GradingSheet";
-import RequestTOR from "pages/private/StudentPages/RequestTOR";
+import MyGrade from "pages/private/StudentPages/MyGrade/Index";
+import RequestTOR from "pages/private/StudentPages/TORRequests/Index";
 
 //teacher
-import TeacherBrowseStudent from "pages/private/TeacherPages/BrowseStudent/Index";
+import MyStudents from "pages/private/TeacherPages/MyStudents/Index";
 import InputGrade from "pages/private/TeacherPages/InputGrade/Index";
 
 //registrar
@@ -105,19 +105,26 @@ function App() {
         { path: "/enroll", element: Enroll },
         { path: "/studentViewEnrollments", element: StudentViewEnrollments },
         { path: "/studentViewEnrollment/:id", element: StudentViewEnrollment },
-        { path: "/gradingSheet", element: GradingSheet },
+        { path: "/myGrade", element: MyGrade },
         { path: "/requestTOR", element: RequestTOR }
     ];
 
     const teacherRoutes = [
-        { path: "/teacherBrowseStudent", element: TeacherBrowseStudent },
+        { path: "/myStudents", element: MyStudents },
         { path: "/inputGrade", element: InputGrade }
     ];
 
     const registrarRoutes = [{ path: "/TORRequests", element: TORRequests }];
 
     const deanRoutes = [
-        { path: "/approveGrades", element: ApproveGrade }
+        { path: "/deanTeacherSubjects", element: TeacherSubjects },
+        { path: "/deanTeacherSubject/:id", element: ViewTeacherSubject },
+        { path: "/deanCreateTeacherSubject", element: CreateTeacherSubject },
+        {
+            path: "/deanUpdateTeacherSubject/:id",
+            element: UpdateTeacherSubject
+        }
+        //{ path: "/approveGrades", element: ApproveGrade }
         //{ path: "/assignTeacher", element: AssignTeacher }
     ];
 

@@ -5,7 +5,7 @@ import UserName from "components/common/UserName";
 
 import http from "services/httpService";
 
-const GradingSheet = ({ teacherId, enrollmentItem, onRefetch }) => {
+const GradeDetails = ({ teacherId, enrollmentItem, readOnly, onRefetch }) => {
     //if no records then all values will become zero
 
     const [activeTab, setActiveTab] = useState(1);
@@ -38,22 +38,22 @@ const GradingSheet = ({ teacherId, enrollmentItem, onRefetch }) => {
             final_grade = final_grade || 0;
 
             const gradeEquivalents = [
-                { start: 0, end: 59, value: 5.0 },
-                { start: 60, end: 64, value: 3.0 },
-                { start: 65, end: 69, value: 2.75 },
-                { start: 70, end: 74, value: 2.5 },
-                { start: 79, end: 79, value: 2.25 },
-                { start: 80, end: 83, value: 2.0 },
-                { start: 84, end: 87, value: 1.75 },
-                { start: 88, end: 91, value: 1.5 },
-                { start: 92, end: 95, value: 1.25 },
+                { start: 0, end: 59.99, value: 5.0 },
+                { start: 60, end: 64.99, value: 3.0 },
+                { start: 65, end: 69.99, value: 2.75 },
+                { start: 70, end: 74.99, value: 2.5 },
+                { start: 75, end: 79.99, value: 2.25 },
+                { start: 80, end: 83.99, value: 2.0 },
+                { start: 84, end: 87.99, value: 1.75 },
+                { start: 88, end: 91.99, value: 1.5 },
+                { start: 92, end: 95.99, value: 1.25 },
                 { start: 96, end: 100, value: 1.0 }
             ];
 
             if (target === "Prelim") {
                 const prelimGradePercentage = computedGrade * 0.3;
                 const midtermGradePercentage = midterm_grade * 0.3;
-                const finalGradePercentage = final_grade * 0.3;
+                const finalGradePercentage = final_grade * 0.4;
 
                 let newGrade =
                     prelimGradePercentage +
@@ -97,7 +97,7 @@ const GradingSheet = ({ teacherId, enrollmentItem, onRefetch }) => {
             } else if (target === "Midterm") {
                 const prelimGradePercentage = prelim_grade * 0.3;
                 const midtermGradePercentage = computedGrade * 0.3;
-                const finalGradePercentage = final_grade * 0.3;
+                const finalGradePercentage = final_grade * 0.4;
 
                 let newGrade =
                     prelimGradePercentage +
@@ -140,7 +140,7 @@ const GradingSheet = ({ teacherId, enrollmentItem, onRefetch }) => {
             } else if (target === "Final") {
                 const prelimGradePercentage = prelim_grade * 0.3;
                 const midtermGradePercentage = midterm_grade * 0.3;
-                const finalGradePercentage = computedGrade * 0.3;
+                const finalGradePercentage = computedGrade * 0.4;
 
                 let newGrade =
                     prelimGradePercentage +
@@ -196,7 +196,7 @@ const GradingSheet = ({ teacherId, enrollmentItem, onRefetch }) => {
         TabContent = () => (
             <FormGrade
                 target="Prelim"
-                readOnly={false}
+                readOnly={readOnly}
                 grade={enrollmentItem.grade}
                 onSubmit={handleSubmit}
             />
@@ -205,7 +205,7 @@ const GradingSheet = ({ teacherId, enrollmentItem, onRefetch }) => {
         TabContent = () => (
             <FormGrade
                 target="Midterm"
-                readOnly={false}
+                readOnly={readOnly}
                 grade={enrollmentItem.grade}
                 onSubmit={handleSubmit}
             />
@@ -214,7 +214,7 @@ const GradingSheet = ({ teacherId, enrollmentItem, onRefetch }) => {
         TabContent = () => (
             <FormGrade
                 target="Final"
-                readOnly={false}
+                readOnly={readOnly}
                 grade={enrollmentItem.grade}
                 onSubmit={handleSubmit}
             />
@@ -235,7 +235,16 @@ const GradingSheet = ({ teacherId, enrollmentItem, onRefetch }) => {
         grade
     } = enrollmentItem || {};
 
-    let { prelim_grade, midterm_grade, final_grade, grade: g } = grade || {};
+    let {
+        teacher_lastname,
+        teacher_firstname,
+        teacher_middlename,
+        teacher_extname,
+        prelim_grade,
+        midterm_grade,
+        final_grade,
+        grade: g
+    } = grade || {};
 
     prelim_grade = prelim_grade || 0;
     midterm_grade = midterm_grade || 0;
@@ -271,7 +280,23 @@ const GradingSheet = ({ teacherId, enrollmentItem, onRefetch }) => {
                     </div>
                 </div>
                 <div className="columns">
-                    <div className="column is-5"></div>
+                    <div className="column is-5">
+                        <label className="label">Teacher</label>
+                        <div>
+                            {grade ? (
+                                <UserName
+                                    user={{
+                                        lastname: teacher_lastname,
+                                        firstname: teacher_firstname,
+                                        middlename: teacher_middlename,
+                                        extname: teacher_extname
+                                    }}
+                                />
+                            ) : (
+                                "-"
+                            )}
+                        </div>
+                    </div>
                     <div className="column is-4">
                         <label className="label">Enrolled on course</label>
                         <div>{course_name}</div>
@@ -349,4 +374,4 @@ const GradingSheet = ({ teacherId, enrollmentItem, onRefetch }) => {
     );
 };
 
-export default GradingSheet;
+export default GradeDetails;

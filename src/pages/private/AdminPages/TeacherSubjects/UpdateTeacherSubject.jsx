@@ -5,6 +5,8 @@ import Loader from "components/common/Loader";
 import Error from "components/common/Error";
 import UserName from "components/common/UserName";
 
+import { useUserStore } from "store/userStore";
+
 import http from "services/httpService";
 
 const UpdateTeacherSubjects = () => {
@@ -34,6 +36,8 @@ const UpdateTeacherSubjects = () => {
 
     const params = useParams();
     const navigate = useNavigate();
+
+    const { type: userType } = useUserStore(state => state);
 
     useEffect(() => {
         const getSchoolYears = async () => {
@@ -172,7 +176,13 @@ const UpdateTeacherSubjects = () => {
                     status: "Active"
                 });
 
-                navigate("/teacherSubjects");
+                navigate(
+                    `/${
+                        userType === "Dean"
+                            ? "deanTeacherSubjects"
+                            : "teacherSubjects"
+                    }`
+                );
             } catch (error) {
                 setFormError({
                     ...formError,
@@ -192,7 +202,13 @@ const UpdateTeacherSubjects = () => {
                 <button
                     className="button is-ghost"
                     onClick={() => {
-                        navigate(`/teacherSubjects`);
+                        navigate(
+                            `/${
+                                userType === "Dean"
+                                    ? "deanTeacherSubjects"
+                                    : "teacherSubjects"
+                            }`
+                        );
                     }}
                 >
                     <i className="fa-solid fa-arrow-left"></i>
