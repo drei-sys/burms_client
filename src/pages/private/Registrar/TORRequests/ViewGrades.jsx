@@ -8,6 +8,11 @@ import ConfirmModal from "components/common/ConfirmModal";
 
 import http from "services/httpService";
 
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
 const ViewGrades = () => {
     const [torRequest, setTORRequest] = useState({});
     const [student, setStudent] = useState({});
@@ -174,6 +179,187 @@ const ViewGrades = () => {
         } finally {
             setIsRejectLoading(false);
         }
+    };
+
+    const handlePrint = () => {
+        const content = [];
+        //console.log(syEnrollmentItems);
+
+        // const contentBody = [
+        //     [
+        //         {
+        //             text: "Republic of the Philippines",
+        //             alignment: "center",
+        //             bold: true
+        //         }
+        //     ]
+        // ];
+        const contentBody = [];
+
+        content.push([
+            {
+                text: "Republic of the Philippines",
+                alignment: "center"
+            },
+            {
+                text: "Pamantasan ng Cabuyao",
+                alignment: "center",
+                bold: true,
+                fontSize: 15
+            },
+            {
+                text: "Katapatan Homes, Banay-banay, City of Cabuyao, Laguna 4025",
+                alignment: "center"
+            },
+            {
+                text: "Tel. # (049) 502-5884",
+                alignment: "center"
+            },
+            {
+                text: "www.pnc.edu.ph",
+                alignment: "center"
+            },
+            "\n",
+            "\n",
+            {
+                text: "OFFICE OF THE UNIVERSITY REGISTRAR",
+                alignment: "center",
+                bold: true,
+                fontSize: 11
+            },
+            {
+                text: "OFFICIAL TRANSCRIPT OF RECORDS",
+                alignment: "center",
+                bold: true,
+                fontSize: 11
+            },
+            "\n",
+            "\n"
+        ]);
+
+        const {
+            lastname,
+            firstname,
+            middlename,
+            extname,
+            address,
+            course_name
+        } = student;
+
+        content.push({
+            table: {
+                widths: [289, 198],
+                body: [
+                    [
+                        {
+                            text: `Name: ${lastname}, ${firstname} ${middlename} ${extname}`,
+                            bold: true
+                        },
+                        { text: `Program: ${course_name}`, bold: true }
+                    ],
+                    [{ text: `Address: ${address}`, bold: true }, { text: "" }]
+                ]
+            }
+        });
+
+        content.push("\n");
+
+        content.push({
+            text: `ATTACHED CERTIFIED PHOTOCOPY OF THE ORIGINAL TRANSCRIPT OF RECORDS FROM PREVIOUS SCHOOL: NO`,
+            bold: false,
+            fontSize: 9
+        });
+
+        contentBody.push([
+            { text: "Subject Code", bold: true },
+            { text: "Descriptive Title", bold: true },
+            { text: "Rating", bold: true },
+            { text: "Credits", bold: true },
+            { text: "Completion Grade", bold: true }
+        ]);
+
+        syEnrollmentItems.forEach(syEnrollmentItem => {
+            const { syYear, sySemester, enrollmentItems } = syEnrollmentItem;
+
+            contentBody.push([
+                "",
+                { text: `${sySemester} semester: ${syYear}`, bold: true },
+                "",
+                "",
+                ""
+            ]);
+            enrollmentItems.forEach(enrollmentItem => {
+                const { subject_code, subject_name, grade: g } = enrollmentItem;
+                let { equivalent, remarks, grade } = g || {};
+
+                equivalent = equivalent || 0;
+                remarks = remarks || "-";
+                grade = grade || 0;
+
+                contentBody.push([
+                    { text: `${subject_code}`, bold: true },
+                    { text: `${subject_name}` },
+                    { text: equivalent, bold: true },
+                    { text: remarks, bold: true },
+                    { text: "", bold: true }
+                ]);
+            });
+
+            // content.push({
+            //     text: "This paragraph will have a bigger font",
+            //     alignment: "center",
+            //     fontSize: 15
+            // });
+        });
+
+        content.push({
+            table: {
+                widths: [60, 220, 50, 50, 80],
+                body: contentBody
+            }
+        });
+
+        content.push("\n");
+        content.push("\n");
+        content.push({
+            text: "GRADING SYSTEM",
+            alignment: "center"
+        });
+        content.push("\n");
+
+        content.push({
+            table: {
+                widths: [75, 75, 75, 75, 75, 75],
+                body: [
+                    [
+                        "1.00 = 96-100%",
+                        "1.25 = 92-95%",
+                        "1.50 = 88-91%",
+                        "1.75 = 84-87%",
+                        "2.00 = 80-83%",
+                        "2.25 = 75-75%"
+                    ],
+                    [
+                        "2.25 = 70-74%",
+                        "2.75 = 65-69%",
+                        "3.00 = 60-64%",
+                        "5.00 = 0-59%",
+                        "e",
+                        "f"
+                    ]
+                ]
+            }
+        });
+
+        pdfMake
+            .createPdf({
+                content,
+                defaultStyle: {
+                    fontSize: 10
+                }
+                //pageMargins: [40, 29, 40, 29]
+            })
+            .open();
     };
 
     return (
@@ -397,9 +583,7 @@ const ViewGrades = () => {
                             <>
                                 <button
                                     className="button is-success mr-1"
-                                    // onClick={() =>
-                                    //     setIsOpenConfirmGenerate(true)
-                                    // }
+                                    onClick={() => handlePrint()}
                                 >
                                     Print
                                 </button>

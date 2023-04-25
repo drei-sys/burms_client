@@ -43,6 +43,7 @@ import ProfileEditApprovals from "pages/private/AdminPages/ProfileEditApprovals/
 import ViewEnrollments from "pages/private/AdminPages/Enrollments/Index";
 import ViewEnrollment from "pages/private/AdminPages/Enrollments/ViewEnrollment";
 import BlockChain from "pages/private/AdminPages/BlockChain/Index";
+import ReadBlockChain from "pages/private/AdminPages/BlockChain/ReadBlockChain";
 
 //student routes
 import Enroll from "pages/private/StudentPages/Enroll/Index";
@@ -100,7 +101,8 @@ function App() {
         { path: "/profileEditApprovals", element: ProfileEditApprovals },
         { path: "/viewEnrollments", element: ViewEnrollments },
         { path: "/viewEnrollment/:id", element: ViewEnrollment },
-        { path: "/blockchain", element: BlockChain }
+        { path: "/blockchain", element: BlockChain },
+        { path: "/readBlockchain", element: ReadBlockChain }
     ];
 
     const studentRoutes = [
