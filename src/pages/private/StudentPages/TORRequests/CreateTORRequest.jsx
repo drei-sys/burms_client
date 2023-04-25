@@ -47,6 +47,7 @@ const CreateTORRequest = () => {
                 setIsLoading(true);
                 await http.post("/api/torRequest", {
                     reason,
+                    remarks: "-",
                     status: "Pending"
                 });
 
@@ -80,7 +81,9 @@ const CreateTORRequest = () => {
                     <div className="box">
                         <form onSubmit={handleFormSubmit}>
                             <div className="field">
-                                <label className="label">Reason</label>
+                                <label className="label">
+                                    Reason / Purpose
+                                </label>
                                 <div className="control">
                                     <input
                                         name="reason"

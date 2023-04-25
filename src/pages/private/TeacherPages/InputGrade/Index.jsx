@@ -17,11 +17,9 @@ const InputGrade = () => {
     const [schoolYearId, setSchoolYearId] = useState(0);
 
     const [subjectsSelection, setSubjectsSelection] = useState([]);
-    const [coursesSelection, setCoursesSelection] = useState([]);
     const [sectionsSelection, setSectionsSelection] = useState([]);
 
     const [selectedSubjectId, setSelectedSubjectId] = useState(0);
-    const [selectedCourseId, setSelectedCourseId] = useState(0);
     const [selectedSectionId, setSelectedSectionId] = useState(0);
 
     const [enrollmentItems, setEnrollmentItems] = useState([]);
@@ -197,6 +195,10 @@ const InputGrade = () => {
         setSelectedEnrollmentItem(enrollmentItem);
         setIsOpenGradeDetails(true);
     };
+
+    const selectedSchoolYear = schoolYears.find(
+        ({ id }) => id === schoolYearId
+    );
 
     return (
         <>
@@ -393,7 +395,7 @@ const InputGrade = () => {
                         <GradeDetails
                             teacherId={userId}
                             enrollmentItem={selectedEnrollmentItem}
-                            readOnly={false}
+                            readOnly={selectedSchoolYear.status === "Locked"}
                             onRefetch={handleGradingDetailsRefetch}
                         />
                     }

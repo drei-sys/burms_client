@@ -58,10 +58,11 @@ import MyStudents from "pages/private/TeacherPages/MyStudents/Index";
 import InputGrade from "pages/private/TeacherPages/InputGrade/Index";
 
 //registrar
-//import RequestTOR from "pages/private/Registrar/RequestTOR";
+import RegistrarTORRequests from "pages/private/Registrar/TORRequests/Index";
+import ViewGrades from "pages/private/Registrar/TORRequests/ViewGrades";
 
 //dean routes
-import ApproveGrade from "pages/private/Dean/ApproveGrade";
+//import ApproveGrade from "pages/private/Dean/ApproveGrade";
 //import AssignTeacher from "pages/private/Dean/AssignTeacher";
 
 //dept chair routes
@@ -117,7 +118,10 @@ function App() {
         { path: "/inputGrade", element: InputGrade }
     ];
 
-    const registrarRoutes = [];
+    const registrarRoutes = [
+        { path: "/registrarTORRequests", element: RegistrarTORRequests },
+        { path: "/viewGrades/:id/:studentId", element: ViewGrades }
+    ];
 
     const deanRoutes = [
         { path: "/deanTeacherSubjects", element: TeacherSubjects },

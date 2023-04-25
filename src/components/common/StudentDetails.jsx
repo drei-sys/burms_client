@@ -66,6 +66,7 @@ const StudentDetails = ({ data }) => {
         award_received,
         sh_school_strand,
         course_id,
+        year_level,
         email,
 
         user_type
@@ -207,7 +208,7 @@ const StudentDetails = ({ data }) => {
                                 className="has-text-weight-medium"
                                 style={{ width: 180 }}
                             >
-                                Mother's maided name
+                                Mother's maiden name
                             </td>
                             <td>{mother_name}</td>
                         </tr>
@@ -281,6 +282,12 @@ const StudentDetails = ({ data }) => {
                                 Desired program
                             </td>
                             <td>{courseName || "-"}</td>
+                        </tr>
+                        <tr>
+                            <td className="has-text-weight-medium">
+                                Year level
+                            </td>
+                            <td>{year_level}</td>
                         </tr>
                     </tbody>
                 </table>

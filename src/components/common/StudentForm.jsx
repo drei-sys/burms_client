@@ -1051,6 +1051,46 @@ const StudentForm = ({ formData, formError, courses, mode, onInputChange }) => {
                     </div>
                 </div>
 
+                {mode === "update" && (
+                    <div className="field is-horizontal">
+                        <div className="field-label is-normal is-flex-grow-3">
+                            <label className="label">
+                                <span className="has-text-danger">*</span> Year
+                                level
+                            </label>
+                        </div>
+                        <div className="field-body">
+                            <div className="field">
+                                <div className="control">
+                                    <div className="select is-fullwidth">
+                                        <select
+                                            name="year_level"
+                                            value={formData.year_level}
+                                            onChange={onInputChange}
+                                        >
+                                            <option value="1st">1st</option>
+                                            <option value="2nd">2nd</option>
+                                            <option value="3rd">3rd</option>
+                                            <option value="4th">4th</option>
+                                            <option value="5th">5th</option>
+                                            <option value="Graduated">
+                                                Graduated
+                                            </option>
+                                        </select>
+                                    </div>
+                                    {formError.year_level && (
+                                        <div>
+                                            <span className="has-text-danger">
+                                                {formError.year_level}
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 {mode !== "update" && (
                     <>
                         <div className="is-size-5 mt-6 mb-2">Account Info</div>

@@ -33,7 +33,9 @@ const Sidebar = () => {
         { name: "Input Grade", path: "/inputGrade" }
     ];
 
-    const registrarMenuItems = [{ name: "TOR Requests", path: "/TORRequests" }];
+    const registrarMenuItems = [
+        { name: "TOR Requests", path: "/registrarTORRequests" }
+    ];
 
     const deanMenuItems = [
         { name: "Teacher Subjects", path: "/deanTeacherSubjects" }

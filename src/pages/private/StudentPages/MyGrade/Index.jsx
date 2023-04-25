@@ -55,13 +55,15 @@ const MyGrade = () => {
                     const newEnrollmentItems = enrollmentItems.map(
                         enrollmentItem => {
                             const {
+                                sy_id: syId,
                                 student_id: studentId,
                                 subject_id: subjectId,
                                 student_course_id
                             } = enrollmentItem;
 
                             const grade = grades.find(
-                                ({ student_id, subject_id }) =>
+                                ({ sy_id, student_id, subject_id }) =>
+                                    sy_id === syId &&
                                     student_id === studentId &&
                                     subject_id === subjectId
                             );

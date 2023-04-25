@@ -45,6 +45,7 @@ const Register = () => {
         award_received: "",
         sh_school_strand: "",
         course_id: 0,
+        year_level: "1st",
         email: "",
         password: "",
         password_confirmation: ""
@@ -213,6 +214,8 @@ const Register = () => {
     });
 
     const [isLoading, setIsLoading] = useState(false);
+
+    const [isOpenDisclaimer, setIsOpenDisclaimer] = useState(false);
 
     useEffect(() => {
         const getCourses = async () => {
@@ -446,57 +449,39 @@ const Register = () => {
                 setStudentFormError(studentFormError);
                 alert("There's an error in the form. Please check.");
             } else {
-                try {
-                    setStudentFormError({
-                        lastname: "",
-                        firstname: "",
-                        birth_date: "",
-                        birth_place: "",
-                        gender: "",
-                        address: "",
-                        civil_status: "",
-                        contact: "",
-                        is_cabuyeno: "",
-                        is_registered_voter: "",
-                        is_fully_vaccinated: "",
-                        father_name: "",
-                        father_occupation: "",
-                        father_contact: "",
-                        is_father_voter_of_cabuyao: "",
-                        mother_name: "",
-                        mother_occupation: "",
-                        mother_contact: "",
-                        is_mother_voter_of_cabuyao: "",
-                        is_living_with_parents: "",
-                        education_attained: "",
-                        last_school_attended: "",
-                        school_address: "",
-                        award_received: "",
-                        sh_school_strand: "",
-                        course_id: "",
-                        email: "",
-                        password: "",
-                        password_confirmation: ""
-                    });
+                setStudentFormError({
+                    lastname: "",
+                    firstname: "",
+                    birth_date: "",
+                    birth_place: "",
+                    gender: "",
+                    address: "",
+                    civil_status: "",
+                    contact: "",
+                    is_cabuyeno: "",
+                    is_registered_voter: "",
+                    is_fully_vaccinated: "",
+                    father_name: "",
+                    father_occupation: "",
+                    father_contact: "",
+                    is_father_voter_of_cabuyao: "",
+                    mother_name: "",
+                    mother_occupation: "",
+                    mother_contact: "",
+                    is_mother_voter_of_cabuyao: "",
+                    is_living_with_parents: "",
+                    education_attained: "",
+                    last_school_attended: "",
+                    school_address: "",
+                    award_received: "",
+                    sh_school_strand: "",
+                    course_id: "",
+                    email: "",
+                    password: "",
+                    password_confirmation: ""
+                });
 
-                    setIsLoading(true);
-                    await http.get("/sanctum/csrf-cookie");
-                    await http.post("/register", {
-                        ...studentFormData,
-                        user_type: userType
-                    });
-
-                    window.location = "/login";
-                } catch (error) {
-                    setStudentFormError({
-                        ...studentFormError,
-                        ...(error?.response?.data?.errors || {
-                            password_confirmation: "Something went wrong!"
-                        })
-                    });
-                } finally {
-                    setIsLoading(false);
-                }
+                setIsOpenDisclaimer(true);
             }
         } else {
             const {
@@ -521,33 +506,7 @@ const Register = () => {
                 tin,
                 email,
                 password,
-                password_confirmation,
-
-                we_from_1,
-                we_to_1,
-                we_position_1,
-                we_designation_1,
-                we_monthly_salary_1,
-                we_from_2,
-                we_to_2,
-                we_position_2,
-                we_designation_2,
-                we_monthly_salary_2,
-                we_from_3,
-                we_to_3,
-                we_position_3,
-                we_designation_3,
-                we_monthly_salary_3,
-                we_from_4,
-                we_to_4,
-                we_position_4,
-                we_designation_4,
-                we_monthly_salary_4,
-                we_from_5,
-                we_to_5,
-                we_position_5,
-                we_designation_5,
-                we_monthly_salary_5
+                password_confirmation
             } = nonTeachingFormData;
 
             let hasError = false;
@@ -669,169 +628,279 @@ const Register = () => {
                 setNonTeachingFormError(nonTeachingFormError);
                 alert("There's an error in the form. Please check.");
             } else {
-                try {
-                    setNonTeachingFormError({
-                        lastname: "",
-                        firstname: "",
-                        birth_date: "",
-                        birth_place: "",
-                        gender: "",
-                        civil_status: "",
-                        citizenship: "",
-                        house_number: "",
-                        street: "",
-                        subdivision: "",
-                        barangay: "",
-                        city: "",
-                        province: "",
-                        zipcode: "",
-                        gsis: "",
-                        pagibig: "",
-                        philhealth: "",
-                        sss: "",
-                        tin: "",
-                        email: "",
-                        password: "",
-                        password_confirmation: ""
-                    });
+                setNonTeachingFormError({
+                    lastname: "",
+                    firstname: "",
+                    birth_date: "",
+                    birth_place: "",
+                    gender: "",
+                    civil_status: "",
+                    citizenship: "",
+                    house_number: "",
+                    street: "",
+                    subdivision: "",
+                    barangay: "",
+                    city: "",
+                    province: "",
+                    zipcode: "",
+                    gsis: "",
+                    pagibig: "",
+                    philhealth: "",
+                    sss: "",
+                    tin: "",
+                    email: "",
+                    password: "",
+                    password_confirmation: ""
+                });
 
-                    setIsLoading(true);
+                setIsOpenDisclaimer(true);
+            }
+        }
+    };
 
-                    const work_experiences = [
-                        {
-                            we_from_1,
-                            we_to_1,
-                            we_position_1,
-                            we_designation_1,
-                            we_monthly_salary_1
-                        },
-                        {
-                            we_from_2,
-                            we_to_2,
-                            we_position_2,
-                            we_designation_2,
-                            we_monthly_salary_2
-                        },
-                        {
-                            we_from_3,
-                            we_to_3,
-                            we_position_3,
-                            we_designation_3,
-                            we_monthly_salary_3
-                        },
-                        {
-                            we_from_4,
-                            we_to_4,
-                            we_position_4,
-                            we_designation_4,
-                            we_monthly_salary_4
-                        },
-                        {
-                            we_from_5,
-                            we_to_5,
-                            we_position_5,
-                            we_designation_5,
-                            we_monthly_salary_5
-                        }
-                    ];
+    const handleDisclaimerOK = async () => {
+        setIsOpenDisclaimer(false);
+        if (userType === "Student") {
+            try {
+                setIsLoading(true);
+                await http.get("/sanctum/csrf-cookie");
+                await http.post("/register", {
+                    ...studentFormData,
+                    user_type: userType
+                });
 
-                    await http.get("/sanctum/csrf-cookie");
-                    await http.post("/register", {
-                        ...nonTeachingFormData,
-                        work_experiences: JSON.stringify(work_experiences),
-                        user_type: userType
-                    });
+                window.location = "/login";
+            } catch (error) {
+                setStudentFormError({
+                    ...studentFormError,
+                    ...(error?.response?.data?.errors || {
+                        password_confirmation: "Something went wrong!"
+                    })
+                });
+            } finally {
+                setIsLoading(false);
+            }
+        } else {
+            try {
+                const {
+                    we_from_1,
+                    we_to_1,
+                    we_position_1,
+                    we_designation_1,
+                    we_monthly_salary_1,
+                    we_from_2,
+                    we_to_2,
+                    we_position_2,
+                    we_designation_2,
+                    we_monthly_salary_2,
+                    we_from_3,
+                    we_to_3,
+                    we_position_3,
+                    we_designation_3,
+                    we_monthly_salary_3,
+                    we_from_4,
+                    we_to_4,
+                    we_position_4,
+                    we_designation_4,
+                    we_monthly_salary_4,
+                    we_from_5,
+                    we_to_5,
+                    we_position_5,
+                    we_designation_5,
+                    we_monthly_salary_5
+                } = nonTeachingFormData;
 
-                    window.location = "/login";
-                } catch (error) {
-                    setNonTeachingFormError({
-                        ...nonTeachingFormError,
-                        ...(error?.response?.data?.errors || {
-                            password_confirmation: "Something went wrong!"
-                        })
-                    });
-                } finally {
-                    setIsLoading(false);
-                }
+                setIsLoading(true);
+
+                const work_experiences = [
+                    {
+                        we_from_1,
+                        we_to_1,
+                        we_position_1,
+                        we_designation_1,
+                        we_monthly_salary_1
+                    },
+                    {
+                        we_from_2,
+                        we_to_2,
+                        we_position_2,
+                        we_designation_2,
+                        we_monthly_salary_2
+                    },
+                    {
+                        we_from_3,
+                        we_to_3,
+                        we_position_3,
+                        we_designation_3,
+                        we_monthly_salary_3
+                    },
+                    {
+                        we_from_4,
+                        we_to_4,
+                        we_position_4,
+                        we_designation_4,
+                        we_monthly_salary_4
+                    },
+                    {
+                        we_from_5,
+                        we_to_5,
+                        we_position_5,
+                        we_designation_5,
+                        we_monthly_salary_5
+                    }
+                ];
+
+                await http.get("/sanctum/csrf-cookie");
+                await http.post("/register", {
+                    ...nonTeachingFormData,
+                    work_experiences: JSON.stringify(work_experiences),
+                    user_type: userType
+                });
+
+                window.location = "/login";
+            } catch (error) {
+                setNonTeachingFormError({
+                    ...nonTeachingFormError,
+                    ...(error?.response?.data?.errors || {
+                        password_confirmation: "Something went wrong!"
+                    })
+                });
+            } finally {
+                setIsLoading(false);
             }
         }
     };
 
     return (
-        <div style={{ marginTop: 100, marginBottom: 100 }}>
-            <div className="container is-max-desktop">
-                <form onSubmit={handleFormSubmit}>
-                    <div className="box mb-4">
-                        <div className="is-size-4 has-text-centered">
-                            Register
-                        </div>
+        <>
+            <div style={{ marginTop: 100, marginBottom: 100 }}>
+                <div className="container is-max-desktop">
+                    <form onSubmit={handleFormSubmit}>
+                        <div className="box mb-4">
+                            <div className="is-size-4 has-text-centered">
+                                Register
+                            </div>
 
-                        <div className="field">
-                            <label className="label">Register as</label>
-                            <div className="control">
-                                <div className="select is-fullwidth">
-                                    <select
-                                        value={userType}
-                                        onChange={e =>
-                                            setUserType(e.target.value)
-                                        }
-                                    >
-                                        <option value="Student">Student</option>
-                                        <option value="Teacher">Teacher</option>
-                                        <option value="Non Teaching">
-                                            Non Teaching
-                                        </option>
-                                        <option value="Registrar">
-                                            Registrar
-                                        </option>
-                                        <option value="Dean">Dean</option>
-                                        <option value="DeptChair">
-                                            Department Chair
-                                        </option>
-                                    </select>
+                            <div className="field">
+                                <label className="label">Register as</label>
+                                <div className="control">
+                                    <div className="select is-fullwidth">
+                                        <select
+                                            value={userType}
+                                            onChange={e =>
+                                                setUserType(e.target.value)
+                                            }
+                                        >
+                                            <option value="Student">
+                                                Student
+                                            </option>
+                                            <option value="Teacher">
+                                                Teacher
+                                            </option>
+                                            <option value="Non Teaching">
+                                                Non Teaching
+                                            </option>
+                                            <option value="Registrar">
+                                                Registrar
+                                            </option>
+                                            <option value="Dean">Dean</option>
+                                            <option value="DeptChair">
+                                                Department Chair
+                                            </option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="box">
-                        {userType === "Student" ? (
-                            <StudentForm
-                                formData={studentFormData}
-                                formError={studentFormError}
-                                courses={courses}
-                                onInputChange={handleStudentInputChange}
-                            />
-                        ) : (
-                            <NonTeachingForm
-                                formData={nonTeachingFormData}
-                                formError={nonTeachingFormError}
-                                onInputChange={handleNonTeachingInputChange}
-                            />
-                        )}
+                        <div className="box">
+                            {userType === "Student" ? (
+                                <StudentForm
+                                    formData={studentFormData}
+                                    formError={studentFormError}
+                                    courses={courses}
+                                    onInputChange={handleStudentInputChange}
+                                />
+                            ) : (
+                                <NonTeachingForm
+                                    formData={nonTeachingFormData}
+                                    formError={nonTeachingFormError}
+                                    onInputChange={handleNonTeachingInputChange}
+                                />
+                            )}
 
-                        {/* <NonTeachingForm /> */}
+                            {/* <NonTeachingForm /> */}
 
-                        <hr />
+                            <hr />
 
-                        <button
-                            className={`button is-success is-fullwidth ${
-                                isLoading ? "is-loading" : ""
-                            }`}
-                            type="submit"
-                        >
-                            Register
-                        </button>
+                            <button
+                                className={`button is-success is-fullwidth ${
+                                    isLoading ? "is-loading" : ""
+                                }`}
+                                type="submit"
+                            >
+                                Register
+                            </button>
 
-                        <div className="has-text-centered mt-3">
-                            Already a member ?{" "}
-                            <span className="is-underlined">
-                                <Link to="/login">Login</Link>
-                            </span>
+                            <div className="has-text-centered mt-3">
+                                Already a member ?{" "}
+                                <span className="is-underlined">
+                                    <Link to="/login">Login</Link>
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
-        </div>
+
+            <div className={`modal ${isOpenDisclaimer ? "is-active" : ""}`}>
+                <div className="modal-background"></div>
+                <div className="modal-card">
+                    <header className="modal-card-head">
+                        <p className="modal-card-title">Disclaimer Message</p>
+                        <button
+                            className="delete"
+                            aria-label="close"
+                            onClick={() => setIsOpenDisclaimer(false)}
+                        ></button>
+                    </header>
+                    <section className="modal-card-body">
+                        <p>
+                            While blockchain technology provides a high level of
+                            security and immutability, it is important to note
+                            that personal information stored on the blockchain
+                            is not completely private. The blockchain is a
+                            public ledger and all transactions on the blockchain
+                            are visible to anyone who has access to it. While
+                            personal information can be encrypted on the
+                            blockchain, it is still vulnerable to attack or
+                            theft by hackers or other malicious actors. It is
+                            important to carefully consider the sensitivity of
+                            any personal information before deciding to store it
+                            on the blockchain, and to take appropriate security
+                            measures to protect it. As with any other type of
+                            technology, there are potential risks and benefits
+                            associated with using blockchain technology to store
+                            personal information, and it is important to weigh
+                            these carefully before making any decisions.
+                        </p>
+                    </section>
+                    <footer className="modal-card-foot">
+                        <button
+                            className="button is-success"
+                            onClick={handleDisclaimerOK}
+                        >
+                            OK
+                        </button>
+                        <button
+                            className="button"
+                            onClick={() => setIsOpenDisclaimer(false)}
+                        >
+                            Cancel
+                        </button>
+                    </footer>
+                </div>
+            </div>
+        </>
     );
 };
 

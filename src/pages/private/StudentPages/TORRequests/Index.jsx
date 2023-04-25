@@ -20,13 +20,15 @@ const TORRequests = () => {
     const [isOpenConfirmDelete, setIsOpenConfirmDelete] = useState(false);
     const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
-    const { status: userStatus } = useUserStore(state => state);
+    const { id: userId, status: userStatus } = useUserStore(state => state);
 
     useEffect(() => {
         const getTORRequests = async () => {
             try {
                 setIsContentLoading(true);
-                const { data } = await http.get("/api/torRequests");
+                const { data } = await http.get(
+                    `/api/studentTORRequests/${userId}`
+                );
                 setTORRequests(data);
             } catch (error) {
                 setError(error);
@@ -101,7 +103,7 @@ const TORRequests = () => {
                             <table className="table is-fullwidth is-hoverable">
                                 <thead>
                                     <tr>
-                                        <th>Reason</th>
+                                        <th>Reason / Purpose</th>
                                         <th>Date requested</th>
                                         <th>Remarks</th>
                                         <th>Status</th>
@@ -113,53 +115,52 @@ const TORRequests = () => {
                                         ({
                                             id,
                                             reason,
+                                            remarks,
                                             status,
                                             created_at
                                         }) => {
                                             let d = new Date(created_at);
-                                            const datestring =
-                                                d.getDate() +
-                                                "-" +
-                                                (d.getMonth() + 1) +
-                                                "-" +
-                                                d.getFullYear() +
-                                                " " +
-                                                d.getHours() +
-                                                ":" +
-                                                d.getMinutes();
+                                            const datestring = `${
+                                                d.getMonth() + 1
+                                            }-${d.getDate()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
 
                                             return (
                                                 <tr key={id}>
                                                     <td>{reason}</td>
                                                     <td>{datestring}</td>
-                                                    <td>-</td>
+                                                    <td>{remarks}</td>
                                                     <td>{status}</td>
                                                     <td>
-                                                        <Link
-                                                            to={`/updateTORRequest/${id}`}
-                                                        >
-                                                            <button
-                                                                className="button mr-1"
-                                                                title="Update"
-                                                            >
-                                                                <span className="icon">
-                                                                    <i className="fa-solid fa-pen-to-square"></i>
-                                                                </span>
-                                                            </button>
-                                                        </Link>
-                                                        <button
-                                                            className="button is-danger"
-                                                            title="Delete"
-                                                            onClick={() =>
-                                                                showConfirmDelete(
-                                                                    id
-                                                                )
-                                                            }
-                                                        >
-                                                            <span className="icon">
-                                                                <i className="fa-solid fa-trash"></i>
-                                                            </span>
-                                                        </button>
+                                                        {status ===
+                                                            "Pending" && (
+                                                            <>
+                                                                <Link
+                                                                    to={`/updateTORRequest/${id}`}
+                                                                >
+                                                                    <button
+                                                                        className="button mr-1"
+                                                                        title="Update"
+                                                                    >
+                                                                        <span className="icon">
+                                                                            <i className="fa-solid fa-pen-to-square"></i>
+                                                                        </span>
+                                                                    </button>
+                                                                </Link>
+                                                                <button
+                                                                    className="button is-danger"
+                                                                    title="Delete"
+                                                                    onClick={() =>
+                                                                        showConfirmDelete(
+                                                                            id
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <span className="icon">
+                                                                        <i className="fa-solid fa-trash"></i>
+                                                                    </span>
+                                                                </button>
+                                                            </>
+                                                        )}
                                                     </td>
                                                 </tr>
                                             );

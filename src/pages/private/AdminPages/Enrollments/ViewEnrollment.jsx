@@ -108,11 +108,28 @@ const ViewEnrollment = () => {
                 View Enrollment
             </h1>
             <div className="box mb-4">
-                <div>
-                    <span className="label">Student name:</span>
-                </div>
-                <div>
-                    <UserName user={student} />
+                <div className="columns">
+                    <div className="column is-4">
+                        <div>
+                            <span className="label">Student name:</span>
+                        </div>
+                        <div>
+                            <UserName user={student} />
+                        </div>
+                    </div>
+
+                    <div className="column is-4">
+                        <div>
+                            <span className="label">Course:</span>
+                        </div>
+                        <div>{student.course_name}</div>
+                    </div>
+                    <div className="column is-4">
+                        <div>
+                            <span className="label">Year level:</span>
+                        </div>
+                        <div>{student.year_level}</div>
+                    </div>
                 </div>
             </div>
             <div className="box">
