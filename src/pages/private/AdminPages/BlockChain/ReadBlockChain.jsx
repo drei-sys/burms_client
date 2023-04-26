@@ -51,7 +51,8 @@ const ReadBlockchain = () => {
                         fetchedData,
                         "123zxc123"
                     );
-                    const data = CryptoJS.enc.Utf8.stringify(decrypted);
+                    let data = CryptoJS.enc.Utf8.stringify(decrypted);
+                    data = JSON.parse(data);
                     setData(data);
                 } else {
                     setData("Empty data");
@@ -107,7 +108,7 @@ const ReadBlockchain = () => {
                     ) : isError ? (
                         <>An error occured</>
                     ) : (
-                        <>{data}</>
+                        <>{data.lastname}</>
                     )}
                 </div>
             </div>
