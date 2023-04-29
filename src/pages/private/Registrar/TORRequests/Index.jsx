@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
-import ConfirmModal from "components/common/ConfirmModal";
 import UserName from "components/common/UserName";
 
 import { useUserStore } from "store/userStore";
@@ -13,9 +12,7 @@ import http from "services/httpService";
 const TORRequests = () => {
     const [activeTab, setActiveTab] = useState(1);
 
-    const [refetchTORRequestsRef, setRefetchTORRequestsRef] = useState(0);
     const [torRequests, setTORRequests] = useState([]);
-    const [selectedTORRequest, setSelectedTORRequest] = useState(null);
 
     const [isContentLoading, setIsContentLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -36,7 +33,7 @@ const TORRequests = () => {
         };
 
         getTORRequests();
-    }, [refetchTORRequestsRef]);
+    }, []);
 
     if (isContentLoading) {
         return <Loader />;
@@ -110,9 +107,7 @@ const TORRequests = () => {
                                     </td>
                                     <td>{reason}</td>
                                     <td>
-                                        <Link
-                                            to={`/viewGrades/${id}/${student_id}`}
-                                        >
+                                        <Link to={`/tor/${id}`}>
                                             <button
                                                 className="button mr-1"
                                                 title="View grades"

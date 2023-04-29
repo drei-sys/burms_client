@@ -37,7 +37,7 @@ const UpdateTeacherSubjects = () => {
     const params = useParams();
     const navigate = useNavigate();
 
-    const { type: userType } = useUserStore(state => state);
+    const { type: userType, status: userStatus } = useUserStore(state => state);
 
     useEffect(() => {
         const getSchoolYears = async () => {
@@ -107,6 +107,17 @@ const UpdateTeacherSubjects = () => {
 
     if (error) {
         return <Error error={error} />;
+    }
+
+    if (userStatus === "For Verification") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">Update Teacher Subjects</h1>
+                <div className="notification is-warning my-4">
+                    Your account is pending for admin verification.
+                </div>
+            </>
+        );
     }
 
     if (isNotExist) {
@@ -213,7 +224,7 @@ const UpdateTeacherSubjects = () => {
                 >
                     <i className="fa-solid fa-arrow-left"></i>
                 </button>{" "}
-                Update Assign Teacher
+                Update Teacher Subjects
             </h1>
             <div className="box mb-4">
                 <form onSubmit={handleFormSubmit}>

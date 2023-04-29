@@ -29,11 +29,9 @@ const ViewEnrollment = () => {
     useEffect(() => {
         const getUser = async () => {
             try {
-                const { data } = await http.get(
-                    `/api/enrollmentItems/${params.id}`
-                );
+                const { data } = await http.get(`/api/enrollment/${params.id}`);
                 const { student, enrollment, enrollmentItems } = data;
-                if (data.length === 0) {
+                if (!student) {
                     setIsNotExist(true);
                 } else {
                     setEnrollment(enrollment);
@@ -67,7 +65,9 @@ const ViewEnrollment = () => {
     const handleApprove = async () => {
         try {
             setIsApproveLoading(true);
-            await http.put(`/api/approveEnrollment/${params.id}`);
+            await http.put(`/api/enrollmentStatus/${params.id}`, {
+                status: "Enrolled"
+            });
             navigate("/viewEnrollments");
         } catch (error) {
             console.log(error);
@@ -83,12 +83,14 @@ const ViewEnrollment = () => {
     const handleReject = async () => {
         try {
             setIsRejectLoading(true);
-            await http.put(`/api/rejectEnrollment/${params.id}`);
+            await http.put(`/api/enrollmentStatus/${params.id}`, {
+                status: "Rejected"
+            });
             navigate("/viewEnrollments");
         } catch (error) {
             console.log(error);
             alert(
-                "An error occured while approving the enrollment. Please try again."
+                "An error occured while rejecting the enrollment. Please try again."
             );
         } finally {
             setIsOpenConfirmReject(false);
@@ -147,8 +149,6 @@ const ViewEnrollment = () => {
                         {enrollmentItems.map(enrollmentItem => {
                             const {
                                 subject_id,
-                                year,
-                                semester,
                                 course_name,
                                 section_name,
                                 subject_code,
@@ -157,8 +157,8 @@ const ViewEnrollment = () => {
 
                             return (
                                 <tr key={subject_id}>
-                                    <td>{year}</td>
-                                    <td>{semester}</td>
+                                    <td>{enrollment.sy_year}</td>
+                                    <td>{enrollment.sy_semester}</td>
                                     <td>{course_name}</td>
                                     <td>{section_name}</td>
                                     <td>

@@ -26,9 +26,7 @@ const TORRequests = () => {
         const getTORRequests = async () => {
             try {
                 setIsContentLoading(true);
-                const { data } = await http.get(
-                    `/api/studentTORRequests/${userId}`
-                );
+                const { data } = await http.get(`/api/torRequests/${userId}`);
                 setTORRequests(data);
             } catch (error) {
                 setError(error);

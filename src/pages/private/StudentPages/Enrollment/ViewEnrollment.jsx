@@ -4,9 +4,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
 
+import { useUserStore } from "store/userStore";
+
 import http from "services/httpService";
 
 const ViewEnrollment = () => {
+    const [enrollment, setEnrollment] = useState(null);
     const [enrollmentItems, setEnrollmentItems] = useState(null);
 
     const [isContentLoading, setIsContentLoading] = useState(true);
@@ -16,17 +19,18 @@ const ViewEnrollment = () => {
     const params = useParams();
     const navigate = useNavigate();
 
+    const { status: userStatus } = useUserStore(state => state);
+
     useEffect(() => {
-        const getUser = async () => {
+        const getEnrollment = async () => {
             try {
-                const { data } = await http.get(
-                    `/api/enrollmentItems/${params.id}`
-                );
-                const { enrollmentItems } = data;
-                if (data.length === 0) {
-                    setIsNotExist(true);
-                } else {
+                const { data } = await http.get(`/api/enrollment/${params.id}`);
+                const { student, enrollment, enrollmentItems } = data;
+                if (student) {
+                    setEnrollment(enrollment);
                     setEnrollmentItems(enrollmentItems);
+                } else {
+                    setIsNotExist(true);
                 }
             } catch (error) {
                 setError(error);
@@ -35,7 +39,7 @@ const ViewEnrollment = () => {
             }
         };
 
-        getUser();
+        getEnrollment();
     }, []);
 
     if (isContentLoading) {
@@ -44,6 +48,17 @@ const ViewEnrollment = () => {
 
     if (error) {
         return <Error error={error} />;
+    }
+
+    if (userStatus === "For Verification") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">View Enrollment</h1>
+                <div className="notification is-warning my-4">
+                    Your account is pending for admin verification.
+                </div>
+            </>
+        );
     }
 
     if (isNotExist) {
@@ -84,8 +99,6 @@ const ViewEnrollment = () => {
                         {enrollmentItems.map(enrollmentItem => {
                             const {
                                 subject_id,
-                                year,
-                                semester,
                                 course_name,
                                 section_name,
                                 subject_code,
@@ -95,8 +108,8 @@ const ViewEnrollment = () => {
 
                             return (
                                 <tr key={subject_id}>
-                                    <td>{year}</td>
-                                    <td>{semester}</td>
+                                    <td>{enrollment.sy_year}</td>
+                                    <td>{enrollment.sy_semester}</td>
                                     <td>{course_name}</td>
                                     <td>{section_name}</td>
                                     <td>

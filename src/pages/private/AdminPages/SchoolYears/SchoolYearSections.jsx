@@ -45,7 +45,7 @@ const SchoolYearSections = () => {
 
     const params = useParams();
     const navigate = useNavigate();
-    const { type: userType } = useUserStore(state => state);
+    const { type: userType, status: userStatus } = useUserStore(state => state);
 
     useEffect(() => {
         const getSchoolYear = async () => {
@@ -55,13 +55,7 @@ const SchoolYearSections = () => {
                     `/api/schoolYearSection/${params.id}`
                 );
 
-                const {
-                    schoolYear,
-                    schoolYearSections,
-                    courses: courseList,
-                    sections: sectionList,
-                    subjects: subjectList
-                } = data;
+                const { schoolYear, schoolYearSections } = data;
 
                 let courses = [];
                 schoolYearSections.forEach(schoolYearSection => {
@@ -71,7 +65,12 @@ const SchoolYearSections = () => {
                         subject_id,
                         current_slot_count,
                         max_slot_count,
-                        is_slot_full
+                        is_slot_full,
+
+                        course_name,
+                        section_name,
+                        subject_code,
+                        subject_name
                     } = schoolYearSection;
 
                     const course = courses.find(
@@ -85,19 +84,15 @@ const SchoolYearSections = () => {
                                     ({ section_id: secId }) =>
                                         secId === section_id
                                 );
-
                                 if (courseSection) {
-                                    const subject = subjectList.find(
-                                        ({ id }) => id === subject_id
-                                    );
-
                                     courseSection.subjects.push({
-                                        ...subject,
+                                        id: subject_id,
+                                        code: subject_code,
+                                        name: subject_name,
                                         current_slot_count,
                                         max_slot_count,
                                         is_slot_full
                                     });
-
                                     return {
                                         ...course,
                                         sections: course.sections.map(
@@ -113,52 +108,38 @@ const SchoolYearSections = () => {
                                         )
                                     };
                                 } else {
-                                    const section = sectionList.find(
-                                        ({ id }) => id === section_id
-                                    );
-                                    const subject = subjectList.find(
-                                        ({ id }) => id === subject_id
-                                    );
-
                                     course.sections.push({
-                                        section_id: section.id,
-                                        name: section.name,
+                                        section_id,
+                                        name: section_name,
                                         subjects: [
                                             {
-                                                ...subject,
+                                                id: subject_id,
+                                                code: subject_code,
+                                                name: subject_name,
                                                 current_slot_count,
                                                 max_slot_count,
                                                 is_slot_full
                                             }
                                         ]
                                     });
-
                                     return course;
                                 }
                             }
                             return course;
                         });
                     } else {
-                        const course = courseList.find(
-                            ({ id }) => id === course_id
-                        );
-                        const section = sectionList.find(
-                            ({ id }) => id === section_id
-                        );
-                        const subject = subjectList.find(
-                            ({ id }) => id === subject_id
-                        );
-
                         courses.push({
                             course_id,
-                            name: course.name,
+                            name: course_name,
                             sections: [
                                 {
-                                    section_id: section.id,
-                                    name: section.name,
+                                    section_id,
+                                    name: section_name,
                                     subjects: [
                                         {
-                                            ...subject,
+                                            id: subject_id,
+                                            code: subject_code,
+                                            name: subject_name,
                                             current_slot_count,
                                             max_slot_count,
                                             is_slot_full
@@ -195,6 +176,17 @@ const SchoolYearSections = () => {
 
     if (error) {
         return <Error error={error} />;
+    }
+
+    if (userStatus === "For Verification") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">School Year Sections</h1>
+                <div className="notification is-warning my-4">
+                    Your account is pending for admin verification.
+                </div>
+            </>
+        );
     }
 
     if (isNotExist) {

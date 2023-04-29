@@ -16,7 +16,7 @@ const BlockChain = () => {
         const getUsers = async () => {
             try {
                 setIsContentLoading(true);
-                const { data } = await http.get("/api/blockChainUsers");
+                const { data } = await http.get("/api/users");
                 setUsers(data);
             } catch (error) {
                 setError(error);

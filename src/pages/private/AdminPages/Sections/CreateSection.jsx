@@ -16,7 +16,18 @@ const CreateSection = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
-    const { type: userType } = useUserStore(state => state);
+    const { type: userType, status: userStatus } = useUserStore(state => state);
+
+    if (userStatus === "For Verification") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">Create Section</h1>
+                <div className="notification is-warning my-4">
+                    Your account is pending for admin verification.
+                </div>
+            </>
+        );
+    }
 
     const handleInputChange = e => {
         let { name, value } = e.target;

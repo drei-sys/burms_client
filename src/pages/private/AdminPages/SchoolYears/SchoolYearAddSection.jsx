@@ -35,7 +35,7 @@ const SchoolYearAddSection = () => {
 
     const params = useParams();
     const navigate = useNavigate();
-    const { type: userType } = useUserStore(state => state);
+    const { type: userType, status: userStatus } = useUserStore(state => state);
 
     useEffect(() => {
         const getSchoolYear = async () => {
@@ -74,6 +74,17 @@ const SchoolYearAddSection = () => {
 
     if (error) {
         return <Error error={error} />;
+    }
+
+    if (userStatus === "For Verification") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">School Year Add Section</h1>
+                <div className="notification is-warning my-4">
+                    Your account is pending for admin verification.
+                </div>
+            </>
+        );
     }
 
     if (isNotExist) {

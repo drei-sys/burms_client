@@ -14,20 +14,24 @@ import http from "services/httpService";
 
 const Profile = () => {
     const [refetchUserDetailsRef, setRefetchUserDetailsRef] = useState(0);
-    const [userDetails, setUserDetails] = useState(null);
+    const [user, setUser] = useState(null);
     const [isContentLoading, setIsContentLoading] = useState(true);
     const [error, setError] = useState(null);
 
     const [isLoading, setIsLoading] = useState(false);
 
-    const { status: userStatus, type: userType } = useUserStore(state => state);
+    const {
+        id: userId,
+        status: userStatus,
+        type: userType
+    } = useUserStore(state => state);
 
     useEffect(() => {
         const getUserDetails = async () => {
             try {
                 setIsContentLoading(true);
-                const { data } = await http.get(`/api/userDetails`);
-                setUserDetails(data);
+                const { data } = await http.get(`/api/user/${userId}`);
+                setUser(data);
             } catch (error) {
                 setError(error);
             } finally {
@@ -49,12 +53,9 @@ const Profile = () => {
     const handleRequestEdit = async () => {
         try {
             setIsLoading(true);
-            await http.put(
-                `/api/userDetailsStatus/${userDetails.id}/${userDetails.user_type}`,
-                {
-                    status: "For Approval"
-                }
-            );
+            await http.put(`/api/userStatus/${user.id}`, {
+                status: "For Approval"
+            });
             setRefetchUserDetailsRef(Math.random());
         } catch (error) {
             setError(error);
@@ -81,7 +82,7 @@ const Profile = () => {
             ) : (
                 <div className="box mb-4">
                     <div className="has-text-right">
-                        {userDetails.status === "Uneditable" && (
+                        {user.status === "Uneditable" && (
                             <button
                                 className={`button is-success ${
                                     isLoading ? "is-loading" : ""
@@ -91,7 +92,7 @@ const Profile = () => {
                                 Request for profile edit
                             </button>
                         )}
-                        {userDetails.status === "For Approval" && (
+                        {user.status === "For Approval" && (
                             <span className="has-text-success">
                                 <span className="icon">
                                     <i className="fa-solid fa-check"></i>
@@ -99,7 +100,7 @@ const Profile = () => {
                                 Update requested
                             </span>
                         )}
-                        {userDetails.status === "Editable" && (
+                        {user.status === "Editable" && (
                             <Link to="/updateProfile">
                                 <button className="button is-success">
                                     Update profile
@@ -110,9 +111,9 @@ const Profile = () => {
                     <hr />
                     <div>
                         {userType === "Student" ? (
-                            <StudentDetails data={userDetails} />
+                            <StudentDetails data={user} />
                         ) : (
-                            <NonTeachingDetails data={userDetails} />
+                            <NonTeachingDetails data={user} />
                         )}
                     </div>
                 </div>

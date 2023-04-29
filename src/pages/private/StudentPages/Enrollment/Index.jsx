@@ -5,6 +5,7 @@ import Loader from "components/common/Loader";
 import Error from "components/common/Error";
 
 import { useUserStore } from "store/userStore";
+
 import http from "services/httpService";
 
 const Enrollments = () => {
@@ -31,6 +32,14 @@ const Enrollments = () => {
         getEnrollments();
     }, []);
 
+    if (isContentLoading) {
+        return <Loader />;
+    }
+
+    if (error) {
+        return <Error error={error} />;
+    }
+
     if (userStatus === "For Verification") {
         return (
             <>
@@ -40,14 +49,6 @@ const Enrollments = () => {
                 </div>
             </>
         );
-    }
-
-    if (isContentLoading) {
-        return <Loader />;
-    }
-
-    if (error) {
-        return <Error error={error} />;
     }
 
     return (

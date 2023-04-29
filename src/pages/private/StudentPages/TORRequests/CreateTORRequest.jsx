@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useUserStore } from "store/userStore";
+
 import http from "services/httpService";
 
 const CreateTORRequest = () => {
@@ -14,6 +16,18 @@ const CreateTORRequest = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
+    const { status: userStatus } = useUserStore(state => state);
+
+    if (userStatus === "For Verification") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">Request TOR</h1>
+                <div className="notification is-warning my-4">
+                    Your account is pending for admin verification.
+                </div>
+            </>
+        );
+    }
 
     const handleInputChange = e => {
         let { name, value } = e.target;

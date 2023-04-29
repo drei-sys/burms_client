@@ -54,47 +54,77 @@ const InputGrade = () => {
 
     useEffect(() => {
         if (schoolYearId !== 0) {
-            const getTeacherStudents = async () => {
+            const getGrades = async () => {
                 try {
                     setIsStudentsLoading(true);
-                    const { data } = await http.get(
-                        `/api/teacherStudents/${schoolYearId}/${userId}`
+                    const { data: data1 } = await http.get(
+                        `/api/enrollmentItemsTPOV/${schoolYearId}/${userId}`
+                    );
+                    const { data: grades } = await http.get(
+                        `/api/gradesTPOV/${schoolYearId}`
                     );
 
                     const {
                         teacherSubjectItems,
-                        enrollmentItems,
-                        courses,
-                        grades
-                    } = data;
+                        enrollments,
+                        enrollmentItems
+                    } = data1;
 
-                    const newFilteredenrollmentItems = enrollmentItems.map(
+                    const newEnrollmentItems = enrollmentItems.map(
                         enrollmentItem => {
+                            const enrollment = enrollments.find(
+                                ({ id }) => id === enrollmentItem.enrollment_id
+                            );
                             const {
+                                sy_id,
+                                sy_semester,
+                                sy_year,
+                                student_id,
+                                student_lastname,
+                                student_firstname,
+                                student_middlename,
+                                student_extname,
+                                student_course_id,
+                                student_course_name,
+                                student_user_type
+                            } = enrollment;
+
+                            const newEnrollmentItem = {
+                                ...enrollmentItem,
+                                sy_id,
+                                sy_semester,
+                                sy_year,
+                                student_id,
+                                student_lastname,
+                                student_firstname,
+                                student_middlename,
+                                student_extname,
+                                student_course_id,
+                                student_course_name,
+                                student_user_type
+                            };
+
+                            const {
+                                sy_id: syId,
                                 student_id: studentId,
-                                subject_id: subjectId,
-                                student_course_id
-                            } = enrollmentItem;
+                                subject_id: subjectId
+                            } = newEnrollmentItem;
 
                             const grade = grades.find(
-                                ({ student_id, subject_id }) =>
+                                ({ sy_id, student_id, subject_id }) =>
+                                    sy_id === syId &&
                                     student_id === studentId &&
                                     subject_id === subjectId
                             );
 
-                            const student_course_name = courses.find(
-                                ({ id }) => id === student_course_id
-                            ).name;
-
                             return {
-                                ...enrollmentItem,
-                                student_course_name,
+                                ...newEnrollmentItem,
                                 grade
                             };
                         }
                     );
 
-                    const filteredEnrollmentItems = newFilteredenrollmentItems
+                    const filteredEnrollmentItems = newEnrollmentItems
                         .filter(
                             ({ subject_id }) =>
                                 subject_id === selectedSubjectId ||
@@ -107,7 +137,7 @@ const InputGrade = () => {
                         );
 
                     setSubjectsSelection(teacherSubjectItems);
-                    setEnrollmentItems(newFilteredenrollmentItems);
+                    setEnrollmentItems(newEnrollmentItems);
                     setFilteredEnrollmentItems(filteredEnrollmentItems);
                 } catch (error) {
                     console.log(error);
@@ -117,7 +147,7 @@ const InputGrade = () => {
                 }
             };
 
-            getTeacherStudents();
+            getGrades();
         }
     }, [schoolYearId, refetchTeacherStudents]);
 
@@ -202,7 +232,7 @@ const InputGrade = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-4">My Students</h1>
+            <h1 className="is-size-4 mb-4">Input Grades</h1>
 
             <div className="box mb-4">
                 <label className="label">Select school year</label>
@@ -308,7 +338,11 @@ const InputGrade = () => {
                                                 enrollmentItem => {
                                                     const {
                                                         student_id,
-                                                        user_type,
+                                                        student_lastname,
+                                                        student_firstname,
+                                                        student_middlename,
+                                                        student_extname,
+                                                        student_course_name,
                                                         grade
                                                     } = enrollmentItem;
 
@@ -333,16 +367,23 @@ const InputGrade = () => {
                                                                 <div>
                                                                     <span className="has-text-weight-medium">
                                                                         <UserName
-                                                                            user={
-                                                                                enrollmentItem
-                                                                            }
+                                                                            user={{
+                                                                                lastname:
+                                                                                    student_lastname,
+                                                                                firstname:
+                                                                                    student_firstname,
+                                                                                middlename:
+                                                                                    student_middlename,
+                                                                                extname:
+                                                                                    student_extname
+                                                                            }}
                                                                         />
                                                                     </span>
                                                                 </div>
                                                                 <div>
                                                                     <span className="is-size-6">
                                                                         {
-                                                                            user_type
+                                                                            student_course_name
                                                                         }
                                                                     </span>
                                                                 </div>

@@ -50,10 +50,9 @@ const ProfileEditApprovals = () => {
     const handleApprove = async () => {
         try {
             setIsLoading(true);
-            await http.put(
-                `/api/userDetailsStatus/${selectedUser.id}/${selectedUser.user_type}`,
-                { status: "Editable" }
-            );
+            await http.put(`/api/userStatus/${selectedUser.id}`, {
+                status: "Editable"
+            });
             setRefetchUsersRef(Math.random());
         } catch (error) {
             alert(

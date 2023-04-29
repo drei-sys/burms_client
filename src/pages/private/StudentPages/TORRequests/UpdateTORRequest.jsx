@@ -4,6 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
 
+import { useUserStore } from "store/userStore";
+
 import http from "services/httpService";
 
 const UpdateTORRequest = () => {
@@ -24,17 +26,18 @@ const UpdateTORRequest = () => {
 
     const params = useParams();
     const navigate = useNavigate();
+    const { status: userStatus } = useUserStore(state => state);
 
     useEffect(() => {
         const getTORRequest = async () => {
             try {
                 const { data } = await http.get(`/api/torRequest/${params.id}`);
 
-                if (data?.reason) {
+                if (!data) {
+                    setIsNotExist(true);
+                } else {
                     setTORRequest(data);
                     setFormData({ reason: data.reason });
-                } else {
-                    setIsNotExist(true);
                 }
             } catch (error) {
                 setError(error);
@@ -57,6 +60,17 @@ const UpdateTORRequest = () => {
     if (isNotExist) {
         return (
             <div className="has-text-centered mt-6">TOR request not found.</div>
+        );
+    }
+
+    if (userStatus === "For Verification") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">Request TOR</h1>
+                <div className="notification is-warning my-4">
+                    Your account is pending for admin verification.
+                </div>
+            </>
         );
     }
 

@@ -8,6 +8,8 @@ import ConfirmModal from "components/common/ConfirmModal";
 
 import http from "services/httpService";
 
+import { sortObjectArray } from "helpers/helpers";
+
 const Enroll = () => {
     const [schoolYear, setSchoolYear] = useState(null);
     const [schoolYearId, setSchoolYearId] = useState(0);
@@ -33,7 +35,7 @@ const Enroll = () => {
     const [isEnrollLoading, setIsEnrollLoading] = useState(false);
 
     const navigate = useNavigate();
-    const { status: userStatus } = useUserStore(state => state);
+    const { id: userId, status: userStatus } = useUserStore(state => state);
 
     useEffect(() => {
         const getPublishedSchoolYear = async () => {
@@ -59,68 +61,58 @@ const Enroll = () => {
             const getSchoolYearSection = async () => {
                 try {
                     setIsSchoolYearSectionLoading(true);
+                    const { data: student } = await http.get(
+                        `/api/student/${userId}`
+                    );
                     const { data } = await http.get(
                         `/api/schoolYearSection/${schoolYearId}`
                     );
 
-                    const {
-                        courses: coursesList,
-                        sections: sectionList,
-                        subjects: subjectList,
-                        student
-                    } = data;
-                    let { schoolYearSections } = data;
-
-                    schoolYearSections = schoolYearSections.map(
-                        schoolYearSection => {
-                            const { course_id, section_id, subject_id } =
-                                schoolYearSection;
-                            const course = coursesList.find(
-                                ({ id }) => id === course_id
-                            );
-                            const section = sectionList.find(
-                                ({ id }) => id === section_id
-                            );
-                            const subject = subjectList.find(
-                                ({ id }) => id === subject_id
-                            );
-
-                            return {
-                                ...schoolYearSection,
-                                course,
-                                section,
-                                subject
-                            };
-                        }
-                    );
+                    const { schoolYearSections } = data;
 
                     const subjectsSelection = [];
+                    const filteredSubjects = [];
                     let subjectIds = [];
                     schoolYearSections.forEach(schoolYearSection => {
-                        const { course_id, subject_id, subject } =
-                            schoolYearSection;
+                        const {
+                            course_id,
+                            subject_id,
+                            subject_code,
+                            subject_name,
+                            subject_type,
+                            subject_unit
+                        } = schoolYearSection;
 
                         //remove major subjects from other courses.. retain minor subjects
                         if (
                             course_id === student.course_id ||
-                            subject.type === "Minor"
+                            subject_type === "Minor"
                         ) {
                             subjectIds.push(subject_id);
+                            filteredSubjects.push({
+                                id: subject_id,
+                                code: subject_code,
+                                name: subject_name,
+                                type: subject_type,
+                                unit: subject_unit
+                            });
                         }
                     });
 
                     subjectIds = [...new Set(subjectIds)];
 
                     subjectIds.forEach(subjectId => {
-                        const subject = subjectList.find(
+                        const subject = filteredSubjects.find(
                             ({ id }) => id === subjectId
                         );
                         subjectsSelection.push(subject);
                     });
 
-                    setSchoolYearSections(schoolYearSections);
-                    setSubjectsSelection(subjectsSelection);
                     setStudent(student);
+                    setSchoolYearSections(schoolYearSections);
+                    setSubjectsSelection(
+                        sortObjectArray(subjectsSelection, "code")
+                    );
                 } catch (error) {
                     console.log(error);
                     setError(error);
@@ -343,21 +335,34 @@ const Enroll = () => {
                                         {sectionsSelection.map(
                                             sectionsSelection => {
                                                 const {
-                                                    course,
-                                                    section,
+                                                    // course,
+                                                    // section,
+                                                    course_id,
+                                                    course_name,
+                                                    section_id,
+                                                    section_name,
                                                     current_slot_count,
                                                     max_slot_count
                                                 } = sectionsSelection;
-                                                const { id, name } = section;
+
+                                                const course = {
+                                                    id: course_id,
+                                                    name: course_name
+                                                };
+
+                                                const section = {
+                                                    id: section_id,
+                                                    name: section_name
+                                                };
 
                                                 return (
-                                                    <div key={id}>
+                                                    <div key={section_id}>
                                                         <label className="radio">
                                                             <input
                                                                 type="radio"
                                                                 name="section"
                                                                 checked={
-                                                                    id ===
+                                                                    section_id ===
                                                                     selectedSection?.id
                                                                 }
                                                                 onChange={() =>
@@ -370,9 +375,9 @@ const Enroll = () => {
                                                                     !selectedSubject
                                                                 }
                                                             />{" "}
-                                                            {course.name} |{" "}
+                                                            {course_name} |{" "}
                                                             <strong>
-                                                                {name}
+                                                                {section_name}
                                                             </strong>{" "}
                                                             |{" "}
                                                             {current_slot_count}

@@ -6,6 +6,8 @@ import Error from "components/common/Error";
 import UserName from "components/common/UserName";
 import ConfirmModal from "components/common/ConfirmModal";
 
+import { useUserStore } from "store/userStore";
+
 import http from "services/httpService";
 
 import pdfMake from "pdfmake/build/pdfmake";
@@ -34,30 +36,66 @@ const ViewGrades = () => {
     const [isRejectReasonVisible, setRejectReasonVisible] = useState(false);
     const [rejectReason, setRejectReason] = useState("");
 
+    const { status: userStatus } = useUserStore(state => state);
+
     useEffect(() => {
         const getGrades = async () => {
             try {
                 const { data } = await http.get(
-                    `/api/registrarStudentGrades/${params.id}/${params.studentId}`
+                    `/api/enrollmentItemsRPOV/${params.id}`
                 );
 
-                const {
-                    torRequest,
-                    student,
-                    enrollmentItems,
-                    courses,
-                    grades
-                } = data;
+                const { torRequest, enrollments, enrollmentItems } = data;
 
-                if (student && torRequest) {
+                if (torRequest) {
+                    const { data: student } = await http.get(
+                        `/api/student/${torRequest.student_id}`
+                    );
+
+                    const { data: grades } = await http.get(
+                        `/api/gradesRPOV/${torRequest.student_id}`
+                    );
+
                     const newEnrollmentItems = enrollmentItems.map(
                         enrollmentItem => {
+                            const enrollment = enrollments.find(
+                                ({ id }) => id === enrollmentItem.enrollment_id
+                            );
+
+                            const {
+                                sy_id,
+                                sy_semester,
+                                sy_year,
+                                student_id,
+                                student_lastname,
+                                student_firstname,
+                                student_middlename,
+                                student_extname,
+                                student_course_id,
+                                student_course_name,
+                                student_user_type
+                            } = enrollment;
+
+                            const newEnrollmentItem = {
+                                ...enrollmentItem,
+                                sy_id,
+                                sy_semester,
+                                sy_year,
+                                student_id,
+                                student_lastname,
+                                student_firstname,
+                                student_middlename,
+                                student_extname,
+                                student_course_id,
+                                student_course_name,
+                                student_user_type
+                            };
+
                             const {
                                 sy_id: syId,
                                 student_id: studentId,
-                                subject_id: subjectId,
-                                student_course_id
-                            } = enrollmentItem;
+                                subject_id: subjectId
+                            } = newEnrollmentItem;
 
                             const grade = grades.find(
                                 ({ sy_id, student_id, subject_id }) =>
@@ -66,13 +104,8 @@ const ViewGrades = () => {
                                     subject_id === subjectId
                             );
 
-                            const student_course_name = courses.find(
-                                ({ id }) => id === student_course_id
-                            ).name;
-
                             return {
-                                ...enrollmentItem,
-                                student_course_name,
+                                ...newEnrollmentItem,
                                 grade
                             };
                         }
@@ -91,13 +124,10 @@ const ViewGrades = () => {
                             syEnrollmentItems = syEnrollmentItems.map(
                                 syEnrollmentItem => {
                                     if (syEnrollmentItem.syId === sy_id) {
-                                        return {
-                                            ...syEnrollmentItem,
-                                            enrollmentItems: [
-                                                ...syEnrollmentItem.enrollmentItems,
-                                                newEnrollmentItem
-                                            ]
-                                        };
+                                        syEnrollmentItem.enrollmentItems.push(
+                                            newEnrollmentItem
+                                        );
+                                        return syEnrollmentItem;
                                     }
                                     return syEnrollmentItem;
                                 }
@@ -120,6 +150,7 @@ const ViewGrades = () => {
                     setIsNotExist(true);
                 }
             } catch (error) {
+                console.log(error);
                 setError(error);
             } finally {
                 setIsContentLoading(false);
@@ -137,8 +168,21 @@ const ViewGrades = () => {
         return <Error error={error} />;
     }
 
+    if (userStatus === "For Verification") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">TOR</h1>
+                <div className="notification is-warning my-4">
+                    Your account is pending for admin verification.
+                </div>
+            </>
+        );
+    }
+
     if (isNotExist) {
-        return <div className="has-text-centered mt-6">Not found.</div>;
+        return (
+            <div className="has-text-centered mt-6">TOR request not found.</div>
+        );
     }
 
     const handleGenerate = async () => {
@@ -146,7 +190,7 @@ const ViewGrades = () => {
             setIsGenerateLoading(true);
 
             await http.post(`/api/torItem`, {
-                torRequestId: params.id,
+                torRequestId: torRequest.id,
                 enrollmentItems
             });
 
@@ -290,16 +334,16 @@ const ViewGrades = () => {
             ]);
             enrollmentItems.forEach(enrollmentItem => {
                 const { subject_code, subject_name, grade: g } = enrollmentItem;
-                let { equivalent, remarks, grade } = g || {};
+                let { rating, remarks, grade } = g || {};
 
-                equivalent = equivalent || 0;
+                rating = rating || 0;
                 remarks = remarks || "-";
                 grade = grade || 0;
 
                 contentBody.push([
                     { text: `${subject_code}`, bold: true },
                     { text: `${subject_name}` },
-                    { text: equivalent, bold: true },
+                    { text: rating, bold: true },
                     { text: remarks, bold: true },
                     { text: "", bold: true }
                 ]);
@@ -372,7 +416,7 @@ const ViewGrades = () => {
                 >
                     <i className="fa-solid fa-arrow-left"></i>
                 </button>{" "}
-                Student Grade
+                TOR
             </h1>
 
             <div className="box mb-4">
@@ -448,7 +492,7 @@ const ViewGrades = () => {
                                                                 midterm_grade,
                                                                 final_grade,
                                                                 grade: g,
-                                                                equivalent,
+                                                                rating,
                                                                 remarks
                                                             } = grade || {};
 
@@ -461,8 +505,8 @@ const ViewGrades = () => {
                                                             final_grade =
                                                                 final_grade ||
                                                                 0;
-                                                            equivalent =
-                                                                equivalent || 0;
+                                                            rating =
+                                                                rating || 0;
                                                             remarks =
                                                                 remarks || "-";
                                                             g = g || 0;
@@ -490,9 +534,7 @@ const ViewGrades = () => {
 
                                                                     <td>{g}</td>
                                                                     <td>
-                                                                        {
-                                                                            equivalent
-                                                                        }
+                                                                        {rating}
                                                                     </td>
                                                                     <td>
                                                                         {

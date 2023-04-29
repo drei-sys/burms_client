@@ -43,23 +43,54 @@ const MyGrade = () => {
 
     useEffect(() => {
         if (schoolYearId !== 0) {
-            const getStudentGrades = async () => {
+            const getGrades = async () => {
                 try {
                     setIsGradesLoading(true);
-                    const { data } = await http.get(
-                        `/api/studentGrades/${schoolYearId}/${userId}`
+                    const { data: data1 } = await http.get(
+                        `/api/enrollmentItemsSPOV/${schoolYearId}/${userId}`
+                    );
+                    const { data: grades } = await http.get(
+                        `/api/gradesSPOV/${schoolYearId}/${userId}`
                     );
 
-                    const { enrollmentItems, courses, grades } = data;
+                    const { enrollment, enrollmentItems } = data1;
 
                     const newEnrollmentItems = enrollmentItems.map(
                         enrollmentItem => {
                             const {
+                                sy_id,
+                                sy_semester,
+                                sy_year,
+                                student_id,
+                                student_lastname,
+                                student_firstname,
+                                student_middlename,
+                                student_extname,
+                                student_course_id,
+                                student_course_name,
+                                student_user_type
+                            } = enrollment;
+
+                            const newEnrollmentItem = {
+                                ...enrollmentItem,
+                                sy_id,
+                                sy_semester,
+                                sy_year,
+                                student_id,
+                                student_lastname,
+                                student_firstname,
+                                student_middlename,
+                                student_extname,
+                                student_course_id,
+                                student_course_name,
+                                student_user_type
+                            };
+
+                            const {
                                 sy_id: syId,
                                 student_id: studentId,
-                                subject_id: subjectId,
-                                student_course_id
-                            } = enrollmentItem;
+                                subject_id: subjectId
+                            } = newEnrollmentItem;
 
                             const grade = grades.find(
                                 ({ sy_id, student_id, subject_id }) =>
@@ -68,13 +99,8 @@ const MyGrade = () => {
                                     subject_id === subjectId
                             );
 
-                            const student_course_name = courses.find(
-                                ({ id }) => id === student_course_id
-                            ).name;
-
                             return {
-                                ...enrollmentItem,
-                                student_course_name,
+                                ...newEnrollmentItem,
                                 grade
                             };
                         }
@@ -89,7 +115,7 @@ const MyGrade = () => {
                 }
             };
 
-            getStudentGrades();
+            getGrades();
         }
     }, [schoolYearId]);
 
@@ -175,14 +201,14 @@ const MyGrade = () => {
                                         midterm_grade,
                                         final_grade,
                                         grade: g,
-                                        equivalent,
+                                        rating,
                                         remarks
                                     } = grade || {};
 
                                     prelim_grade = prelim_grade || 0;
                                     midterm_grade = midterm_grade || 0;
                                     final_grade = final_grade || 0;
-                                    equivalent = equivalent || 0;
+                                    rating = rating || 0;
                                     remarks = remarks || "-";
                                     g = g || 0;
 
@@ -198,7 +224,7 @@ const MyGrade = () => {
                                             </td>
 
                                             <td>{g}</td>
-                                            <td>{equivalent}</td>
+                                            <td>{rating}</td>
                                             <td>{remarks}</td>
                                             <td>
                                                 <button

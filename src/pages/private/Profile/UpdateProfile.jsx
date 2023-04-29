@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
@@ -218,12 +218,16 @@ const UpdateProfile = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
-    const { status: userStatus, type: userType } = useUserStore(state => state);
+    const {
+        id: userId,
+        status: userStatus,
+        type: userType
+    } = useUserStore(state => state);
 
     useEffect(() => {
         const getUser = async () => {
             try {
-                const { data: user } = await http.get(`/api/userDetails`);
+                const { data: user } = await http.get(`/api/user/${userId}`);
                 const { data: courses } = await http.get("/api/courses");
                 if (user.status !== "Editable") {
                     setIsNotEditable(true);
@@ -329,18 +333,21 @@ const UpdateProfile = () => {
         return <Error error={error} />;
     }
 
+    if (userStatus === "For Verification") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">Update Profile</h1>
+                <div className="notification is-warning my-4">
+                    Your account is pending for admin verification.
+                </div>
+            </>
+        );
+    }
+
     if (isNotEditable) {
         return (
             <div className="notification is-warning my-4">
                 Your profile is prohibited from editing.
-            </div>
-        );
-    }
-
-    if (userStatus === "For Verification") {
-        return (
-            <div className="notification is-warning my-4">
-                Your account is pending for admin verification.
             </div>
         );
     }
@@ -566,7 +573,7 @@ const UpdateProfile = () => {
 
                     setIsLoading(true);
 
-                    await http.put(`/api/userDetails/${user.id}`, {
+                    await http.put(`/api/user/${user.id}`, {
                         ...studentFormData
                     });
 
@@ -798,7 +805,7 @@ const UpdateProfile = () => {
                         }
                     ];
 
-                    await http.put(`/api/userDetails/${user.id}`, {
+                    await http.put(`/api/user/${user.id}`, {
                         ...nonTeachingFormData,
                         work_experiences: JSON.stringify(work_experiences)
                     });

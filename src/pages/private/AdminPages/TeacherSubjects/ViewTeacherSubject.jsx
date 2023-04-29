@@ -20,7 +20,7 @@ const ViewTeacherSubject = () => {
     const params = useParams();
     const navigate = useNavigate();
 
-    const { type: userType } = useUserStore(state => state);
+    const { type: userType, status: userStatus } = useUserStore(state => state);
 
     useEffect(() => {
         const getUsers = async () => {
@@ -54,6 +54,17 @@ const ViewTeacherSubject = () => {
         return <Error error={error} />;
     }
 
+    if (userStatus === "For Verification") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">Teacher Subjects</h1>
+                <div className="notification is-warning my-4">
+                    Your account is pending for admin verification.
+                </div>
+            </>
+        );
+    }
+
     if (isNotExist) {
         return <div className="has-text-centered mt-6">Teacher not found.</div>;
     }
@@ -75,7 +86,7 @@ const ViewTeacherSubject = () => {
                 >
                     <i className="fa-solid fa-arrow-left"></i>
                 </button>{" "}
-                Teacher Subject
+                Teacher Subjects
             </h1>
 
             <div className="columns">

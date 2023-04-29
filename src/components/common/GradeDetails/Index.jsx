@@ -7,7 +7,6 @@ import http from "services/httpService";
 
 const GradeDetails = ({ teacherId, enrollmentItem, readOnly, onRefetch }) => {
     //if no records then all values will become zero
-
     const [activeTab, setActiveTab] = useState(1);
 
     const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +36,7 @@ const GradeDetails = ({ teacherId, enrollmentItem, readOnly, onRefetch }) => {
             midterm_grade = midterm_grade || 0;
             final_grade = final_grade || 0;
 
-            const gradeEquivalents = [
+            const gradeRatings = [
                 { start: 0, end: 59.99, value: 5.0 },
                 { start: 60, end: 64.99, value: 3.0 },
                 { start: 65, end: 69.99, value: 2.75 },
@@ -62,8 +61,8 @@ const GradeDetails = ({ teacherId, enrollmentItem, readOnly, onRefetch }) => {
 
                 newGrade = Number(newGrade.toFixed(2));
 
-                const gradeEquivalent =
-                    gradeEquivalents.find(({ start, end }) => {
+                const gradeRating =
+                    gradeRatings.find(({ start, end }) => {
                         return newGrade >= start && newGrade <= end;
                     })?.value || 4.0;
 
@@ -81,7 +80,7 @@ const GradeDetails = ({ teacherId, enrollmentItem, readOnly, onRefetch }) => {
                     midterm_grade,
                     final_grade,
                     grade: newGrade,
-                    equivalent: Number(gradeEquivalent.toFixed(2)),
+                    rating: Number(gradeRating.toFixed(2)),
                     remarks: newGrade < 60 ? "FAILED" : "PASSED",
                     status: "Pending"
                 };
@@ -106,8 +105,8 @@ const GradeDetails = ({ teacherId, enrollmentItem, readOnly, onRefetch }) => {
 
                 newGrade = Number(newGrade.toFixed(2));
 
-                const gradeEquivalent =
-                    gradeEquivalents.find(({ start, end }) => {
+                const gradeRating =
+                    gradeRatings.find(({ start, end }) => {
                         return newGrade >= start && newGrade <= end;
                     })?.value || 4.0;
 
@@ -125,7 +124,7 @@ const GradeDetails = ({ teacherId, enrollmentItem, readOnly, onRefetch }) => {
                     midterm_grade: computedGrade,
                     final_grade,
                     grade: newGrade,
-                    equivalent: Number(gradeEquivalent.toFixed(2)),
+                    rating: Number(gradeRating.toFixed(2)),
                     remarks: newGrade < 60 ? "FAILED" : "PASSED",
                     status: "Pending"
                 };
@@ -149,8 +148,8 @@ const GradeDetails = ({ teacherId, enrollmentItem, readOnly, onRefetch }) => {
 
                 newGrade = Number(newGrade.toFixed(2));
 
-                const gradeEquivalent =
-                    gradeEquivalents.find(({ start, end }) => {
+                const gradeRating =
+                    gradeRatings.find(({ start, end }) => {
                         return newGrade >= start && newGrade <= end;
                     })?.value || 4.0;
 
@@ -168,7 +167,7 @@ const GradeDetails = ({ teacherId, enrollmentItem, readOnly, onRefetch }) => {
                     midterm_grade,
                     final_grade: computedGrade,
                     grade: newGrade,
-                    equivalent: Number(gradeEquivalent.toFixed(2)),
+                    rating: Number(gradeRating.toFixed(2)),
                     remarks: newGrade < 60 ? "FAILED" : "PASSED",
                     status: "Pending"
                 };
@@ -222,10 +221,10 @@ const GradeDetails = ({ teacherId, enrollmentItem, readOnly, onRefetch }) => {
     }
 
     const {
-        lastname,
-        firstname,
-        middlename,
-        extname,
+        student_lastname,
+        student_firstname,
+        student_middlename,
+        student_extname,
         student_course_name,
         subject_code,
         subject_name,
@@ -243,13 +242,17 @@ const GradeDetails = ({ teacherId, enrollmentItem, readOnly, onRefetch }) => {
         prelim_grade,
         midterm_grade,
         final_grade,
-        grade: g
+        grade: g,
+        rating,
+        remarks
     } = grade || {};
 
     prelim_grade = prelim_grade || 0;
     midterm_grade = midterm_grade || 0;
     final_grade = final_grade || 0;
     g = g || 0;
+    rating = rating || 0;
+    remarks = remarks || "-";
 
     return (
         <>
@@ -260,10 +263,10 @@ const GradeDetails = ({ teacherId, enrollmentItem, readOnly, onRefetch }) => {
                         <div>
                             <UserName
                                 user={{
-                                    lastname,
-                                    firstname,
-                                    middlename,
-                                    extname
+                                    lastname: student_lastname,
+                                    firstname: student_firstname,
+                                    middlename: student_middlename,
+                                    extname: student_extname
                                 }}
                             />
                         </div>
@@ -354,22 +357,22 @@ const GradeDetails = ({ teacherId, enrollmentItem, readOnly, onRefetch }) => {
                 </div>
             )}
 
-            {/* <div className="box">
+            <div className="box">
                 <div className="columns">
                     <div className="column is-4">
-                        <label className="label">Final Grade</label>
-                        <div>0.00</div>
+                        <label className="label">Final Grade:</label>
+                        <div>{g}</div>
                     </div>
                     <div className="column is-4">
-                        <label className="label">Equivalent</label>
-                        <div>0.00</div>
+                        <label className="label">Rating:</label>
+                        <div>{rating}</div>
                     </div>
                     <div className="column is-4">
-                        <label className="label">Status</label>
-                        <div>Pending</div>
+                        <label className="label">Remarks:</label>
+                        <div>{remarks}</div>
                     </div>
                 </div>
-            </div> */}
+            </div>
         </>
     );
 };

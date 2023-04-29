@@ -75,7 +75,7 @@ const StudentForm = ({ formData, formError, courses, mode, onInputChange }) => {
                                     className="input"
                                     type="text"
                                     placeholder="Enter middle name"
-                                    value={formData.middlename}
+                                    value={formData.middlename || ""}
                                     onChange={onInputChange}
                                 />
                                 {formError.middlename && (
@@ -102,7 +102,7 @@ const StudentForm = ({ formData, formError, courses, mode, onInputChange }) => {
                                     className="input"
                                     type="text"
                                     placeholder="JR., SR., III"
-                                    value={formData.extname}
+                                    value={formData.extname || ""}
                                     onChange={onInputChange}
                                 />
                                 {formError.extname && (

@@ -24,8 +24,8 @@ const CreateTeacherSubjects = () => {
 
     const [schoolYears, setSchoolYears] = useState([]);
     const [teachers, setTeachers] = useState([]);
-    const [schoolYearSections, setSchoolYearSections] = useState([]);
     const [subjectList, setSubjectList] = useState([]);
+    const [schoolYearSections, setSchoolYearSections] = useState([]);
     const [subjectsSelection, setSubjectsSelection] = useState([]);
 
     const [isContentLoading, setIsContentLoading] = useState(true);
@@ -34,21 +34,20 @@ const CreateTeacherSubjects = () => {
 
     const navigate = useNavigate();
 
-    const { type: userType } = useUserStore(state => state);
+    const { type: userType, status: userStatus } = useUserStore(state => state);
 
     useEffect(() => {
         const getSchoolYears = async () => {
             try {
                 setIsContentLoading(true);
                 const { data } = await http.get("/api/teacherSubjectFormData");
-                const { schoolYears, teachers, schoolYearSections, subjects } =
+                const { schoolYears, teachers, subjects, schoolYearSections } =
                     data;
 
                 setSchoolYears(schoolYears);
                 setTeachers(teachers);
-                setSchoolYearSections(schoolYearSections);
                 setSubjectList(subjects);
-                //setSubjects(subjects);
+                setSchoolYearSections(schoolYearSections);
             } catch (error) {
                 console.log(error);
                 setError(error);
@@ -66,6 +65,17 @@ const CreateTeacherSubjects = () => {
 
     if (error) {
         return <Error error={error} />;
+    }
+
+    if (userStatus === "For Verification") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">Create Teacher Subjects</h1>
+                <div className="notification is-warning my-4">
+                    Your account is pending for admin verification.
+                </div>
+            </>
+        );
     }
 
     const handleInputChange = e => {
@@ -192,7 +202,7 @@ const CreateTeacherSubjects = () => {
                 >
                     <i className="fa-solid fa-arrow-left"></i>
                 </button>{" "}
-                Create Teacher Subject
+                Create Teacher Subjects
             </h1>
             <div className="box mb-4">
                 <form onSubmit={handleFormSubmit}>
@@ -288,7 +298,7 @@ const CreateTeacherSubjects = () => {
                         }`}
                         type="submit"
                     >
-                        Assign Teacher
+                        Create teacher subjects
                     </button>
                 </form>
             </div>

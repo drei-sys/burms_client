@@ -46,18 +46,57 @@ const MyStudents = () => {
 
     useEffect(() => {
         if (schoolYearId !== 0) {
-            const getTeacherStudents = async () => {
+            const getStudents = async () => {
                 try {
                     setIsStudentsLoading(true);
                     const { data } = await http.get(
-                        `/api/teacherStudents/${schoolYearId}/${userId}`
+                        `/api/enrollmentItemsTPOV/${schoolYearId}/${userId}`
                     );
 
-                    const { teacherSubjectItems, enrollmentItems } = data;
+                    const {
+                        teacherSubjectItems,
+                        enrollments,
+                        enrollmentItems
+                    } = data;
+
+                    const newEnrollmentItems = enrollmentItems.map(
+                        enrollmentItem => {
+                            const enrollment = enrollments.find(
+                                ({ id }) => id === enrollmentItem.enrollment_id
+                            );
+                            const {
+                                sy_id,
+                                sy_semester,
+                                sy_year,
+                                student_id,
+                                student_lastname,
+                                student_firstname,
+                                student_middlename,
+                                student_extname,
+                                student_course_id,
+                                student_course_name,
+                                student_user_type
+                            } = enrollment;
+                            return {
+                                ...enrollmentItem,
+                                sy_id,
+                                sy_semester,
+                                sy_year,
+                                student_id,
+                                student_lastname,
+                                student_firstname,
+                                student_middlename,
+                                student_extname,
+                                student_course_id,
+                                student_course_name,
+                                student_user_type
+                            };
+                        }
+                    );
 
                     setSubjectsSelection(teacherSubjectItems);
-                    setEnrollmentItems(enrollmentItems);
-                    setFilteredEnrollmentItems(enrollmentItems);
+                    setEnrollmentItems(newEnrollmentItems);
+                    setFilteredEnrollmentItems(newEnrollmentItems);
                 } catch (error) {
                     console.log(error);
                     setError(error);
@@ -66,7 +105,7 @@ const MyStudents = () => {
                 }
             };
 
-            getTeacherStudents();
+            getStudents();
         }
     }, [schoolYearId]);
 
@@ -237,8 +276,11 @@ const MyStudents = () => {
                                             {filteredEnrollmentItems.map(
                                                 ({
                                                     student_id,
-                                                    user_type,
-                                                    ...rest
+                                                    student_lastname,
+                                                    student_firstname,
+                                                    student_middlename,
+                                                    student_extname,
+                                                    student_course_name
                                                 }) => {
                                                     return (
                                                         <tr key={student_id}>
@@ -246,16 +288,23 @@ const MyStudents = () => {
                                                                 <div>
                                                                     <span className="has-text-weight-medium">
                                                                         <UserName
-                                                                            user={
-                                                                                rest
-                                                                            }
+                                                                            user={{
+                                                                                lastname:
+                                                                                    student_lastname,
+                                                                                firstname:
+                                                                                    student_firstname,
+                                                                                middlename:
+                                                                                    student_middlename,
+                                                                                extname:
+                                                                                    student_extname
+                                                                            }}
                                                                         />
                                                                     </span>
                                                                 </div>
                                                                 <div>
                                                                     <span className="is-size-6">
                                                                         {
-                                                                            user_type
+                                                                            student_course_name
                                                                         }
                                                                     </span>
                                                                 </div>

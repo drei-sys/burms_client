@@ -12,7 +12,7 @@ const Registrations = () => {
     const [activeTab, setActiveTab] = useState(1);
 
     const [refetchUsersRef, setRefetchUsersRef] = useState(0);
-    const [users, setUsers] = useState([]);
+    const [registeredUsers, setRegisteredUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState(null);
 
     const [isContentLoading, setIsContentLoading] = useState(true);
@@ -28,8 +28,8 @@ const Registrations = () => {
         const getUsers = async () => {
             try {
                 setIsContentLoading(true);
-                const { data } = await http.get("/api/users");
-                setUsers(data);
+                const { data } = await http.get("/api/registeredUsers");
+                setRegisteredUsers(data);
             } catch (error) {
                 setError(error);
             } finally {
@@ -49,19 +49,21 @@ const Registrations = () => {
     }
 
     const showConfirmVerify = selectedId => {
-        setSelectedUser(users.find(({ id }) => id === selectedId));
+        setSelectedUser(registeredUsers.find(({ id }) => id === selectedId));
         setIsOpenConfirmVerify(true);
     };
 
     const showConfirmReject = selectedId => {
-        setSelectedUser(users.find(({ id }) => id === selectedId));
+        setSelectedUser(registeredUsers.find(({ id }) => id === selectedId));
         setIsOpenConfirmReject(true);
     };
 
     const handleVerify = async () => {
         try {
             setIsVerifyLoading(true);
-            await http.put(`/api/verifyUser/${selectedUser.id}`);
+            await http.put(`/api/registeredUser/${selectedUser.id}`, {
+                status: "Verified"
+            });
             setRefetchUsersRef(Math.random());
         } catch (error) {
             alert(
@@ -76,7 +78,9 @@ const Registrations = () => {
     const handleReject = async () => {
         try {
             setIsRejectLoading(true);
-            await http.put(`/api/rejectUser/${selectedUser.id}`);
+            await http.put(`/api/registeredUser/${selectedUser.id}`, {
+                status: "Rejected"
+            });
             setRefetchUsersRef(Math.random());
         } catch (error) {
             alert(
@@ -88,15 +92,23 @@ const Registrations = () => {
         }
     };
 
-    const forVerificationUsers = users.filter(
+    const forVerificationUsers = registeredUsers.filter(
         ({ status }) => status === "For Verification"
     );
-    const verifiedUsers = users.filter(({ status }) => status === "Verified");
-    const rejectedUsers = users.filter(({ status }) => status === "Rejected");
+    const verifiedUsers = registeredUsers.filter(
+        ({ status }) => status === "Verified"
+    );
+    const rejectedUsers = registeredUsers.filter(
+        ({ status }) => status === "Rejected"
+    );
 
-    const Table = ({ users }) => {
-        if (users.length === 0) {
-            return <div className="has-text-centered">No users found.</div>;
+    const Table = ({ registeredUsers }) => {
+        if (registeredUsers.length === 0) {
+            return (
+                <div className="has-text-centered">
+                    No registered user found.
+                </div>
+            );
         }
 
         return (
@@ -108,7 +120,7 @@ const Registrations = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map(
+                    {registeredUsers.map(
                         ({
                             id,
                             lastname,
@@ -188,11 +200,11 @@ const Registrations = () => {
 
     let TabContent = () => null;
     if (activeTab === 1) {
-        TabContent = () => <Table users={forVerificationUsers} />;
+        TabContent = () => <Table registeredUsers={forVerificationUsers} />;
     } else if (activeTab === 2) {
-        TabContent = () => <Table users={verifiedUsers} />;
+        TabContent = () => <Table registeredUsers={verifiedUsers} />;
     } else if (activeTab === 3) {
-        TabContent = () => <Table users={rejectedUsers} />;
+        TabContent = () => <Table registeredUsers={rejectedUsers} />;
     }
 
     return (
