@@ -221,7 +221,8 @@ const UpdateProfile = () => {
     const {
         id: userId,
         status: userStatus,
-        type: userType
+        type: userType,
+        setUser: setUserStore
     } = useUserStore(state => state);
 
     useEffect(() => {
@@ -577,6 +578,10 @@ const UpdateProfile = () => {
                         ...studentFormData
                     });
 
+                    setUserStore({
+                        name: `${lastname}, ${firstname}`
+                    });
+
                     navigate("/profile");
                 } catch (error) {
                     setStudentFormError({
@@ -808,6 +813,10 @@ const UpdateProfile = () => {
                     await http.put(`/api/user/${user.id}`, {
                         ...nonTeachingFormData,
                         work_experiences: JSON.stringify(work_experiences)
+                    });
+
+                    setUserStore({
+                        name: `${lastname}, ${firstname}`
                     });
 
                     navigate("/profile");

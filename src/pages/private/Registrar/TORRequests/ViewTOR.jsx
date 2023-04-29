@@ -210,7 +210,7 @@ const ViewGrades = () => {
         try {
             setIsRejectLoading(true);
 
-            await http.put(`/api/rejectTORRequest/${params.id}`, {
+            await http.put(`/api/torRequestReject/${params.id}`, {
                 rejectReason: rejectReason || "-"
             });
 
@@ -447,7 +447,50 @@ const ViewGrades = () => {
 
             <div className="box">
                 {syEnrollmentItems.length === 0 ? (
-                    <>No records found.</>
+                    <>
+                        <div>No records found.</div>
+
+                        {torRequest.status === "Pending" && (
+                            <>
+                                <hr />
+                                <button
+                                    className={`button is-danger ${
+                                        isRejectLoading ? "is-loading" : ""
+                                    }`}
+                                    onClick={() => setRejectReasonVisible(true)}
+                                >
+                                    Reject
+                                </button>
+
+                                {isRejectReasonVisible && (
+                                    <div className="mt-4">
+                                        <label className="label">
+                                            Reject reason:
+                                        </label>
+                                        <input
+                                            type="text"
+                                            className="input mb-2"
+                                            placeholder="Enter reject reason"
+                                            value={rejectReason}
+                                            onChange={e =>
+                                                setRejectReason(e.target.value)
+                                            }
+                                        />
+                                        <button
+                                            className={`button is-info ${
+                                                isRejectLoading
+                                                    ? "is-loading"
+                                                    : ""
+                                            }`}
+                                            onClick={handleReject}
+                                        >
+                                            OK
+                                        </button>
+                                    </div>
+                                )}
+                            </>
+                        )}
+                    </>
                 ) : (
                     <>
                         <div>

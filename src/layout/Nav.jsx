@@ -3,7 +3,7 @@ import { useUserStore } from "store/userStore";
 import http from "services/httpService";
 
 const Nav = () => {
-    const { name: userName } = useUserStore(state => state);
+    const { name: userName, type: userType } = useUserStore(state => state);
 
     const handleLogout = async () => {
         await http.post("/logout");
@@ -20,21 +20,34 @@ const Nav = () => {
         >
             <div className="is-flex is-justify-content-space-between">
                 <div>
-                    <button className="button is-light">
+                    {/* <button className="button is-light">
                         <span className="icon">
                             <i className="fa-solid fa-bars"></i>
                         </span>
-                    </button>
+                    </button> */}
                 </div>
                 <div>
                     <div className="is-flex">
-                        <div className="mt-2">
-                            <span className="mr-4">
-                                <span className="icon">
-                                    <i className="fa-solid fa-user"></i>
-                                </span>{" "}
-                                {userName}
-                            </span>
+                        <div>
+                            <div className="mt-2">
+                                <span>
+                                    <span className="icon">
+                                        <i className="fa-solid fa-user"></i>
+                                    </span>{" "}
+                                    {userName}{" "}
+                                </span>
+                                <span
+                                    className="is-size-7 has-background-info has-text-white mr-4"
+                                    style={{
+                                        marginLeft: 3,
+                                        padding: "2px 5px",
+                                        borderRadius: 3
+                                    }}
+                                >
+                                    {userType}
+                                </span>
+                            </div>
+                            <div style={{ marginTop: -7 }}></div>
                         </div>
                         <div>
                             <button

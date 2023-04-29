@@ -68,6 +68,7 @@ const TORRequests = () => {
                         <th>Date requested</th>
                         <th>Student name</th>
                         <th>Reason / Purpose</th>
+                        <th>Remarks</th>
                         <th style={{ width: 60 }}></th>
                     </tr>
                 </thead>
@@ -75,12 +76,12 @@ const TORRequests = () => {
                     {torRequests.map(
                         ({
                             id,
-                            student_id,
                             student_lastname: lastname,
                             student_firstname: firstname,
                             student_middlename: middlename,
                             student_extname: extname,
                             reason,
+                            remarks,
                             created_at
                         }) => {
                             let d = new Date(created_at);
@@ -106,6 +107,7 @@ const TORRequests = () => {
                                         </div>
                                     </td>
                                     <td>{reason}</td>
+                                    <td>{remarks}</td>
                                     <td>
                                         <Link to={`/tor/${id}`}>
                                             <button

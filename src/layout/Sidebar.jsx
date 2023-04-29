@@ -1,6 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import "assets/css/sidebar.css";
 
+import Logo from "assets/images/logo.png";
+
 import { useUserStore } from "store/userStore";
 
 const Sidebar = () => {
@@ -151,6 +153,7 @@ const Sidebar = () => {
 
     return (
         <aside
+            className="is-hidden-mobile"
             style={{
                 background: "#21BF73",
                 width: 270,
@@ -161,6 +164,36 @@ const Sidebar = () => {
                 top: 0
             }}
         >
+            <div
+                style={{
+                    backgroundColor: "#20aa68",
+                    borderRadius: 5,
+                    padding: "5px 10px"
+                }}
+                className="is-flex is-align-items-center"
+            >
+                <div className="mr-2">
+                    <img
+                        src={Logo}
+                        alt="logo"
+                        width={32}
+                        height={32}
+                        style={{ marginTop: 5 }}
+                    />
+                </div>
+                <div className="mr-2">
+                    <h1
+                        className="is-size-4 has-text-weight-bold has-text-white"
+                        style={{ marginTop: -2 }}
+                    >
+                        BURMS
+                    </h1>
+                </div>
+                <div>
+                    <span className="has-text-white is-size-7">v1.0</span>
+                </div>
+            </div>
+
             {userType === "Admin" ? (
                 <AdminMenuItems />
             ) : (
