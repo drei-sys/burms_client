@@ -73,6 +73,12 @@ const Profile = () => {
                         Your account is pending for admin verification.
                     </div>
                 </div>
+            ) : userStatus === "Rejected" ? (
+                <div className="box mb-4">
+                    <div className="notification is-danger my-4">
+                        Your account has been rejected.
+                    </div>
+                </div>
             ) : userType === "Admin" ? (
                 <div className="box mb-4">
                     <div className="notification is-info my-4">

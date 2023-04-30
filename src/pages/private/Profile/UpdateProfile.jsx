@@ -345,6 +345,17 @@ const UpdateProfile = () => {
         );
     }
 
+    if (userStatus === "Rejected") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">Update Profile</h1>
+                <div className="notification is-danger my-4">
+                    Your account has been rejected.
+                </div>
+            </>
+        );
+    }
+
     if (isNotEditable) {
         return (
             <div className="notification is-warning my-4">

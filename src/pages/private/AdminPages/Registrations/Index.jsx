@@ -112,89 +112,94 @@ const Registrations = () => {
         }
 
         return (
-            <table className="table is-fullwidth is-hoverable">
-                <thead>
-                    <tr>
-                        <th>User name</th>
-                        <th style={{ width: 180 }}></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {registeredUsers.map(
-                        ({
-                            id,
-                            lastname,
-                            firstname,
-                            middlename,
-                            extname,
-                            user_type,
-                            status
-                        }) => {
-                            return (
-                                <tr key={id}>
-                                    <td>
-                                        <div>
-                                            <span className="has-text-weight-medium">
-                                                <UserName
-                                                    user={{
-                                                        lastname,
-                                                        firstname,
-                                                        middlename,
-                                                        extname
-                                                    }}
-                                                />
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <span className="is-size-6">
-                                                {user_type}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <Link to={`/registration/${id}`}>
-                                            <button
-                                                className="button mr-1"
-                                                title="View profile"
-                                            >
-                                                <span className="icon">
-                                                    <i className="fa-solid fa-eye"></i>
+            <>
+                <table className="table is-fullwidth is-hoverable">
+                    <thead>
+                        <tr>
+                            <th>User name</th>
+                            <th style={{ width: 180 }}></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {registeredUsers.map(
+                            ({
+                                id,
+                                lastname,
+                                firstname,
+                                middlename,
+                                extname,
+                                user_type,
+                                status
+                            }) => {
+                                return (
+                                    <tr key={id}>
+                                        <td>
+                                            <div>
+                                                <span className="has-text-weight-medium">
+                                                    <UserName
+                                                        user={{
+                                                            lastname,
+                                                            firstname,
+                                                            middlename,
+                                                            extname
+                                                        }}
+                                                    />
                                                 </span>
-                                            </button>
-                                        </Link>
-                                        {status === "For Verification" ? (
-                                            <button
-                                                className="button is-success mr-1"
-                                                title="Verify"
-                                                onClick={() =>
-                                                    showConfirmVerify(id)
-                                                }
-                                            >
-                                                <span className="icon">
-                                                    <i className="fa-solid fa-check"></i>
+                                            </div>
+                                            <div>
+                                                <span className="is-size-6">
+                                                    {user_type}
                                                 </span>
-                                            </button>
-                                        ) : null}
-                                        {status === "For Verification" ? (
-                                            <button
-                                                className="button is-danger mr-1"
-                                                title="Reject"
-                                                onClick={() =>
-                                                    showConfirmReject(id)
-                                                }
-                                            >
-                                                <span className="icon">
-                                                    <i className="fa-solid fa-trash"></i>
-                                                </span>
-                                            </button>
-                                        ) : null}
-                                    </td>
-                                </tr>
-                            );
-                        }
-                    )}
-                </tbody>
-            </table>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <Link to={`/registration/${id}`}>
+                                                <button
+                                                    className="button mr-1"
+                                                    title="View profile"
+                                                >
+                                                    <span className="icon">
+                                                        <i className="fa-solid fa-eye"></i>
+                                                    </span>
+                                                </button>
+                                            </Link>
+                                            {status === "For Verification" ? (
+                                                <button
+                                                    className="button is-success mr-1"
+                                                    title="Verify"
+                                                    onClick={() =>
+                                                        showConfirmVerify(id)
+                                                    }
+                                                >
+                                                    <span className="icon">
+                                                        <i className="fa-solid fa-check"></i>
+                                                    </span>
+                                                </button>
+                                            ) : null}
+                                            {status === "For Verification" ? (
+                                                <button
+                                                    className="button is-danger mr-1"
+                                                    title="Reject"
+                                                    onClick={() =>
+                                                        showConfirmReject(id)
+                                                    }
+                                                >
+                                                    <span className="icon">
+                                                        <i className="fa-solid fa-trash"></i>
+                                                    </span>
+                                                </button>
+                                            ) : null}
+                                        </td>
+                                    </tr>
+                                );
+                            }
+                        )}
+                    </tbody>
+                </table>
+                <div className="p-4 has-text-right">
+                    {registeredUsers.length} total items
+                </div>
+            </>
         );
     };
 

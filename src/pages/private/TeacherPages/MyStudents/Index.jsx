@@ -128,6 +128,17 @@ const MyStudents = () => {
         );
     }
 
+    if (userStatus === "Rejected") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">My Students</h1>
+                <div className="notification is-danger my-4">
+                    Your account has been rejected.
+                </div>
+            </>
+        );
+    }
+
     const handleSYChange = syId => {
         setSchoolYearId(syId);
         setSelectedSubjectId(0);

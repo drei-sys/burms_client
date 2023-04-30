@@ -51,6 +51,17 @@ const Enrollments = () => {
         );
     }
 
+    if (userStatus === "Rejected") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">Enrollments</h1>
+                <div className="notification is-danger my-4">
+                    Your account has been rejected.
+                </div>
+            </>
+        );
+    }
+
     return (
         <>
             <h1 className="is-size-4 mb-4">Enrollments</h1>

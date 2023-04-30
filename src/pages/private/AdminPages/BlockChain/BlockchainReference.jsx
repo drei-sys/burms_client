@@ -6,7 +6,7 @@ import UserName from "components/common/UserName";
 
 import http from "services/httpService";
 
-const BlockChain = () => {
+const BlockchainReference = () => {
     const [users, setUsers] = useState([]);
 
     const [isContentLoading, setIsContentLoading] = useState(true);
@@ -38,14 +38,13 @@ const BlockChain = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-4">BlockChain</h1>
+            <h1 className="is-size-4 mb-4">Users Reference</h1>
             <div className="box">
                 <table className="table is-fullwidth is-hoverable">
                     <thead>
                         <tr>
                             <th>User name</th>
-                            <th>Hash</th>
-                            <th>Block hash</th>
+                            <th>User Id</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -77,21 +76,31 @@ const BlockChain = () => {
                                             </div>
                                             <div>
                                                 <span className="is-size-6">
+                                                    BlockHash:{" "}
+                                                    {block_hash || "-"}
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <span className="is-size-6">
                                                     {user_type}
                                                 </span>
                                             </div>
                                         </td>
-                                        <td>{hash}</td>
-                                        <td>{block_hash || "-"}</td>
+                                        <td>{id}</td>
+                                        {/* <td>{hash}</td>
+                                        <td>{block_hash || "-"}</td> */}
                                     </tr>
                                 );
                             }
                         )}
                     </tbody>
                 </table>
+                <div className="p-4 has-text-right">
+                    {users.length} total items
+                </div>
             </div>
         </>
     );
 };
 
-export default BlockChain;
+export default BlockchainReference;

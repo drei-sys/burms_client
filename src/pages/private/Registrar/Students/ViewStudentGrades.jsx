@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
@@ -9,7 +10,8 @@ import http from "services/httpService";
 
 import { useUserStore } from "store/userStore";
 
-const MyGrade = () => {
+const ViewStudentGrades = () => {
+    const [student, setStudent] = useState(null);
     const [schoolYears, setSchoolYears] = useState([]);
     const [schoolYearId, setSchoolYearId] = useState(0);
 
@@ -18,18 +20,29 @@ const MyGrade = () => {
 
     const [isContentLoading, setIsContentLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isNotExist, setIsNotExist] = useState(false);
     const [isGradesLoading, setIsGradesLoading] = useState(false);
 
     const [isOpenGradeDetails, setIsOpenGradeDetails] = useState(false);
 
-    const { id: userId, status: userStatus } = useUserStore(state => state);
+    const params = useParams();
+    const navigate = useNavigate();
+    const { status: userStatus } = useUserStore(state => state);
 
     useEffect(() => {
         const getSchoolYears = async () => {
             try {
                 setIsContentLoading(true);
-                const { data } = await http.get("/api/schoolYears");
-                setSchoolYears(data);
+                const { data } = await http.get(`/api/student/${params.id}`);
+                const { data: schoolYears } = await http.get(
+                    "/api/schoolYears"
+                );
+                if (data?.lastname) {
+                    setStudent(data);
+                    setSchoolYears(schoolYears);
+                } else {
+                    setIsNotExist(true);
+                }
             } catch (error) {
                 console.log(error);
                 setError(error);
@@ -46,11 +59,12 @@ const MyGrade = () => {
             const getGrades = async () => {
                 try {
                     setIsGradesLoading(true);
+
                     const { data: data1 } = await http.get(
-                        `/api/enrollmentItemsSPOV/${schoolYearId}/${userId}`
+                        `/api/enrollmentItemsSPOV/${schoolYearId}/${params.id}`
                     );
                     const { data: grades } = await http.get(
-                        `/api/gradesSPOV/${schoolYearId}/${userId}`
+                        `/api/gradesSPOV/${schoolYearId}/${params.id}`
                     );
 
                     const { enrollment, enrollmentItems } = data1;
@@ -130,7 +144,7 @@ const MyGrade = () => {
     if (userStatus === "For Verification") {
         return (
             <>
-                <h1 className="is-size-4 mb-4">My Grade</h1>
+                <h1 className="is-size-4 mb-4">Student Grade</h1>
                 <div className="notification is-warning my-4">
                     Your account is pending for admin verification.
                 </div>
@@ -141,12 +155,16 @@ const MyGrade = () => {
     if (userStatus === "Rejected") {
         return (
             <>
-                <h1 className="is-size-4 mb-4">My Grade</h1>
+                <h1 className="is-size-4 mb-4">Student Grade</h1>
                 <div className="notification is-danger my-4">
                     Your account has been rejected.
                 </div>
             </>
         );
+    }
+
+    if (isNotExist) {
+        return <div className="has-text-centered mt-6">Student not found.</div>;
     }
 
     const handleSYChange = syId => {
@@ -160,7 +178,15 @@ const MyGrade = () => {
 
     return (
         <>
-            <h1 className="is-size-4 mb-4">My Grade</h1>
+            <h1 className="is-size-4 mb-4">
+                <button
+                    className="button is-ghost"
+                    onClick={() => navigate("/students")}
+                >
+                    <i className="fa-solid fa-arrow-left"></i>
+                </button>{" "}
+                Student Grade
+            </h1>
 
             <div className="box mb-4">
                 <label className="label">Select school year</label>
@@ -281,4 +307,4 @@ const MyGrade = () => {
     );
 };
 
-export default MyGrade;
+export default ViewStudentGrades;

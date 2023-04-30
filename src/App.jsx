@@ -42,8 +42,9 @@ import ViewRegistration from "pages/private/AdminPages/Registrations/ViewRegistr
 import ProfileEditApprovals from "pages/private/AdminPages/ProfileEditApprovals/Index";
 import ViewEnrollments from "pages/private/AdminPages/Enrollments/Index";
 import ViewEnrollment from "pages/private/AdminPages/Enrollments/ViewEnrollment";
-import BlockChain from "pages/private/AdminPages/BlockChain/Index";
-import ReadBlockChain from "pages/private/AdminPages/BlockChain/ReadBlockChain";
+import BlockChainReference from "pages/private/AdminPages/BlockChain/BlockChainReference";
+import BlockchainRead from "pages/private/AdminPages/BlockChain/BlockchainRead";
+import BlockchainWrite from "pages/private/AdminPages/BlockChain/BlockchainWrite";
 
 //student routes
 import Enroll from "pages/private/StudentPages/Enroll/Index";
@@ -59,6 +60,9 @@ import MyStudents from "pages/private/TeacherPages/MyStudents/Index";
 import InputGrade from "pages/private/TeacherPages/InputGrade/Index";
 
 //registrar
+import Students from "pages/private/Registrar/Students/Students";
+import ViewStudentDetails from "pages/private/Registrar/Students/ViewStudentDetails";
+import ViewStudentGrades from "pages/private/Registrar/Students/ViewStudentGrades";
 import RegistrarTORRequests from "pages/private/Registrar/TORRequests/Index";
 import ViewTOR from "pages/private/Registrar/TORRequests/ViewTOR";
 
@@ -101,8 +105,9 @@ function App() {
         { path: "/profileEditApprovals", element: ProfileEditApprovals },
         { path: "/viewEnrollments", element: ViewEnrollments },
         { path: "/viewEnrollment/:id", element: ViewEnrollment },
-        { path: "/blockchain", element: BlockChain },
-        { path: "/readBlockchain", element: ReadBlockChain }
+        { path: "/blockchainReference", element: BlockChainReference },
+        { path: "/blockchainRead", element: BlockchainRead },
+        { path: "/blockchainWrite", element: BlockchainWrite }
     ];
 
     const studentRoutes = [
@@ -121,6 +126,9 @@ function App() {
     ];
 
     const registrarRoutes = [
+        { path: "/students", element: Students },
+        { path: "/student/:id", element: ViewStudentDetails },
+        { path: "/studentGrades/:id", element: ViewStudentGrades },
         { path: "/registrarTORRequests", element: RegistrarTORRequests },
         { path: "/tor/:id/", element: ViewTOR }
     ];

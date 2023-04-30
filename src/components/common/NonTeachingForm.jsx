@@ -77,7 +77,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                         className="input"
                                         type="text"
                                         placeholder="Enter middle name"
-                                        value={formData.middlename}
+                                        value={formData.middlename || ""}
                                         onChange={onInputChange}
                                     />
                                     {formError.middlename && (
@@ -104,7 +104,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                         className="input"
                                         type="text"
                                         placeholder="JR., SR., III"
-                                        value={formData.extname}
+                                        value={formData.extname || ""}
                                         onChange={onInputChange}
                                     />
                                     {formError.extname && (
@@ -677,7 +677,9 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                         className="input"
                                         type="text"
                                         placeholder="Enter agency employee no."
-                                        value={formData.agency_employee_no}
+                                        value={
+                                            formData.agency_employee_no || ""
+                                        }
                                         onChange={onInputChange}
                                     />
                                 </div>
@@ -820,7 +822,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="text"
                                 placeholder="Enter school name"
-                                value={formData.elementary_school}
+                                value={formData.elementary_school || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -830,7 +832,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="text"
                                 placeholder="Basic Education/Degree/Course"
-                                value={formData.elementary_remarks}
+                                value={formData.elementary_remarks || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -843,7 +845,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="text"
                                 placeholder="Enter school name"
-                                value={formData.secondary_school}
+                                value={formData.secondary_school || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -853,7 +855,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="text"
                                 placeholder="Basic Education/Degree/Course"
-                                value={formData.secondary_remarks}
+                                value={formData.secondary_remarks || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -866,7 +868,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="text"
                                 placeholder="Enter school name"
-                                value={formData.vocational_school}
+                                value={formData.vocational_school || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -876,7 +878,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="text"
                                 placeholder="Basic Education/Degree/Course"
-                                value={formData.vocational_remarks}
+                                value={formData.vocational_remarks || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -889,7 +891,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="text"
                                 placeholder="Enter school name"
-                                value={formData.college_school}
+                                value={formData.college_school || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -899,7 +901,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="text"
                                 placeholder="Basic Education/Degree/Course"
-                                value={formData.college_remarks}
+                                value={formData.college_remarks || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -912,7 +914,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="text"
                                 placeholder="Enter school name"
-                                value={formData.graduate_studies_school}
+                                value={formData.graduate_studies_school || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -922,7 +924,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="text"
                                 placeholder="Basic Education/Degree/Course"
-                                value={formData.graduate_studies_remarks}
+                                value={formData.graduate_studies_remarks || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -950,7 +952,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 name="we_from_1"
                                 className="input"
                                 type="date"
-                                value={formData.we_from_1}
+                                value={formData.we_from_1 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -959,7 +961,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 name="we_to_1"
                                 className="input"
                                 type="date"
-                                value={formData.we_to_1}
+                                value={formData.we_to_1 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -969,7 +971,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="input"
                                 placeholder="Enter position"
-                                value={formData.we_position_1}
+                                value={formData.we_position_1 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -979,7 +981,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="input"
                                 placeholder="Dept./Agency/Office/Company"
-                                value={formData.we_designation_1}
+                                value={formData.we_designation_1 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -989,7 +991,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="input"
                                 placeholder="Enter salary"
-                                value={formData.we_monthly_salary_1}
+                                value={formData.we_monthly_salary_1 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1001,7 +1003,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 name="we_from_2"
                                 className="input"
                                 type="date"
-                                value={formData.we_from_2}
+                                value={formData.we_from_2 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1010,7 +1012,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 name="we_to_2"
                                 className="input"
                                 type="date"
-                                value={formData.we_to_2}
+                                value={formData.we_to_2 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1020,7 +1022,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="input"
                                 placeholder="Enter position"
-                                value={formData.we_position_2}
+                                value={formData.we_position_2 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1030,7 +1032,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="input"
                                 placeholder="Dept./Agency/Office/Company"
-                                value={formData.we_designation_2}
+                                value={formData.we_designation_2 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1040,7 +1042,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="input"
                                 placeholder="Enter salary"
-                                value={formData.we_monthly_salary_2}
+                                value={formData.we_monthly_salary_2 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1052,7 +1054,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 name="we_from_3"
                                 className="input"
                                 type="date"
-                                value={formData.we_from_3}
+                                value={formData.we_from_3 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1061,7 +1063,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 name="we_to_3"
                                 className="input"
                                 type="date"
-                                value={formData.we_to_3}
+                                value={formData.we_to_3 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1071,7 +1073,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="input"
                                 placeholder="Enter position"
-                                value={formData.we_position_3}
+                                value={formData.we_position_3 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1081,7 +1083,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="input"
                                 placeholder="Dept./Agency/Office/Company"
-                                value={formData.we_designation_3}
+                                value={formData.we_designation_3 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1091,7 +1093,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="input"
                                 placeholder="Enter salary"
-                                value={formData.we_monthly_salary_3}
+                                value={formData.we_monthly_salary_3 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1103,7 +1105,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 name="we_from_4"
                                 className="input"
                                 type="date"
-                                value={formData.we_from_4}
+                                value={formData.we_from_4 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1112,7 +1114,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 name="we_to_4"
                                 className="input"
                                 type="date"
-                                value={formData.we_to_4}
+                                value={formData.we_to_4 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1122,7 +1124,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="input"
                                 placeholder="Enter position"
-                                value={formData.we_position_4}
+                                value={formData.we_position_4 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1132,7 +1134,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="input"
                                 placeholder="Dept./Agency/Office/Company"
-                                value={formData.we_designation_4}
+                                value={formData.we_designation_4 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1142,7 +1144,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="input"
                                 placeholder="Enter salary"
-                                value={formData.we_monthly_salary_4}
+                                value={formData.we_monthly_salary_4 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1154,7 +1156,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 name="we_from_5"
                                 className="input"
                                 type="date"
-                                value={formData.we_from_5}
+                                value={formData.we_from_5 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1163,7 +1165,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 name="we_to_5"
                                 className="input"
                                 type="date"
-                                value={formData.we_to_5}
+                                value={formData.we_to_5 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1173,7 +1175,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="input"
                                 placeholder="Enter position"
-                                value={formData.we_position_5}
+                                value={formData.we_position_5 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1183,7 +1185,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="input"
                                 placeholder="Dept./Agency/Office/Company"
-                                value={formData.we_designation_5}
+                                value={formData.we_designation_5 || ""}
                                 onChange={onInputChange}
                             />
                         </td>
@@ -1193,7 +1195,7 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 className="input"
                                 type="input"
                                 placeholder="Enter salary"
-                                value={formData.we_monthly_salary_5}
+                                value={formData.we_monthly_salary_5 || ""}
                                 onChange={onInputChange}
                             />
                         </td>

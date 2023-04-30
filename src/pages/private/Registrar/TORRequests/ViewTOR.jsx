@@ -179,6 +179,17 @@ const ViewGrades = () => {
         );
     }
 
+    if (userStatus === "Rejected") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">TOR</h1>
+                <div className="notification is-danger my-4">
+                    Your account has been rejected.
+                </div>
+            </>
+        );
+    }
+
     if (isNotExist) {
         return (
             <div className="has-text-centered mt-6">TOR request not found.</div>
@@ -227,17 +238,6 @@ const ViewGrades = () => {
 
     const handlePrint = () => {
         const content = [];
-        //console.log(syEnrollmentItems);
-
-        // const contentBody = [
-        //     [
-        //         {
-        //             text: "Republic of the Philippines",
-        //             alignment: "center",
-        //             bold: true
-        //         }
-        //     ]
-        // ];
         const contentBody = [];
 
         content.push([
@@ -388,8 +388,8 @@ const ViewGrades = () => {
                         "2.75 = 65-69%",
                         "3.00 = 60-64%",
                         "5.00 = 0-59%",
-                        "e",
-                        "f"
+                        "",
+                        ""
                     ]
                 ]
             }
@@ -509,7 +509,13 @@ const ViewGrades = () => {
                                             <table className="table is-fullwidth is-hoverable">
                                                 <thead>
                                                     <tr>
-                                                        <th>Subject name</th>
+                                                        <th
+                                                            style={{
+                                                                width: 500
+                                                            }}
+                                                        >
+                                                            Subject name
+                                                        </th>
                                                         <th>Grade</th>
                                                         <th>Rating</th>
                                                         <th>Remarks</th>

@@ -85,6 +85,17 @@ const TeacherSubjects = () => {
         );
     }
 
+    if (userStatus === "Rejected") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">Teacher Subjects</h1>
+                <div className="notification is-danger my-4">
+                    Your account has been rejected.
+                </div>
+            </>
+        );
+    }
+
     const handleSYChange = id => {
         setSchoolYearId(Number(id));
     };
@@ -118,6 +129,22 @@ const TeacherSubjects = () => {
             <h1 className="is-size-4 mb-4">Teacher Subjects</h1>
 
             <div className="box mb-4">
+                <div className="has-text-right">
+                    <Link
+                        to={`/${
+                            userType === "Dean"
+                                ? "deanCreateTeacherSubject"
+                                : "createTeacherSubject"
+                        }`}
+                    >
+                        <button className="button is-success">
+                            Create teacher subjects
+                        </button>
+                    </Link>
+                </div>
+            </div>
+
+            <div className="box mb-4">
                 <div className="field">
                     <label className="label">Select school year</label>
                     <div className="control">
@@ -146,21 +173,6 @@ const TeacherSubjects = () => {
             ) : (
                 <>
                     <div className="box">
-                        <div className="has-text-right">
-                            <Link
-                                to={`/${
-                                    userType === "Dean"
-                                        ? "deanCreateTeacherSubject"
-                                        : "createTeacherSubject"
-                                }`}
-                            >
-                                <button className="button is-success">
-                                    Create teacher subjects
-                                </button>
-                            </Link>
-                        </div>
-                        <hr />
-
                         {teacherSubjects.length == 0 ? (
                             <div className="has-text-centered p-4">
                                 No teachers found.
@@ -252,6 +264,9 @@ const TeacherSubjects = () => {
                                         )}
                                     </tbody>
                                 </table>
+                                <div className="p-4 has-text-right">
+                                    {teacherSubjects.length} total items
+                                </div>
                             </>
                         )}
                     </div>

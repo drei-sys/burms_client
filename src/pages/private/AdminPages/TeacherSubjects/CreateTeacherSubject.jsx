@@ -78,6 +78,17 @@ const CreateTeacherSubjects = () => {
         );
     }
 
+    if (userStatus === "Rejected") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">Create Teacher Subjects</h1>
+                <div className="notification is-danger my-4">
+                    Your account has been rejected.
+                </div>
+            </>
+        );
+    }
+
     const handleInputChange = e => {
         let { name, value } = e.target;
         setFormData({ ...formData, [name]: value });

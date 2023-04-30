@@ -10,49 +10,134 @@ const Sidebar = () => {
     const { type: userType } = useUserStore(state => state);
 
     const adminMenuItems = [
-        { name: "Courses", path: "/courses", group: 2 },
-        { name: "Subjects", path: "/subjects", group: 2 },
-        { name: "Sections", path: "/sections", group: 2 },
-        { name: "School Years", path: "/schoolYears", group: 2 },
-        { name: "Teacher Subjects", path: "/teacherSubjects", group: 2 },
-        { name: "Registrations", path: "/registrations", group: 3 },
+        {
+            name: "Courses",
+            path: "/courses",
+            icon: "fa-solid fa-user",
+            group: 2
+        },
+        {
+            name: "Subjects",
+            path: "/subjects",
+            icon: "fa-solid fa-user",
+            group: 2
+        },
+        {
+            name: "Sections",
+            path: "/sections",
+            icon: "fa-solid fa-user",
+            group: 2
+        },
+        {
+            name: "School Years",
+            icon: "fa-solid fa-user",
+            path: "/schoolYears",
+            group: 2
+        },
+        {
+            name: "Teacher Subjects",
+            icon: "fa-solid fa-user",
+            path: "/teacherSubjects",
+            group: 2
+        },
+        {
+            name: "Registrations",
+            icon: "fa-solid fa-user",
+            path: "/registrations",
+            group: 3
+        },
         {
             name: "Profile Edit Approvals",
+            icon: "fa-solid fa-user",
             path: "/profileEditApprovals",
             group: 3
         },
-        { name: "Enrollments", path: "/viewEnrollments", group: 3 },
-        { name: "Blockchain", path: "/blockchain", group: 5 }
+        {
+            name: "Enrollments",
+            icon: "fa-solid fa-user",
+            path: "/viewEnrollments",
+            group: 3
+        },
+        {
+            name: "Users Reference",
+            icon: "fa-solid fa-user",
+            path: "/blockchainReference",
+            group: 5
+        },
+        {
+            name: "Blockchain Write",
+            icon: "fa-solid fa-user",
+            path: "/blockchainWrite",
+            group: 5
+        },
+        {
+            name: "Blockchain Read",
+            icon: "fa-solid fa-user",
+            path: "/blockchainRead",
+            group: 5
+        }
     ];
     const studentMenuItems = [
-        { name: "Enroll", path: "/enroll" },
-        { name: "Enrollments", path: "/studentViewEnrollments" },
-        { name: "My Grades", path: "/myGrades" },
-        { name: "TOR Requests", path: "/TORRequests" }
+        { name: "Enroll", icon: "fa-solid fa-user", path: "/enroll" },
+        {
+            name: "Enrollments",
+            icon: "fa-solid fa-user",
+            path: "/studentViewEnrollments"
+        },
+        { name: "My Grades", icon: "fa-solid fa-user", path: "/myGrades" },
+        { name: "TOR Requests", icon: "fa-solid fa-user", path: "/TORRequests" }
     ];
     const teacherMenuItems = [
-        { name: "My Students", path: "/myStudents" },
-        { name: "Input Grade", path: "/inputGrade" }
+        { name: "My Students", icon: "fa-solid fa-user", path: "/myStudents" },
+        { name: "Input Grade", icon: "fa-solid fa-user", path: "/inputGrade" }
     ];
-
     const registrarMenuItems = [
-        { name: "TOR Requests", path: "/registrarTORRequests" }
+        {
+            name: "Students",
+            icon: "fa-solid fa-user",
+            path: "/students"
+        },
+        {
+            name: "TOR Requests",
+            icon: "fa-solid fa-user",
+            path: "/registrarTORRequests"
+        }
     ];
-
     const deanMenuItems = [
-        { name: "Teacher Subjects", path: "/deanTeacherSubjects" }
+        {
+            name: "Teacher Subjects",
+            icon: "fa-solid fa-user",
+            path: "/deanTeacherSubjects"
+        }
         //{ name: "Approve Grades", path: "/approveGrades" }
     ];
-
     const deptChainMenuItems = [
-        { name: "Sections", path: "/deptChairSections" },
-        { name: "School Years", path: "/deptChairSchoolYears" }
+        {
+            name: "Sections",
+            icon: "fa-solid fa-user",
+            path: "/deptChairSections"
+        },
+        {
+            name: "School Years",
+            icon: "fa-solid fa-user",
+            path: "/deptChairSchoolYears"
+        }
     ];
 
     const menuItems = [
         //defaul routes
-        { name: "Dashboard", path: "/dashboard", userType: undefined },
-        { name: "Profile", path: "/profile", userType: undefined },
+        {
+            name: "Dashboard",
+            icon: "fa-solid fa-user",
+            path: "/dashboard",
+            userType: undefined
+        },
+        {
+            name: "Profile",
+            icon: "fa-solid fa-user",
+            path: "/profile",
+            userType: undefined
+        },
         ...studentMenuItems.map(i => ({ ...i, userType: "Student" })),
         ...teacherMenuItems.map(i => ({ ...i, userType: "Teacher" })),
         ...registrarMenuItems.map(i => ({ ...i, userType: "Registrar" })),
@@ -128,7 +213,7 @@ const Sidebar = () => {
                             </li>
                         ))}
                 </ul>
-                <p className="menu-label has-text-white">Users</p>
+                <p className="menu-label has-text-white">Blockchain</p>
                 <ul className="menu-list">
                     {adminMenuItems
                         .filter(({ group }) => group === 5)

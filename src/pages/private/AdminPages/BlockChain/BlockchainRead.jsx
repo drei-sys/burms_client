@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import testAbi from "assets/data/test.json";
 import { ethers } from "ethers";
-
 import CryptoJS from "crypto-js";
 
-const ReadBlockchain = () => {
+import StudentDetails from "components/common/StudentDetails";
+import NonTeachingDetails from "components/common/NonTeachingDetails";
+
+const BlockchainRead = () => {
     const [userType, setUserType] = useState("Student");
     const [userId, setUserId] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
-    const [data, setData] = useState("");
+    const [data, setData] = useState(null);
 
     const handleSelectChange = e => {
         const value = e.target.value;
@@ -21,7 +23,7 @@ const ReadBlockchain = () => {
         setUserId(value);
     };
 
-    const handleQuery = async () => {
+    const handleGet = async () => {
         try {
             const { ethereum } = window;
             if (ethereum) {
@@ -30,7 +32,7 @@ const ReadBlockchain = () => {
                 await provider.send("eth_requestAccounts", []);
                 const signer = provider.getSigner();
                 const contract = new ethers.Contract(
-                    "0xC61d8b49518BcE66049bF2977788e12c2C799779",
+                    import.meta.env.VITE_SMART_CONTRACT,
                     testAbi,
                     signer
                 );
@@ -38,32 +40,41 @@ const ReadBlockchain = () => {
 
                 let fetchedData = "";
                 if (userType === "Student") {
-                    console.log("gg");
                     fetchedData = await contract.getInfoToStudId(userId);
                 } else if (userType === "Teacher") {
                     fetchedData = await contract.getInfoToProfId(userId);
+                } else if (userType === "Non Teaching") {
+                    fetchedData = await contract.getInfoToNontId(userId);
+                } else if (userType === "Registrar") {
+                    fetchedData = await contract.getInfoToRegId(userId);
                 } else if (userType === "Dean") {
-                    fetchedData = await contract.getInfoTDeanId(userId);
+                    fetchedData = await contract.getInfoToDeanId(userId);
+                } else if (userType === "DeptChair") {
+                    fetchedData = await contract.getInfoToDeptId(userId);
                 }
 
                 if (fetchedData) {
                     const decrypted = CryptoJS.AES.decrypt(
                         fetchedData,
-                        "123zxc123"
+                        import.meta.env.VITE_SECRET_KEY
                     );
                     let data = CryptoJS.enc.Utf8.stringify(decrypted);
                     data = JSON.parse(data);
                     setData(data);
                 } else {
-                    setData("Empty data");
+                    console.log("Empty data");
+                    setData(null);
                 }
             } else {
-                console.log("gg");
+                alert(
+                    "Non-Ethereum browser detected. You should consider installing MetaMask."
+                );
             }
         } catch (error) {
             console.log(error);
             setIsError(true);
         } finally {
+            setIsError(false);
             setIsLoading(false);
         }
     };
@@ -76,7 +87,10 @@ const ReadBlockchain = () => {
                     <select onChange={handleSelectChange}>
                         <option value="Student">Student</option>
                         <option value="Teacher">Teacher</option>
+                        <option value="Non Teaching">Non Teaching</option>
+                        <option value="Registrar">Registrar</option>
                         <option value="Dean">Dean</option>
+                        <option value="DeptChair">Department Chair</option>
                     </select>
                 </div>
                 <label className="label">Input user id:</label>
@@ -88,32 +102,37 @@ const ReadBlockchain = () => {
                         onChange={handleInputChange}
                     />
                 </div>
-                <button className="button" onClick={handleQuery}>
-                    Query
+                <button
+                    className={`button is-success  ${
+                        isLoading ? "is-loading" : ""
+                    }`}
+                    disabled={isLoading}
+                    onClick={handleGet}
+                >
+                    Get
                 </button>
             </div>
 
-            <div className="box">
-                <label className="label">Output</label>
-                <div
-                    style={{
-                        maxWidth: 900,
-                        //border: "1px solid #000",
-                        overflow: "auto",
-                        height: 100
-                    }}
-                >
-                    {isLoading ? (
-                        <>Loading...</>
-                    ) : isError ? (
-                        <>An error occured</>
-                    ) : (
-                        <>{data.lastname}</>
-                    )}
-                </div>
+            <hr />
+
+            <label className="label">User Details</label>
+            <div>
+                {isLoading ? (
+                    <>Loading...</>
+                ) : isError ? (
+                    <>An error occured.</>
+                ) : !data ? (
+                    <>User not found.</>
+                ) : data.user_type === "Student" ? (
+                    <StudentDetails data={data} />
+                ) : data.user_type !== "Student" ? (
+                    <NonTeachingDetails data={data} />
+                ) : (
+                    <>Something went wrong!</>
+                )}
             </div>
         </div>
     );
 };
 
-export default ReadBlockchain;
+export default BlockchainRead;

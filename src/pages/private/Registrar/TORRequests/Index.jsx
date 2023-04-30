@@ -54,6 +54,17 @@ const TORRequests = () => {
         );
     }
 
+    if (userStatus === "Rejected") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">TOR Requests</h1>
+                <div className="notification is-danger my-4">
+                    Your account has been rejected.
+                </div>
+            </>
+        );
+    }
+
     const Table = ({ torRequests }) => {
         if (torRequests.length === 0) {
             return (
@@ -62,70 +73,75 @@ const TORRequests = () => {
         }
 
         return (
-            <table className="table is-fullwidth is-hoverable">
-                <thead>
-                    <tr>
-                        <th>Date requested</th>
-                        <th>Student name</th>
-                        <th>Reason / Purpose</th>
-                        <th>Remarks</th>
-                        <th style={{ width: 60 }}></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {torRequests.map(
-                        ({
-                            id,
-                            student_lastname: lastname,
-                            student_firstname: firstname,
-                            student_middlename: middlename,
-                            student_extname: extname,
-                            reason,
-                            remarks,
-                            created_at
-                        }) => {
-                            let d = new Date(created_at);
-                            const datestring = `${
-                                d.getMonth() + 1
-                            }-${d.getDate()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
+            <>
+                <table className="table is-fullwidth is-hoverable">
+                    <thead>
+                        <tr>
+                            <th>Date requested</th>
+                            <th>Student name</th>
+                            <th>Reason / Purpose</th>
+                            <th>Remarks</th>
+                            <th style={{ width: 60 }}></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {torRequests.map(
+                            ({
+                                id,
+                                student_lastname: lastname,
+                                student_firstname: firstname,
+                                student_middlename: middlename,
+                                student_extname: extname,
+                                reason,
+                                remarks,
+                                created_at
+                            }) => {
+                                let d = new Date(created_at);
+                                const datestring = `${
+                                    d.getMonth() + 1
+                                }-${d.getDate()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
 
-                            return (
-                                <tr key={id}>
-                                    <td>{datestring}</td>
-                                    <td>
-                                        <div>
-                                            <span className="has-text-weight-medium">
-                                                <UserName
-                                                    user={{
-                                                        lastname,
-                                                        firstname,
-                                                        middlename,
-                                                        extname
-                                                    }}
-                                                />
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td>{reason}</td>
-                                    <td>{remarks}</td>
-                                    <td>
-                                        <Link to={`/tor/${id}`}>
-                                            <button
-                                                className="button mr-1"
-                                                title="View grades"
-                                            >
-                                                <span className="icon">
-                                                    <i className="fa-solid fa-eye"></i>
+                                return (
+                                    <tr key={id}>
+                                        <td>{datestring}</td>
+                                        <td>
+                                            <div>
+                                                <span className="has-text-weight-medium">
+                                                    <UserName
+                                                        user={{
+                                                            lastname,
+                                                            firstname,
+                                                            middlename,
+                                                            extname
+                                                        }}
+                                                    />
                                                 </span>
-                                            </button>
-                                        </Link>
-                                    </td>
-                                </tr>
-                            );
-                        }
-                    )}
-                </tbody>
-            </table>
+                                            </div>
+                                        </td>
+                                        <td>{reason}</td>
+                                        <td>{remarks}</td>
+                                        <td>
+                                            <Link to={`/tor/${id}`}>
+                                                <button
+                                                    className="button mr-1"
+                                                    title="View grades"
+                                                >
+                                                    <span className="icon">
+                                                        <i className="fa-solid fa-eye"></i>
+                                                    </span>
+                                                </button>
+                                            </Link>
+                                        </td>
+                                    </tr>
+                                );
+                            }
+                        )}
+                    </tbody>
+                </table>
+                <div className="p-4 has-text-right">
+                    {torRequests.length} total items
+                </div>
+            </>
         );
     };
 

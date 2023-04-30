@@ -65,6 +65,17 @@ const ViewTeacherSubject = () => {
         );
     }
 
+    if (userStatus === "Rejected") {
+        return (
+            <>
+                <h1 className="is-size-4 mb-4">Teacher Subjects</h1>
+                <div className="notification is-danger my-4">
+                    Your account has been rejected.
+                </div>
+            </>
+        );
+    }
+
     if (isNotExist) {
         return <div className="has-text-centered mt-6">Teacher not found.</div>;
     }
