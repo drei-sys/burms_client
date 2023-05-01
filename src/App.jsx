@@ -5,6 +5,7 @@ import PublicRoutes from "components/PublicRoutes";
 import ProtectedRoutes from "components/ProtectedRoutes";
 import RoleRoutes from "components/RoleRoutes";
 
+import LandingPage from "pages/public/LandingPAge/Index";
 import Login from "pages/public/Login";
 import Register from "pages/public/Register";
 import ForgotPassword from "pages/public/ForgotPassword";
@@ -42,9 +43,9 @@ import ViewRegistration from "pages/private/AdminPages/Registrations/ViewRegistr
 import ProfileEditApprovals from "pages/private/AdminPages/ProfileEditApprovals/Index";
 import ViewEnrollments from "pages/private/AdminPages/Enrollments/Index";
 import ViewEnrollment from "pages/private/AdminPages/Enrollments/ViewEnrollment";
-import BlockChainReference from "pages/private/AdminPages/BlockChain/BlockChainReference";
+import BlockchainUsers from "pages/private/AdminPages/BlockChain/BlockchainUsers";
+import BlockchainGrades from "pages/private/AdminPages/BlockChain/BlockchainGrade";
 import BlockchainRead from "pages/private/AdminPages/BlockChain/BlockchainRead";
-import BlockchainWrite from "pages/private/AdminPages/BlockChain/BlockchainWrite";
 
 //student routes
 import Enroll from "pages/private/StudentPages/Enroll/Index";
@@ -75,6 +76,7 @@ import DeptChairSchoolYear from "pages/private/DeptChairPages/SchoolYear/Index";
 
 function App() {
     const publicRoutes = [
+        { path: "/", element: LandingPage },
         { path: "/login", element: Login },
         { path: "/register", element: Register },
         { path: "/forgotPassword", element: ForgotPassword },
@@ -105,9 +107,9 @@ function App() {
         { path: "/profileEditApprovals", element: ProfileEditApprovals },
         { path: "/viewEnrollments", element: ViewEnrollments },
         { path: "/viewEnrollment/:id", element: ViewEnrollment },
-        { path: "/blockchainReference", element: BlockChainReference },
-        { path: "/blockchainRead", element: BlockchainRead },
-        { path: "/blockchainWrite", element: BlockchainWrite }
+        { path: "/blockchainUsers", element: BlockchainUsers },
+        { path: "/blockchainGrades", element: BlockchainGrades },
+        { path: "/blockchainRead", element: BlockchainRead }
     ];
 
     const studentRoutes = [
@@ -179,11 +181,6 @@ function App() {
             {/* <Route path="/" element={<Navigate replace to="/login" />} /> */}
             <Route path="/" element={<AuthWrapper />}>
                 <Route path="/" element={<PublicRoutes />}>
-                    <Route
-                        path="/"
-                        element={<Navigate replace to="/login" />}
-                    />
-
                     {publicRoutes.map(({ path, element: Element }) => (
                         <Route key={path} path={path} element={<Element />} />
                     ))}

@@ -59,15 +59,15 @@ const Sidebar = () => {
             group: 3
         },
         {
-            name: "Users Reference",
+            name: "Users",
             icon: "fa-solid fa-user",
-            path: "/blockchainReference",
+            path: "/blockchainUsers",
             group: 5
         },
         {
-            name: "Blockchain Write",
+            name: "Grades",
             icon: "fa-solid fa-user",
-            path: "/blockchainWrite",
+            path: "/blockchainGrades",
             group: 5
         },
         {
