@@ -290,13 +290,24 @@ const ViewTOR = () => {
             course_name
         } = student;
 
+        console.log({
+            lastname,
+            firstname,
+            middlename,
+            extname,
+            address,
+            course_name
+        });
+
         content.push({
             table: {
                 widths: [289, 198],
                 body: [
                     [
                         {
-                            text: `Name: ${lastname}, ${firstname} ${middlename} ${extname}`,
+                            text: `Name: ${lastname}, ${firstname} ${
+                                middlename || ""
+                            } ${extname || ""}`,
                             bold: true
                         },
                         { text: `Program: ${course_name}`, bold: true }

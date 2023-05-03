@@ -18,6 +18,9 @@ import { generateString } from "helpers/helpers";
 const BlockchainUsers = () => {
     const [refetchUsersRef, setRefetchUsersRef] = useState(0);
     const [users, setUsers] = useState([]);
+    const [filteredUsers, setFilteredUsers] = useState([]);
+
+    const [searchText, setSearchText] = useState("");
 
     const [blockchainUser, setBlockchainUser] = useState(null);
 
@@ -35,7 +38,9 @@ const BlockchainUsers = () => {
             try {
                 setIsContentLoading(true);
                 const { data } = await http.get("/api/users");
+                setSearchText("");
                 setUsers(data);
+                setFilteredUsers(data);
             } catch (error) {
                 setError(error);
             } finally {
@@ -158,10 +163,41 @@ const BlockchainUsers = () => {
         }
     };
 
+    const handleSearch = () => {
+        if (searchText.trim() === "") {
+            setFilteredUsers(users);
+        } else {
+            const filteredUsers = users.filter(user => {
+                const { lastname, firstname, middlename, extname } = user;
+
+                const name = `${lastname} ${firstname} ${middlename || ""} ${
+                    extname || ""
+                }`;
+
+                return name.toLowerCase().includes(searchText.toLowerCase());
+            });
+
+            setFilteredUsers(filteredUsers);
+        }
+    };
+
     return (
         <>
             <h1 className="is-size-4 mb-4">Blockchain Users</h1>
             <div className="box" style={{ position: "relative" }}>
+                <div className="is-flex">
+                    <input
+                        type="text"
+                        className="input mb-2"
+                        placeholder="Search user name"
+                        value={searchText}
+                        onChange={e => setSearchText(e.target.value)}
+                    />
+                    <button className="button is-info" onClick={handleSearch}>
+                        Search
+                    </button>
+                </div>
+                <hr />
                 <table className="table is-fullwidth is-hoverable">
                     <thead>
                         <tr>
@@ -171,7 +207,7 @@ const BlockchainUsers = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map(user => {
+                        {filteredUsers.map(user => {
                             const {
                                 id,
                                 lastname,
@@ -212,7 +248,7 @@ const BlockchainUsers = () => {
                                                             }
                                                         >
                                                             BlockHash:{" "}
-                                                            {blockHash} ... {id}
+                                                            {blockHash}
                                                         </button>
                                                     </div>
                                                 );
@@ -224,27 +260,29 @@ const BlockchainUsers = () => {
                                                 {user_type}
                                             </span>
                                         </div>
-                                        {block_hash ? (
-                                            <span
-                                                className="is-size-7 has-background-info has-text-white mr-4"
-                                                style={{
-                                                    padding: "2px 5px",
-                                                    borderRadius: 3
-                                                }}
-                                            >
-                                                On blockchain
-                                            </span>
-                                        ) : (
-                                            <span
-                                                className="is-size-7 has-background-dark has-text-white mr-4"
-                                                style={{
-                                                    padding: "2px 5px",
-                                                    borderRadius: 3
-                                                }}
-                                            >
-                                                Pending
-                                            </span>
-                                        )}
+                                        <div>
+                                            {block_hash ? (
+                                                <span
+                                                    className="is-size-7 has-background-info has-text-white mr-4"
+                                                    style={{
+                                                        padding: "2px 5px",
+                                                        borderRadius: 3
+                                                    }}
+                                                >
+                                                    On blockchain
+                                                </span>
+                                            ) : (
+                                                <span
+                                                    className="is-size-7 has-background-dark has-text-white mr-4"
+                                                    style={{
+                                                        padding: "2px 5px",
+                                                        borderRadius: 3
+                                                    }}
+                                                >
+                                                    Pending
+                                                </span>
+                                            )}
+                                        </div>
                                     </td>
                                     <td>{id}</td>
                                     <td>
@@ -264,7 +302,7 @@ const BlockchainUsers = () => {
                     </tbody>
                 </table>
                 <div className="p-4 has-text-right">
-                    {users.length} total items
+                    {filteredUsers.length} total items
                 </div>
 
                 {isWriteLoading && (

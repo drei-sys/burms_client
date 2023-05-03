@@ -1,37 +1,37 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
 import UserName from "components/common/UserName";
 import Drawer from "components/common/Drawer";
-
-import testAbi from "assets/data/test.json";
-import { ethers } from "ethers";
-import CryptoJS from "crypto-js";
+import ViewTOR from "./components/ViewTOR";
+import ViewTORBlockchain from "./components/ViewTORBlockchain";
 
 import http from "services/httpService";
 
 const BlockchainGrades = () => {
-    const [refetchUsersRef, setRefetchUsersRef] = useState(0);
+    const [refetchTORRequestsRef, setRefetchTORRequestsRef] = useState(0);
     const [torRequests, setTORRequests] = useState([]);
+    const [filteredTORRequests, setFilteredTORRequests] = useState([]);
+
     const [selectedTORRequestId, setSelectedTORRequestId] = useState(0);
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [scrollToTop, setScrollToTop] = useState(false);
+    const [searchText, setSearchText] = useState("");
 
     const [isContentLoading, setIsContentLoading] = useState(true);
     const [error, setError] = useState(null);
 
     const [isOpenViewTOR, setIsOpenViewTOR] = useState(false);
+    const [isOpenViewTORBlockchain, setIsOpenViewTORBlockchain] =
+        useState(false);
 
     useEffect(() => {
-        const getUsers = async () => {
+        const getTORRequests = async () => {
             try {
                 setIsContentLoading(true);
                 const { data } = await http.get("/api/torRequestsApproved");
-                console.log(data);
                 setTORRequests(data);
+                setFilteredTORRequests(data);
             } catch (error) {
                 setError(error);
             } finally {
@@ -39,12 +39,8 @@ const BlockchainGrades = () => {
             }
         };
 
-        getUsers();
-    }, [refetchUsersRef]);
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [scrollToTop]);
+        getTORRequests();
+    }, [refetchTORRequestsRef]);
 
     if (isContentLoading) {
         return <Loader />;
@@ -54,9 +50,37 @@ const BlockchainGrades = () => {
         return <Error error={error} />;
     }
 
-    const showViewTOR = torId => {
-        setSelectedTORRequestId(torId);
+    const showViewTOR = torRequestId => {
+        setSelectedTORRequestId(torRequestId);
         setIsOpenViewTOR(true);
+    };
+
+    const showViewTORBlockchain = torRequestId => {
+        setSelectedTORRequestId(torRequestId);
+        setIsOpenViewTORBlockchain(true);
+    };
+
+    const handleSearch = () => {
+        if (searchText.trim() === "") {
+            setFilteredTORRequests(torRequests);
+        } else {
+            const filteredTORRequests = torRequests.filter(torRequest => {
+                const {
+                    student_lastname: lastname,
+                    student_firstname: firstname,
+                    student_middlename: middlename,
+                    student_extname: extname
+                } = torRequest;
+
+                const name = `${lastname} ${firstname} ${middlename || ""} ${
+                    extname || ""
+                }`;
+
+                return name.toLowerCase().includes(searchText.toLowerCase());
+            });
+
+            setFilteredTORRequests(filteredTORRequests);
+        }
     };
 
     return (
@@ -64,34 +88,38 @@ const BlockchainGrades = () => {
             <h1 className="is-size-4 mb-4">Blockchain Grades</h1>
 
             <div className="box">
+                <div className="is-flex">
+                    <input
+                        type="text"
+                        className="input mb-2"
+                        placeholder="Search user name"
+                        value={searchText}
+                        onChange={e => setSearchText(e.target.value)}
+                    />
+                    <button className="button is-info" onClick={handleSearch}>
+                        Search
+                    </button>
+                </div>
+                <hr />
                 <table className="table is-fullwidth is-hoverable">
                     <thead>
                         <tr>
                             <th>Student name</th>
-                            {/* <th>Date requested</th>
-                            <th>Reason / Purpose</th>
-                            <th>Remarks</th> */}
                             <th style={{ width: 60 }}></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {torRequests.map(
+                        {filteredTORRequests.map(
                             ({
                                 id,
                                 student_lastname: lastname,
                                 student_firstname: firstname,
                                 student_middlename: middlename,
                                 student_extname: extname,
-                                created_at
+                                block_hash
                             }) => {
-                                let d = new Date(created_at);
-                                const datestring = `${
-                                    d.getMonth() + 1
-                                }-${d.getDate()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
-
                                 return (
                                     <tr key={id}>
-                                        {/* <td>{datestring}</td> */}
                                         <td>
                                             <div>
                                                 <span className="has-text-weight-medium">
@@ -105,11 +133,43 @@ const BlockchainGrades = () => {
                                                     />
                                                 </span>
                                             </div>
+                                            <div>
+                                                <button
+                                                    className="button is-ghost p-0"
+                                                    onClick={() =>
+                                                        showViewTORBlockchain(
+                                                            id
+                                                        )
+                                                    }
+                                                >
+                                                    BlockHash: {block_hash}
+                                                </button>
+                                            </div>
+                                            <div>
+                                                {block_hash ? (
+                                                    <span
+                                                        className="is-size-7 has-background-info has-text-white mr-4"
+                                                        style={{
+                                                            padding: "2px 5px",
+                                                            borderRadius: 3
+                                                        }}
+                                                    >
+                                                        On blockchain
+                                                    </span>
+                                                ) : (
+                                                    <span
+                                                        className="is-size-7 has-background-dark has-text-white mr-4"
+                                                        style={{
+                                                            padding: "2px 5px",
+                                                            borderRadius: 3
+                                                        }}
+                                                    >
+                                                        Pending
+                                                    </span>
+                                                )}
+                                            </div>
                                         </td>
-                                        {/* <td>{reason}</td>
-                                        <td>{remarks}</td> */}
                                         <td>
-                                            {/* <Link to={`/tor/${id}`}> */}
                                             <button
                                                 className="button mr-1"
                                                 title="View grades"
@@ -119,7 +179,6 @@ const BlockchainGrades = () => {
                                                     <i className="fa-solid fa-eye"></i>
                                                 </span>
                                             </button>
-                                            {/* </Link> */}
                                         </td>
                                     </tr>
                                 );
@@ -128,24 +187,38 @@ const BlockchainGrades = () => {
                     </tbody>
                 </table>
                 <div className="p-4 has-text-right">
-                    {torRequests.length} total items
+                    {filteredTORRequests.length} total items
                 </div>
             </div>
 
             {isOpenViewTOR && (
                 <Drawer
-                    title="Input Grades"
+                    title="Grades"
                     isOpen={isOpenViewTOR}
                     onOk={() => setIsOpenViewTOR(false)}
                     onClose={() => setIsOpenViewTOR(false)}
                     content={
-                        // <GradeDetails
-                        //     teacherId={null}
-                        //     enrollmentItem={selectedEnrollmentItem}
-                        //     readOnly={true}
-                        //     onRefetch={() => console.log("refetch")}
-                        // />
-                        <>gg</>
+                        <ViewTOR
+                            torRequestId={selectedTORRequestId}
+                            onDoneWrite={() => {
+                                setIsOpenViewTOR(false);
+                                setRefetchTORRequestsRef(Math.random());
+                            }}
+                        />
+                    }
+                />
+            )}
+
+            {isOpenViewTORBlockchain && (
+                <Drawer
+                    title="Grades Blockchain"
+                    isOpen={isOpenViewTORBlockchain}
+                    onOk={() => setIsOpenViewTORBlockchain(false)}
+                    onClose={() => setIsOpenViewTORBlockchain(false)}
+                    content={
+                        <ViewTORBlockchain
+                            torRequestId={selectedTORRequestId}
+                        />
                     }
                 />
             )}

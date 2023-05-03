@@ -45,7 +45,7 @@ import ViewEnrollments from "pages/private/AdminPages/Enrollments/Index";
 import ViewEnrollment from "pages/private/AdminPages/Enrollments/ViewEnrollment";
 import BlockchainUsers from "pages/private/AdminPages/BlockChain/BlockchainUsers";
 import BlockchainGrades from "pages/private/AdminPages/BlockChain/BlockchainGrade/Index";
-import BlockchainRead from "pages/private/AdminPages/BlockChain/BlockchainRead";
+//import BlockchainRead from "pages/private/AdminPages/BlockChain/BlockchainRead";
 
 //student routes
 import Enroll from "pages/private/StudentPages/Enroll/Index";
@@ -108,8 +108,8 @@ function App() {
         { path: "/viewEnrollments", element: ViewEnrollments },
         { path: "/viewEnrollment/:id", element: ViewEnrollment },
         { path: "/blockchainUsers", element: BlockchainUsers },
-        { path: "/blockchainGrades", element: BlockchainGrades },
-        { path: "/blockchainRead", element: BlockchainRead }
+        { path: "/blockchainGrades", element: BlockchainGrades }
+        //{ path: "/blockchainRead", element: BlockchainRead }
     ];
 
     const studentRoutes = [

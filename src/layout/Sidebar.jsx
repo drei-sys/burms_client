@@ -69,13 +69,13 @@ const Sidebar = () => {
             icon: "fa-solid fa-user",
             path: "/blockchainGrades",
             group: 5
-        },
-        {
-            name: "Blockchain Read",
-            icon: "fa-solid fa-user",
-            path: "/blockchainRead",
-            group: 5
         }
+        // {
+        //     name: "Blockchain Read",
+        //     icon: "fa-solid fa-user",
+        //     path: "/blockchainRead",
+        //     group: 5
+        // }
     ];
     const studentMenuItems = [
         { name: "Enroll", icon: "fa-solid fa-user", path: "/enroll" },

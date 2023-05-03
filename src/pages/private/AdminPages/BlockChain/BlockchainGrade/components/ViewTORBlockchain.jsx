@@ -10,123 +10,56 @@ import CryptoJS from "crypto-js";
 
 import http from "services/httpService";
 
-const ViewTOR = ({ torRequestId, onDoneWrite }) => {
+const ViewTORBlockchain = ({ torRequestId }) => {
     const [student, setStudent] = useState({});
     const [syEnrollmentItems, setSYEnrollmentItems] = useState([]);
-
-    const [isWriteLoading, setIsWriteLoading] = useState(false);
 
     const [isContentLoading, setIsContentLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const getGrades = async () => {
+        const getGradesBlockchain = async () => {
+            const { data: torRequest } = await http.get(
+                `/api/torRequest/${torRequestId}`
+            );
+
+            const { data: student } = await http.get(
+                `/api/student/${torRequest.student_id}`
+            );
+
             try {
-                const { data } = await http.get(
-                    `/api/enrollmentItemsRPOV/${torRequestId}`
-                );
-
-                const { torRequest, enrollments, enrollmentItems } = data;
-
-                if (torRequest) {
-                    const { data: student } = await http.get(
-                        `/api/student/${torRequest.student_id}`
+                const { ethereum } = window;
+                if (ethereum) {
+                    const provider = new ethers.providers.Web3Provider(
+                        ethereum
+                    );
+                    await provider.send("eth_requestAccounts", []);
+                    const signer = provider.getSigner();
+                    const contract = new ethers.Contract(
+                        import.meta.env.VITE_SMART_CONTRACT,
+                        testAbi,
+                        signer
                     );
 
-                    const { data: grades } = await http.get(
-                        `/api/gradesRPOV/${torRequest.student_id}`
+                    const fetchedData = await contract.getGradeToStudent(
+                        torRequestId
                     );
 
-                    const newEnrollmentItems = enrollmentItems.map(
-                        enrollmentItem => {
-                            const enrollment = enrollments.find(
-                                ({ id }) => id === enrollmentItem.enrollment_id
-                            );
-
-                            const {
-                                sy_id,
-                                sy_semester,
-                                sy_year,
-                                student_id,
-                                student_lastname,
-                                student_firstname,
-                                student_middlename,
-                                student_extname,
-                                student_course_id,
-                                student_course_name,
-                                student_user_type
-                            } = enrollment;
-
-                            const newEnrollmentItem = {
-                                ...enrollmentItem,
-                                sy_id,
-                                sy_semester,
-                                sy_year,
-                                student_id,
-                                student_lastname,
-                                student_firstname,
-                                student_middlename,
-                                student_extname,
-                                student_course_id,
-                                student_course_name,
-                                student_user_type
-                            };
-
-                            const {
-                                sy_id: syId,
-                                student_id: studentId,
-                                subject_id: subjectId
-                            } = newEnrollmentItem;
-
-                            const grade = grades.find(
-                                ({ sy_id, student_id, subject_id }) =>
-                                    sy_id === syId &&
-                                    student_id === studentId &&
-                                    subject_id === subjectId
-                            );
-
-                            return {
-                                ...newEnrollmentItem,
-                                grade
-                            };
-                        }
-                    );
-
-                    let syEnrollmentItems = [];
-                    newEnrollmentItems.forEach(newEnrollmentItem => {
-                        const { sy_id, sy_year, sy_semester } =
-                            newEnrollmentItem;
-
-                        const syEnrollmentItem = syEnrollmentItems.find(
-                            ({ syId }) => syId === sy_id
+                    if (fetchedData) {
+                        const decrypted = CryptoJS.AES.decrypt(
+                            fetchedData,
+                            import.meta.env.VITE_SECRET_KEY
                         );
+                        let data = CryptoJS.enc.Utf8.stringify(decrypted);
+                        data = JSON.parse(data);
 
-                        if (syEnrollmentItem) {
-                            syEnrollmentItems = syEnrollmentItems.map(
-                                syEnrollmentItem => {
-                                    if (syEnrollmentItem.syId === sy_id) {
-                                        syEnrollmentItem.enrollmentItems.push(
-                                            newEnrollmentItem
-                                        );
-                                        return syEnrollmentItem;
-                                    }
-                                    return syEnrollmentItem;
-                                }
-                            );
-                        } else {
-                            syEnrollmentItems.push({
-                                syId: sy_id,
-                                syYear: sy_year,
-                                sySemester: sy_semester,
-                                enrollmentItems: [newEnrollmentItem]
-                            });
-                        }
-                    });
-
-                    setStudent(student);
-                    setSYEnrollmentItems(syEnrollmentItems);
+                        setStudent(student);
+                        setSYEnrollmentItems(data);
+                    }
                 } else {
-                    setIsNotExist(true);
+                    alert(
+                        "Non-Ethereum browser detected. You should consider installing MetaMask."
+                    );
                 }
             } catch (error) {
                 console.log(error);
@@ -136,7 +69,7 @@ const ViewTOR = ({ torRequestId, onDoneWrite }) => {
             }
         };
 
-        getGrades();
+        getGradesBlockchain();
     }, []);
 
     if (isContentLoading) {
@@ -146,64 +79,6 @@ const ViewTOR = ({ torRequestId, onDoneWrite }) => {
     if (error) {
         return <Error error={error} />;
     }
-
-    const handleWrite = async () => {
-        try {
-            setIsWriteLoading(true);
-
-            const { ethereum } = window;
-            if (ethereum) {
-                const provider = new ethers.providers.Web3Provider(ethereum);
-                await provider.send("eth_requestAccounts", []);
-                const signer = provider.getSigner();
-                const contract = new ethers.Contract(
-                    import.meta.env.VITE_SMART_CONTRACT,
-                    testAbi,
-                    signer
-                );
-
-                const syEnrollmentItemsString =
-                    JSON.stringify(syEnrollmentItems);
-                const encrypted = CryptoJS.AES.encrypt(
-                    syEnrollmentItemsString,
-                    import.meta.env.VITE_SECRET_KEY
-                );
-                const encryptedString = encrypted.toString();
-
-                //const userId = user.id;
-                //const dataId = generateString(10, "00");
-                let tx = await contract.setGradeToStudent(
-                    torRequestId,
-                    encryptedString
-                );
-
-                const receipt = await tx.wait();
-                if (receipt.status === 1) {
-                    // const blockHashItems = torRequest.block_hash
-                    //     ? JSON.parse(torRequest.block_hash)
-                    //     : [];
-                    // blockHashItems.push({ id: torRequestId, blockHash: tx.hash });
-
-                    await http.put(`/api/torRequestBlockHash/${torRequestId}`, {
-                        block_hash: tx.hash
-                    });
-
-                    onDoneWrite();
-                }
-            } else {
-                alert(
-                    "Non-Ethereum browser detected. You should consider installing MetaMask."
-                );
-            }
-        } catch (error) {
-            console.log(error);
-            alert(
-                "An error occured. Please see the console for more information."
-            );
-        } finally {
-            setIsWriteLoading(false);
-        }
-    };
 
     return (
         <>
@@ -363,14 +238,6 @@ const ViewTOR = ({ torRequestId, onDoneWrite }) => {
                             )}
                         </div>
                         <hr />
-                        <button
-                            className={`button is-success  ${
-                                isWriteLoading ? "is-loading" : ""
-                            }`}
-                            onClick={handleWrite}
-                        >
-                            Write to blockchain
-                        </button>
                     </>
                 )}
             </div>
@@ -378,4 +245,4 @@ const ViewTOR = ({ torRequestId, onDoneWrite }) => {
     );
 };
 
-export default ViewTOR;
+export default ViewTORBlockchain;
