@@ -53,6 +53,12 @@ const BlockchainRead = () => {
                     fetchedData = await contract.getInfoToDeptId(userId);
                 }
 
+                // const testData = await contract.getInfoInBlock(
+                //     "0x2516b418d13822e5094ff3b44b7c7ec06184cd349057af787f92e98ee529ff11"
+                // );
+
+                // console.log({ testData });
+
                 if (fetchedData) {
                     const decrypted = CryptoJS.AES.decrypt(
                         fetchedData,

@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import Loader from "components/common/Loader";
 import Error from "components/common/Error";
 import UserName from "components/common/UserName";
+import Drawer from "components/common/Drawer";
+import StudentDetails from "components/common/StudentDetails";
+import NonTeachingDetails from "components/common/NonTeachingDetails";
 
 import testAbi from "assets/data/test.json";
 import { ethers } from "ethers";
@@ -10,15 +13,22 @@ import CryptoJS from "crypto-js";
 
 import http from "services/httpService";
 
+import { generateString } from "helpers/helpers";
+
 const BlockchainUsers = () => {
     const [refetchUsersRef, setRefetchUsersRef] = useState(0);
     const [users, setUsers] = useState([]);
 
-    const [isLoading, setIsLoading] = useState(false);
+    const [blockchainUser, setBlockchainUser] = useState(null);
+
+    const [isWriteLoading, setIsWriteLoading] = useState(false);
+    const [isReadLoading, setIsReadLoading] = useState(false);
     const [scrollToTop, setScrollToTop] = useState(false);
 
     const [isContentLoading, setIsContentLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const [isOpenUserDetails, setIsOpenUserDetails] = useState(false);
 
     useEffect(() => {
         const getUsers = async () => {
@@ -51,7 +61,7 @@ const BlockchainUsers = () => {
     const handleWrite = async user => {
         try {
             setScrollToTop(!scrollToTop);
-            setIsLoading(true);
+            setIsWriteLoading(true);
 
             const { ethereum } = window;
             if (ethereum) {
@@ -63,6 +73,7 @@ const BlockchainUsers = () => {
                     testAbi,
                     signer
                 );
+
                 const userString = JSON.stringify(user);
                 const encrypted = CryptoJS.AES.encrypt(
                     userString,
@@ -71,41 +82,21 @@ const BlockchainUsers = () => {
                 const encryptedString = encrypted.toString();
 
                 const userId = user.id;
-                let tx = null;
-                if (user.user_type === "Student") {
-                    tx = await contract.setInfoToStudId(
-                        userId,
-                        encryptedString
-                    );
-                } else if (user.user_type === "Teacher") {
-                    tx = await contract.setInfoToProfId(
-                        userId,
-                        encryptedString
-                    );
-                } else if (user.user_type === "Non Teaching") {
-                    tx = await contract.setInfoToNontId(
-                        userId,
-                        encryptedString
-                    );
-                } else if (user.user_type === "Registrar") {
-                    tx = await contract.setInfoToRegId(userId, encryptedString);
-                } else if (user.user_type === "Dean") {
-                    tx = await contract.setInfoToDeanId(
-                        userId,
-                        encryptedString
-                    );
-                } else if (user.user_type === "DeptChair") {
-                    tx = await contract.setInfoToDeptId(
-                        userId,
-                        encryptedString
-                    );
-                }
+                const dataId = generateString(10, "00");
+                let tx = await contract.setUserInfoInBlock(
+                    dataId,
+                    encryptedString
+                );
 
                 const receipt = await tx.wait();
-                console.log(receipt);
                 if (receipt.status === 1) {
+                    const blockHashItems = user.block_hash
+                        ? JSON.parse(user.block_hash)
+                        : [];
+                    blockHashItems.push({ id: dataId, blockHash: tx.hash });
+
                     await http.put(`/api/userBlockHash/${userId}`, {
-                        block_hash: receipt.blockHash
+                        block_hash: JSON.stringify(blockHashItems)
                     });
                     setRefetchUsersRef(Math.random());
                 }
@@ -120,7 +111,50 @@ const BlockchainUsers = () => {
                 "An error occured. Please see the console for more information."
             );
         } finally {
-            setIsLoading(false);
+            setIsWriteLoading(false);
+        }
+    };
+
+    const handleRead = async id => {
+        try {
+            const { ethereum } = window;
+            if (ethereum) {
+                setIsReadLoading(true);
+                setIsOpenUserDetails(true);
+
+                const provider = new ethers.providers.Web3Provider(ethereum);
+                await provider.send("eth_requestAccounts", []);
+                const signer = provider.getSigner();
+                const contract = new ethers.Contract(
+                    import.meta.env.VITE_SMART_CONTRACT,
+                    testAbi,
+                    signer
+                );
+
+                const fetchedData = await contract.getUserInfoInBlock(id);
+
+                if (fetchedData) {
+                    const decrypted = CryptoJS.AES.decrypt(
+                        fetchedData,
+                        import.meta.env.VITE_SECRET_KEY
+                    );
+                    let data = CryptoJS.enc.Utf8.stringify(decrypted);
+                    data = JSON.parse(data);
+                    setBlockchainUser(data);
+                }
+            } else {
+                alert(
+                    "Non-Ethereum browser detected. You should consider installing MetaMask."
+                );
+            }
+        } catch (error) {
+            console.log(error);
+            alert(
+                "An error occured. Please see the console for more information."
+            );
+            setIsOpenUserDetails(false);
+        } finally {
+            setIsReadLoading(false);
         }
     };
 
@@ -148,10 +182,14 @@ const BlockchainUsers = () => {
                                 block_hash
                             } = user;
 
+                            const blockHashItems = block_hash
+                                ? JSON.parse(block_hash)
+                                : [];
+
                             return (
                                 <tr key={id}>
                                     <td>
-                                        <div>
+                                        <div className="mb-1">
                                             <span className="has-text-weight-medium">
                                                 <UserName
                                                     user={{
@@ -163,11 +201,24 @@ const BlockchainUsers = () => {
                                                 />
                                             </span>
                                         </div>
-                                        <div>
-                                            <span className="is-size-6">
-                                                BlockHash: {block_hash || "-"}
-                                            </span>
-                                        </div>
+                                        {blockHashItems.map(
+                                            ({ id, blockHash }) => {
+                                                return (
+                                                    <div key={id}>
+                                                        <button
+                                                            className="button  is-ghost p-0"
+                                                            onClick={() =>
+                                                                handleRead(id)
+                                                            }
+                                                        >
+                                                            BlockHash:{" "}
+                                                            {blockHash} ... {id}
+                                                        </button>
+                                                    </div>
+                                                );
+                                            }
+                                        )}
+
                                         <div>
                                             <span className="is-size-6">
                                                 {user_type}
@@ -216,7 +267,7 @@ const BlockchainUsers = () => {
                     {users.length} total items
                 </div>
 
-                {isLoading && (
+                {isWriteLoading && (
                     <div
                         style={{
                             position: "absolute",
@@ -240,6 +291,46 @@ const BlockchainUsers = () => {
                     </div>
                 )}
             </div>
+
+            {isOpenUserDetails && (
+                <Drawer
+                    title="User Blockchain Details"
+                    isOpen={isOpenUserDetails}
+                    onOk={() => setIsOpenUserDetails(false)}
+                    onClose={() => setIsOpenUserDetails(false)}
+                    content={
+                        <>
+                            {isReadLoading ? (
+                                <div className="is-flex is-justify-content-center is-align-items-center mt-6">
+                                    <div className="has-text-centered">
+                                        <div>
+                                            <i className="fa-solid fa-spinner fa-spin"></i>
+                                        </div>
+                                        <div>
+                                            Reading from blockchain... Please
+                                            wait.
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : blockchainUser ? (
+                                <>
+                                    {blockchainUser.user_type === "Student" ? (
+                                        <StudentDetails data={blockchainUser} />
+                                    ) : (
+                                        <NonTeachingDetails
+                                            data={blockchainUser}
+                                        />
+                                    )}
+                                </>
+                            ) : (
+                                <div className="has-text-centered">
+                                    No details.
+                                </div>
+                            )}
+                        </>
+                    }
+                />
+            )}
         </>
     );
 };

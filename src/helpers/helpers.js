@@ -15,3 +15,15 @@ export function sortObjectArray(array, sortBy, type = "string", order = "asc") {
         }
     }
 }
+
+export function generateString(length, prefix = null, charSet) {
+    charSet =
+        charSet ||
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var randomString = "";
+    for (var i = 0; i < length; i++) {
+        var randomPoz = Math.floor(Math.random() * charSet.length);
+        randomString += charSet.substring(randomPoz, randomPoz + 1);
+    }
+    return prefix ? prefix + randomString : randomString;
+}
