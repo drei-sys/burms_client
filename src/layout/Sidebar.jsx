@@ -174,6 +174,18 @@ const Sidebar = () => {
                             Profile
                         </Link>
                     </li>
+                    <li>
+                        <Link
+                            to="/announcement"
+                            className={
+                                location.pathname === "/announcement"
+                                    ? "is-active"
+                                    : ""
+                            }
+                        >
+                            Announcement
+                        </Link>
+                    </li>
                 </ul>
                 <p className="menu-label has-text-white">Curriculum</p>
                 <ul className="menu-list">

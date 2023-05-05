@@ -18,6 +18,9 @@ import Profile from "pages/private/Profile/Index";
 import UpdateProfile from "pages/private/Profile/UpdateProfile";
 
 //admin routes
+import Announcements from "pages/private/Annoucements/Index";
+import CreateAnnouncement from "pages/private/Annoucements/CreateAnnouncement";
+import UpdateAnnouncement from "pages/private/Annoucements/UpdateAnnouncement";
 import Courses from "pages/private/AdminPages/Courses/Index";
 import CreateCourse from "pages/private/AdminPages/Courses/CreateCourse";
 import UpdateCourse from "pages/private/AdminPages/Courses/UpdateCourse";
@@ -84,6 +87,10 @@ function App() {
     ];
 
     const adminRoutes = [
+        { path: "/announcements", element: Announcements },
+        { path: "/createAnnouncement", element: CreateAnnouncement },
+        { path: "/updateAnnouncement/:id", element: UpdateAnnouncement },
+
         { path: "/courses", element: Courses },
         { path: "/createCourse", element: CreateCourse },
         { path: "/updateCourse/:id", element: UpdateCourse },
