@@ -32,7 +32,7 @@ const BlockchainRead = () => {
                 await provider.send("eth_requestAccounts", []);
                 const signer = provider.getSigner();
                 const contract = new ethers.Contract(
-                    import.meta.env.VITE_SMART_CONTRACT,
+                    import.meta.env.VITE_SMART_CONTRACT_1,
                     testAbi,
                     signer
                 );
@@ -53,16 +53,10 @@ const BlockchainRead = () => {
                     fetchedData = await contract.getInfoToDeptId(userId);
                 }
 
-                // const testData = await contract.getInfoInBlock(
-                //     "0x2516b418d13822e5094ff3b44b7c7ec06184cd349057af787f92e98ee529ff11"
-                // );
-
-                // console.log({ testData });
-
                 if (fetchedData) {
                     const decrypted = CryptoJS.AES.decrypt(
                         fetchedData,
-                        import.meta.env.VITE_SECRET_KEY
+                        import.meta.env.VITE_SECRET_KEY_1
                     );
                     let data = CryptoJS.enc.Utf8.stringify(decrypted);
                     data = JSON.parse(data);

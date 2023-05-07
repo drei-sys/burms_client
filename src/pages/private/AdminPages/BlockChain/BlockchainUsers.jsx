@@ -74,7 +74,7 @@ const BlockchainUsers = () => {
                 await provider.send("eth_requestAccounts", []);
                 const signer = provider.getSigner();
                 const contract = new ethers.Contract(
-                    import.meta.env.VITE_SMART_CONTRACT,
+                    import.meta.env.VITE_SMART_CONTRACT_1,
                     testAbi,
                     signer
                 );
@@ -82,7 +82,7 @@ const BlockchainUsers = () => {
                 const userString = JSON.stringify(user);
                 const encrypted = CryptoJS.AES.encrypt(
                     userString,
-                    import.meta.env.VITE_SECRET_KEY
+                    import.meta.env.VITE_SECRET_KEY_1
                 );
                 const encryptedString = encrypted.toString();
 
@@ -131,7 +131,7 @@ const BlockchainUsers = () => {
                 await provider.send("eth_requestAccounts", []);
                 const signer = provider.getSigner();
                 const contract = new ethers.Contract(
-                    import.meta.env.VITE_SMART_CONTRACT,
+                    import.meta.env.VITE_SMART_CONTRACT_1,
                     testAbi,
                     signer
                 );
@@ -141,7 +141,7 @@ const BlockchainUsers = () => {
                 if (fetchedData) {
                     const decrypted = CryptoJS.AES.decrypt(
                         fetchedData,
-                        import.meta.env.VITE_SECRET_KEY
+                        import.meta.env.VITE_SECRET_KEY_1
                     );
                     let data = CryptoJS.enc.Utf8.stringify(decrypted);
                     data = JSON.parse(data);

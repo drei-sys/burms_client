@@ -5,7 +5,7 @@ import PublicRoutes from "components/PublicRoutes";
 import ProtectedRoutes from "components/ProtectedRoutes";
 import RoleRoutes from "components/RoleRoutes";
 
-import LandingPage from "pages/public/LandingPAge/Index";
+import LandingPage from "pages/public/LandingPage/Index";
 import Login from "pages/public/Login";
 import Register from "pages/public/Register";
 import ForgotPassword from "pages/public/ForgotPassword";
@@ -69,6 +69,10 @@ import ViewStudentDetails from "pages/private/Registrar/Students/ViewStudentDeta
 import ViewStudentGrades from "pages/private/Registrar/Students/ViewStudentGrades";
 import RegistrarTORRequests from "pages/private/Registrar/TORRequests/Index";
 import ViewTOR from "pages/private/Registrar/TORRequests/ViewTOR";
+import ReleasedDocs from "pages/private/Registrar/ReleasedDocs/Index";
+import UploadReleasedDoc from "pages/private/Registrar/ReleasedDocs/UploadReleasedDoc";
+import DigitalizedFiles from "pages/private/Registrar/DigitalizedFiles/Index";
+import UploadDigitalizedFile from "pages/private/Registrar/DigitalizedFiles/UploadDigitalizedFile";
 
 //dean routes
 //import ApproveGrade from "pages/private/Dean/ApproveGrade";
@@ -139,7 +143,11 @@ function App() {
         { path: "/student/:id", element: ViewStudentDetails },
         { path: "/studentGrades/:id", element: ViewStudentGrades },
         { path: "/registrarTORRequests", element: RegistrarTORRequests },
-        { path: "/tor/:id/", element: ViewTOR }
+        { path: "/tor/:id", element: ViewTOR },
+        { path: "/releasedDocs", element: ReleasedDocs },
+        { path: "/uploadReleasedDoc", element: UploadReleasedDoc },
+        { path: "/digitalizedFiles", element: DigitalizedFiles },
+        { path: "/uploadDigitalizedFile", element: UploadDigitalizedFile }
     ];
 
     const deanRoutes = [

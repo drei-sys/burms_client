@@ -157,7 +157,7 @@ const ViewTOR = ({ torRequestId, onDoneWrite }) => {
                 await provider.send("eth_requestAccounts", []);
                 const signer = provider.getSigner();
                 const contract = new ethers.Contract(
-                    import.meta.env.VITE_SMART_CONTRACT,
+                    import.meta.env.VITE_SMART_CONTRACT_1,
                     testAbi,
                     signer
                 );
@@ -166,7 +166,7 @@ const ViewTOR = ({ torRequestId, onDoneWrite }) => {
                     JSON.stringify(syEnrollmentItems);
                 const encrypted = CryptoJS.AES.encrypt(
                     syEnrollmentItemsString,
-                    import.meta.env.VITE_SECRET_KEY
+                    import.meta.env.VITE_SECRET_KEY_1
                 );
                 const encryptedString = encrypted.toString();
 

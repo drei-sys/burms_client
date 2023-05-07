@@ -101,6 +101,16 @@ const Sidebar = () => {
             name: "TOR Requests",
             icon: "fa-solid fa-user",
             path: "/registrarTORRequests"
+        },
+        {
+            name: "Released Docs",
+            icon: "fa-solid fa-user",
+            path: "/releasedDocs"
+        },
+        {
+            name: "Digitalized Files",
+            icon: "fa-solid fa-user",
+            path: "/digitalizedFiles"
         }
     ];
     const deanMenuItems = [
@@ -176,9 +186,9 @@ const Sidebar = () => {
                     </li>
                     <li>
                         <Link
-                            to="/announcement"
+                            to="/announcements"
                             className={
-                                location.pathname === "/announcement"
+                                location.pathname === "/announcements"
                                     ? "is-active"
                                     : ""
                             }

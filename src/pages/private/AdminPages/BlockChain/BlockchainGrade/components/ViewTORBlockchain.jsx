@@ -36,7 +36,7 @@ const ViewTORBlockchain = ({ torRequestId }) => {
                     await provider.send("eth_requestAccounts", []);
                     const signer = provider.getSigner();
                     const contract = new ethers.Contract(
-                        import.meta.env.VITE_SMART_CONTRACT,
+                        import.meta.env.VITE_SMART_CONTRACT_1,
                         testAbi,
                         signer
                     );
@@ -48,7 +48,7 @@ const ViewTORBlockchain = ({ torRequestId }) => {
                     if (fetchedData) {
                         const decrypted = CryptoJS.AES.decrypt(
                             fetchedData,
-                            import.meta.env.VITE_SECRET_KEY
+                            import.meta.env.VITE_SECRET_KEY_1
                         );
                         let data = CryptoJS.enc.Utf8.stringify(decrypted);
                         data = JSON.parse(data);

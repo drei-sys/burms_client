@@ -1,0 +1,63 @@
+.bg-image {
+    /* The image used */
+    background: url("../../../assets/images/hero.jpg");
+
+    /* Add the blur effect */
+    filter: blur(4px);
+    -webkit-filter: blur(4px);
+
+    /* Full height */
+    height: 480px;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+    margin: -10px -10px -10px -10px;
+}
+
+.hero-columns-container {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+}
+
+/* Position text in the middle of the page/image */
+.bg-text {
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4); /* Black w/opacity/see-through */
+    color: white;
+    font-weight: bold;
+    border: 3px solid #f1f1f1;
+    z-index: 2;
+    padding: 20px;
+}
+
+.custom-shape-divider-bottom-1683358780 {
+    position: absolute;
+    bottom: -45px;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1683358780 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 100px;
+}
+
+.custom-shape-divider-bottom-1683358780 .shape-fill {
+    fill: #ffffff;
+}
+
+video {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
