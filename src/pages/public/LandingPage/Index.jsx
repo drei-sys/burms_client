@@ -683,6 +683,11 @@ const LandingPage = () => {
                                                 ></textarea>
                                             </div>
                                         </div>
+                                        <div className="field">
+                                            <button className="button">
+                                                Submit
+                                            </button>
+                                        </div>
                                     </form>
                                 </div>
                                 <div className="column is-6">
