@@ -178,85 +178,93 @@ function DigitalizedFiles() {
                     </div>
                 ) : (
                     <>
-                        <table className="table is-fullwidth is-hoverable">
-                            <thead>
-                                <tr>
-                                    <th>Files</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredDigitalizedFiles.map(
-                                    filteredDigitalizedFile => {
-                                        const {
-                                            id,
-                                            student_lastname,
-                                            student_firstname,
-                                            student_middlnema,
-                                            student_extname,
-                                            student_course_name,
-                                            student_year_level,
-                                            filename,
-                                            pid,
-                                            block_hash
-                                        } = filteredDigitalizedFile;
+                        <div className="table-container">
+                            <table
+                                className="table is-fullwidth is-hoverable"
+                                style={{ whiteSpace: "nowrap" }}
+                            >
+                                <thead>
+                                    <tr>
+                                        <th>Files</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filteredDigitalizedFiles.map(
+                                        filteredDigitalizedFile => {
+                                            const {
+                                                id,
+                                                student_lastname,
+                                                student_firstname,
+                                                student_middlnema,
+                                                student_extname,
+                                                student_course_name,
+                                                student_year_level,
+                                                filename,
+                                                pid,
+                                                block_hash
+                                            } = filteredDigitalizedFile;
 
-                                        return (
-                                            <tr key={id}>
-                                                <td>
-                                                    <div>
-                                                        <button
-                                                            className="button is-ghost p-0"
-                                                            onClick={() =>
-                                                                handleRead(
-                                                                    pid,
-                                                                    filename
-                                                                )
-                                                            }
-                                                        >
-                                                            {filename}
-                                                        </button>
-                                                    </div>
-                                                    <div>
-                                                        <UserName
-                                                            user={{
-                                                                lastname:
-                                                                    student_lastname,
-                                                                firstname:
-                                                                    student_firstname,
-                                                                middlename:
-                                                                    student_middlnema,
-                                                                extname:
-                                                                    student_extname
-                                                            }}
-                                                        />{" "}
-                                                        &ndash;{" "}
-                                                        {student_course_name}{" "}
-                                                        &ndash;{" "}
-                                                        {student_year_level}{" "}
-                                                        year
-                                                    </div>
-                                                    <div>
-                                                        BlockHash: {block_hash}
-                                                    </div>
-                                                    <div>
-                                                        <span
-                                                            className="is-size-7 has-background-info has-text-white mr-4"
-                                                            style={{
-                                                                padding:
-                                                                    "2px 5px",
-                                                                borderRadius: 3
-                                                            }}
-                                                        >
-                                                            On blockchain
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        );
-                                    }
-                                )}
-                            </tbody>
-                        </table>
+                                            return (
+                                                <tr key={id}>
+                                                    <td>
+                                                        <div>
+                                                            <button
+                                                                className="button is-ghost p-0"
+                                                                onClick={() =>
+                                                                    handleRead(
+                                                                        pid,
+                                                                        filename
+                                                                    )
+                                                                }
+                                                            >
+                                                                {filename}
+                                                            </button>
+                                                        </div>
+                                                        <div>
+                                                            <UserName
+                                                                user={{
+                                                                    lastname:
+                                                                        student_lastname,
+                                                                    firstname:
+                                                                        student_firstname,
+                                                                    middlename:
+                                                                        student_middlnema,
+                                                                    extname:
+                                                                        student_extname
+                                                                }}
+                                                            />{" "}
+                                                            &ndash;{" "}
+                                                            {
+                                                                student_course_name
+                                                            }{" "}
+                                                            &ndash;{" "}
+                                                            {student_year_level}{" "}
+                                                            year
+                                                        </div>
+                                                        <div>
+                                                            BlockHash:{" "}
+                                                            {block_hash}
+                                                        </div>
+                                                        <div>
+                                                            <span
+                                                                className="is-size-7 has-background-info has-text-white mr-4"
+                                                                style={{
+                                                                    padding:
+                                                                        "2px 5px",
+                                                                    borderRadius: 3
+                                                                }}
+                                                            >
+                                                                On blockchain
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        }
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                         <div className="p-4 has-text-right">
                             {filteredDigitalizedFiles.length} total items
                         </div>

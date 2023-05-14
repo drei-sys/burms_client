@@ -10,7 +10,10 @@ import CryptoJS from "crypto-js";
 
 import http from "services/httpService";
 
+import { generateString } from "helpers/helpers";
+
 const ViewTOR = ({ torRequestId, onDoneWrite }) => {
+    const [torRequest, setTORRequest] = useState();
     const [student, setStudent] = useState({});
     const [syEnrollmentItems, setSYEnrollmentItems] = useState([]);
 
@@ -123,6 +126,7 @@ const ViewTOR = ({ torRequestId, onDoneWrite }) => {
                         }
                     });
 
+                    setTORRequest(torRequest);
                     setStudent(student);
                     setSYEnrollmentItems(syEnrollmentItems);
                 } else {
@@ -162,30 +166,79 @@ const ViewTOR = ({ torRequestId, onDoneWrite }) => {
                     signer
                 );
 
+                //reduce string to be encrypted
+                const newSYEnrollmentItems = syEnrollmentItems.map(
+                    syEnrollmentItem => {
+                        const { syId, syYear, sySemester, enrollmentItems } =
+                            syEnrollmentItem;
+
+                        const newEnrollmentItems = enrollmentItems.map(
+                            enrollmentItem => {
+                                const {
+                                    subject_id,
+                                    subject_code,
+                                    subject_name,
+                                    grade
+                                } = enrollmentItem;
+
+                                const {
+                                    prelim_grade,
+                                    midterm_grade,
+                                    final_grade,
+                                    grade: g,
+                                    rating,
+                                    remarks
+                                } = grade;
+
+                                return {
+                                    subject_id,
+                                    subject_code,
+                                    subject_name,
+                                    grade: {
+                                        prelim_grade,
+                                        midterm_grade,
+                                        final_grade,
+                                        grade: g,
+                                        rating,
+                                        remarks
+                                    }
+                                };
+                            }
+                        );
+
+                        return {
+                            syId,
+                            syYear,
+                            sySemester,
+                            enrollmentItems: newEnrollmentItems
+                        };
+                    }
+                );
+
                 const syEnrollmentItemsString =
-                    JSON.stringify(syEnrollmentItems);
+                    JSON.stringify(newSYEnrollmentItems);
                 const encrypted = CryptoJS.AES.encrypt(
                     syEnrollmentItemsString,
                     import.meta.env.VITE_SECRET_KEY_1
                 );
                 const encryptedString = encrypted.toString();
 
-                //const userId = user.id;
-                //const dataId = generateString(10, "00");
+                const dataId = generateString(10, "00");
                 let tx = await contract.setGradeToStudent(
-                    torRequestId,
+                    dataId,
                     encryptedString
                 );
 
                 const receipt = await tx.wait();
                 if (receipt.status === 1) {
-                    // const blockHashItems = torRequest.block_hash
-                    //     ? JSON.parse(torRequest.block_hash)
-                    //     : [];
-                    // blockHashItems.push({ id: torRequestId, blockHash: tx.hash });
+                    const blockHashItems = torRequest.block_hash
+                        ? JSON.parse(torRequest.block_hash)
+                        : [];
+
+                    blockHashItems.push({ id: dataId, blockHash: tx.hash });
 
                     await http.put(`/api/torRequestBlockHash/${torRequestId}`, {
-                        block_hash: tx.hash
+                        block_hash: JSON.stringify(blockHashItems)
                     });
 
                     onDoneWrite();
@@ -251,92 +304,104 @@ const ViewTOR = ({ torRequestId, onDoneWrite }) => {
                                             <label className="label">
                                                 {syYear}: {sySemester} Semester
                                             </label>
-                                            <table className="table is-fullwidth is-hoverable">
-                                                <thead>
-                                                    <tr>
-                                                        <th
-                                                            style={{
-                                                                width: 500
-                                                            }}
-                                                        >
-                                                            Subject name
-                                                        </th>
-                                                        <th>Grade</th>
-                                                        <th>Rating</th>
-                                                        <th>Remarks</th>
-                                                        <th
-                                                            style={{
-                                                                width: 120
-                                                            }}
-                                                        ></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {enrollmentItems.map(
-                                                        enrollmentItem => {
-                                                            const {
-                                                                subject_id,
-                                                                subject_code,
-                                                                subject_name,
-                                                                grade
-                                                            } = enrollmentItem;
+                                            <div className="table-container">
+                                                <table
+                                                    className="table is-fullwidth is-hoverable"
+                                                    style={{
+                                                        whiteSpace: "nowrap"
+                                                    }}
+                                                >
+                                                    <thead>
+                                                        <tr>
+                                                            <th
+                                                                style={{
+                                                                    width: 500
+                                                                }}
+                                                            >
+                                                                Subject name
+                                                            </th>
+                                                            <th>Grade</th>
+                                                            <th>Rating</th>
+                                                            <th>Remarks</th>
+                                                            <th
+                                                                style={{
+                                                                    width: 120
+                                                                }}
+                                                            ></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {enrollmentItems.map(
+                                                            enrollmentItem => {
+                                                                const {
+                                                                    subject_id,
+                                                                    subject_code,
+                                                                    subject_name,
+                                                                    grade
+                                                                } =
+                                                                    enrollmentItem;
 
-                                                            let {
-                                                                prelim_grade,
-                                                                midterm_grade,
-                                                                final_grade,
-                                                                grade: g,
-                                                                rating,
-                                                                remarks
-                                                            } = grade || {};
+                                                                let {
+                                                                    prelim_grade,
+                                                                    midterm_grade,
+                                                                    final_grade,
+                                                                    grade: g,
+                                                                    rating,
+                                                                    remarks
+                                                                } = grade || {};
 
-                                                            prelim_grade =
-                                                                prelim_grade ||
-                                                                0;
-                                                            midterm_grade =
-                                                                midterm_grade ||
-                                                                0;
-                                                            final_grade =
-                                                                final_grade ||
-                                                                0;
-                                                            rating =
-                                                                rating || 0;
-                                                            remarks =
-                                                                remarks || "-";
-                                                            g = g || 0;
+                                                                prelim_grade =
+                                                                    prelim_grade ||
+                                                                    0;
+                                                                midterm_grade =
+                                                                    midterm_grade ||
+                                                                    0;
+                                                                final_grade =
+                                                                    final_grade ||
+                                                                    0;
+                                                                rating =
+                                                                    rating || 0;
+                                                                remarks =
+                                                                    remarks ||
+                                                                    "-";
+                                                                g = g || 0;
 
-                                                            return (
-                                                                <tr
-                                                                    key={
-                                                                        subject_id
-                                                                    }
-                                                                >
-                                                                    <td>
-                                                                        <div>
-                                                                            <span className="has-text-weight-medium">
-                                                                                {
-                                                                                    subject_code
-                                                                                }
-
-                                                                                :{" "}
-                                                                                {
-                                                                                    subject_name
-                                                                                }
-                                                                            </span>
-                                                                        </div>
-                                                                    </td>
-
-                                                                    <td>{g}</td>
-                                                                    <td>
-                                                                        {rating}
-                                                                    </td>
-                                                                    <td>
-                                                                        {
-                                                                            remarks
+                                                                return (
+                                                                    <tr
+                                                                        key={
+                                                                            subject_id
                                                                         }
-                                                                    </td>
-                                                                    <td>
-                                                                        {/* <button
+                                                                    >
+                                                                        <td>
+                                                                            <div>
+                                                                                <span className="has-text-weight-medium">
+                                                                                    {
+                                                                                        subject_code
+                                                                                    }
+
+                                                                                    :{" "}
+                                                                                    {
+                                                                                        subject_name
+                                                                                    }
+                                                                                </span>
+                                                                            </div>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            {g}
+                                                                        </td>
+                                                                        <td>
+                                                                            {
+                                                                                rating
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            {
+                                                                                remarks
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            {/* <button
                                                                         className="button"
                                                                         title="View Grade"
                                                                         onClick={() =>
@@ -349,13 +414,14 @@ const ViewTOR = ({ torRequestId, onDoneWrite }) => {
                                                                             <i className="fa-solid fa-eye"></i>
                                                                         </span>
                                                                     </button> */}
-                                                                    </td>
-                                                                </tr>
-                                                            );
-                                                        }
-                                                    )}
-                                                </tbody>
-                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                );
+                                                            }
+                                                        )}
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                             <hr />
                                         </div>
                                     );

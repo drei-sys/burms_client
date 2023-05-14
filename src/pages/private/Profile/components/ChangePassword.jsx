@@ -151,6 +151,20 @@ const ChangePassword = () => {
                 )}
             </div>
 
+            <div className="mb-2">
+                <div>- Password must be minimum 8 characters</div>
+                <div>
+                    - Password must contain at least one lower case letter
+                </div>
+                <div>
+                    - Password must contain at least one upper case letter
+                </div>
+                <div>- Password must contain at least one digit</div>
+                <div>
+                    - Password must contain at least one special character
+                </div>
+            </div>
+
             <button
                 className={`button is-success is-fullwidth ${
                     isLoading ? "is-loading" : ""

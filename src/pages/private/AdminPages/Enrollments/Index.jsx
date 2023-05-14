@@ -62,47 +62,58 @@ const Enrollments = () => {
 
         return (
             <>
-                <table className="table is-fullwidth is-hoverable">
-                    <thead>
-                        <tr>
-                            <th>School Year</th>
-                            <th>Semester</th>
-                            <th>Student Name</th>
-                            <th style={{ width: 120 }}></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {enrollments.map(({ id, year, semester, ...rest }) => {
-                            return (
-                                <tr key={id}>
-                                    <td>
-                                        <div>
-                                            <span className="has-text-weight-medium">
-                                                {year}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td>{semester}</td>
-                                    <td>
-                                        <UserName user={rest} />
-                                    </td>
-                                    <td>
-                                        <Link to={`/viewEnrollment/${id}`}>
-                                            <button
-                                                className="button mr-1"
-                                                title="View enrollment"
-                                            >
-                                                <span className="icon">
-                                                    <i className="fa-solid fa-eye"></i>
-                                                </span>
-                                            </button>
-                                        </Link>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                <div className="table-container">
+                    <table
+                        className="table is-fullwidth is-hoverable"
+                        style={{
+                            whiteSpace: "nowrap"
+                        }}
+                    >
+                        <thead>
+                            <tr>
+                                <th>School Year</th>
+                                <th>Semester</th>
+                                <th>Student Name</th>
+                                <th style={{ width: 120 }}></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {enrollments.map(
+                                ({ id, year, semester, ...rest }) => {
+                                    return (
+                                        <tr key={id}>
+                                            <td>
+                                                <div>
+                                                    <span className="has-text-weight-medium">
+                                                        {year}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td>{semester}</td>
+                                            <td>
+                                                <UserName user={rest} />
+                                            </td>
+                                            <td>
+                                                <Link
+                                                    to={`/viewEnrollment/${id}`}
+                                                >
+                                                    <button
+                                                        className="button mr-1"
+                                                        title="View enrollment"
+                                                    >
+                                                        <span className="icon">
+                                                            <i className="fa-solid fa-eye"></i>
+                                                        </span>
+                                                    </button>
+                                                </Link>
+                                            </td>
+                                        </tr>
+                                    );
+                                }
+                            )}
+                        </tbody>
+                    </table>
+                </div>
                 <div className="p-4 has-text-right">
                     {enrollments.length} total items
                 </div>

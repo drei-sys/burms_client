@@ -145,7 +145,6 @@ const StudentForm = ({ formData, formError, courses, mode, onInputChange }) => {
                         </div>
                     </div>
                 </div>
-
                 <div className="field is-horizontal">
                     <div className="field-label is-normal is-flex-grow-3">
                         <label className="label">
@@ -232,28 +231,204 @@ const StudentForm = ({ formData, formError, courses, mode, onInputChange }) => {
                 <div className="field is-horizontal">
                     <div className="field-label is-normal is-flex-grow-3">
                         <label className="label">
-                            <span className="has-text-danger">*</span> Address
+                            <span className="has-text-danger">*</span>{" "}
+                            House/Block/Lot
                         </label>
                     </div>
                     <div className="field-body">
                         <div className="field">
                             <div className="control">
                                 <input
-                                    name="address"
+                                    name="house_number"
                                     className="input"
                                     type="text"
-                                    placeholder="Address for Cabuyeños"
-                                    value={formData.address}
+                                    placeholder="House/Block/Lot no."
+                                    value={formData.house_number}
                                     onChange={onInputChange}
                                 />
-                                {formError.address && (
-                                    <div>
-                                        <span className="has-text-danger">
-                                            {formError.address}
-                                        </span>
-                                    </div>
-                                )}
                             </div>
+                            {formError.house_number && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.house_number}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="field is-horizontal">
+                    <div className="field-label is-normal is-flex-grow-3">
+                        <label className="label">
+                            <span className="has-text-danger">*</span> Street
+                        </label>
+                    </div>
+                    <div className="field-body">
+                        <div className="field">
+                            <div className="control">
+                                <input
+                                    name="street"
+                                    className="input"
+                                    type="text"
+                                    placeholder="Enter street"
+                                    value={formData.street}
+                                    onChange={onInputChange}
+                                />
+                            </div>
+                            {formError.street && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.street}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="field is-horizontal">
+                    <div className="field-label is-normal is-flex-grow-3">
+                        <label className="label">
+                            <span className="has-text-danger">*</span>{" "}
+                            Subdivision/Village
+                        </label>
+                    </div>
+                    <div className="field-body">
+                        <div className="field">
+                            <div className="control">
+                                <input
+                                    name="subdivision"
+                                    className="input"
+                                    type="text"
+                                    placeholder="Subdivision/Village"
+                                    value={formData.subdivision}
+                                    onChange={onInputChange}
+                                />
+                            </div>
+                            {formError.subdivision && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.subdivision}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="field is-horizontal">
+                    <div className="field-label is-normal is-flex-grow-3">
+                        <label className="label">
+                            <span className="has-text-danger">*</span> Barangay
+                        </label>
+                    </div>
+                    <div className="field-body">
+                        <div className="field">
+                            <div className="control">
+                                <input
+                                    name="barangay"
+                                    className="input"
+                                    type="text"
+                                    placeholder="Enter barangay"
+                                    value={formData.barangay}
+                                    onChange={onInputChange}
+                                />
+                            </div>
+                            {formError.barangay && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.barangay}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="field is-horizontal">
+                    <div className="field-label is-normal is-flex-grow-3">
+                        <label className="label">
+                            <span className="has-text-danger">*</span> City
+                        </label>
+                    </div>
+                    <div className="field-body">
+                        <div className="field">
+                            <div className="control">
+                                <input
+                                    name="city"
+                                    className="input"
+                                    type="text"
+                                    placeholder="Enter city"
+                                    value={formData.city}
+                                    onChange={onInputChange}
+                                />
+                            </div>
+                            {formError.city && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.city}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="field is-horizontal">
+                    <div className="field-label is-normal is-flex-grow-3">
+                        <label className="label">
+                            <span className="has-text-danger">*</span> Province
+                        </label>
+                    </div>
+                    <div className="field-body">
+                        <div className="field">
+                            <div className="control">
+                                <input
+                                    name="province"
+                                    className="input"
+                                    type="text"
+                                    placeholder="Enter province"
+                                    value={formData.province}
+                                    onChange={onInputChange}
+                                />
+                            </div>
+                            {formError.province && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.province}
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="field is-horizontal">
+                    <div className="field-label is-normal is-flex-grow-3">
+                        <label className="label">
+                            <span className="has-text-danger">*</span> Zip code
+                        </label>
+                    </div>
+                    <div className="field-body">
+                        <div className="field">
+                            <div className="control">
+                                <input
+                                    name="zipcode"
+                                    className="input"
+                                    type="text"
+                                    placeholder="Enter zip code"
+                                    value={formData.zipcode}
+                                    onChange={onInputChange}
+                                />
+                            </div>
+                            {formError.zipcode && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.zipcode}
+                                    </span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -323,7 +498,7 @@ const StudentForm = ({ formData, formError, courses, mode, onInputChange }) => {
                 <div className="field is-horizontal">
                     <div className="field-label is-normal is-flex-grow-3">
                         <label className="label">
-                            <span className="has-text-danger">*</span> A
+                            <span className="has-text-danger">*</span> Are you
                             Cabuye&ntilde;o?
                         </label>
                     </div>
@@ -1186,6 +1361,25 @@ const StudentForm = ({ formData, formError, courses, mode, onInputChange }) => {
                                         </div>
                                     )}
                                 </div>
+                            </div>
+                        </div>
+
+                        <div className="ml-3">
+                            <div>- Password must be minimum 8 characters</div>
+                            <div>
+                                - Password must contain at least one lower case
+                                letter
+                            </div>
+                            <div>
+                                - Password must contain at least one upper case
+                                letter
+                            </div>
+                            <div>
+                                - Password must contain at least one digit
+                            </div>
+                            <div>
+                                - Password must contain at least one special
+                                character
                             </div>
                         </div>
                     </>

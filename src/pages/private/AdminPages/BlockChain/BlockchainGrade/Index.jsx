@@ -15,6 +15,7 @@ const BlockchainGrades = () => {
     const [filteredTORRequests, setFilteredTORRequests] = useState([]);
 
     const [selectedTORRequestId, setSelectedTORRequestId] = useState(0);
+    const [selectedHashId, setSelectedHashId] = useState("");
 
     const [searchText, setSearchText] = useState("");
 
@@ -55,8 +56,9 @@ const BlockchainGrades = () => {
         setIsOpenViewTOR(true);
     };
 
-    const showViewTORBlockchain = torRequestId => {
+    const showViewTORBlockchain = (torRequestId, hashId) => {
         setSelectedTORRequestId(torRequestId);
+        setSelectedHashId(hashId);
         setIsOpenViewTORBlockchain(true);
     };
 
@@ -101,91 +103,116 @@ const BlockchainGrades = () => {
                     </button>
                 </div>
                 <hr />
-                <table className="table is-fullwidth is-hoverable">
-                    <thead>
-                        <tr>
-                            <th>Student name</th>
-                            <th style={{ width: 60 }}></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredTORRequests.map(
-                            ({
-                                id,
-                                student_lastname: lastname,
-                                student_firstname: firstname,
-                                student_middlename: middlename,
-                                student_extname: extname,
-                                block_hash
-                            }) => {
-                                return (
-                                    <tr key={id}>
-                                        <td>
-                                            <div>
-                                                <span className="has-text-weight-medium">
-                                                    <UserName
-                                                        user={{
-                                                            lastname,
-                                                            firstname,
-                                                            middlename,
-                                                            extname
-                                                        }}
-                                                    />
-                                                </span>
-                                            </div>
-                                            <div>
+                <div className="table-container">
+                    <table
+                        className="table is-fullwidth is-hoverable"
+                        style={{
+                            whiteSpace: "nowrap"
+                        }}
+                    >
+                        <thead>
+                            <tr>
+                                <th>Student name</th>
+                                <th style={{ width: 60 }}></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredTORRequests.map(
+                                ({
+                                    id: torRequestId,
+                                    student_lastname: lastname,
+                                    student_firstname: firstname,
+                                    student_middlename: middlename,
+                                    student_extname: extname,
+                                    block_hash
+                                }) => {
+                                    const blockHashItems = block_hash
+                                        ? JSON.parse(block_hash)
+                                        : [];
+
+                                    return (
+                                        <tr key={torRequestId}>
+                                            <td>
+                                                <div>
+                                                    <span className="has-text-weight-medium">
+                                                        <UserName
+                                                            user={{
+                                                                lastname,
+                                                                firstname,
+                                                                middlename,
+                                                                extname
+                                                            }}
+                                                        />
+                                                    </span>
+                                                </div>
+                                                {blockHashItems.map(
+                                                    ({ id, blockHash }) => {
+                                                        return (
+                                                            <div key={id}>
+                                                                <button
+                                                                    className="button  is-ghost p-0"
+                                                                    onClick={() =>
+                                                                        showViewTORBlockchain(
+                                                                            torRequestId,
+                                                                            id
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    BlockHash:{" "}
+                                                                    {blockHash}
+                                                                </button>
+                                                            </div>
+                                                        );
+                                                    }
+                                                )}
+                                                <div>
+                                                    {block_hash ? (
+                                                        <span
+                                                            className="is-size-7 has-background-info has-text-white mr-4"
+                                                            style={{
+                                                                padding:
+                                                                    "2px 5px",
+                                                                borderRadius: 3
+                                                            }}
+                                                        >
+                                                            On blockchain
+                                                        </span>
+                                                    ) : (
+                                                        <span
+                                                            className="is-size-7 has-background-dark has-text-white mr-4"
+                                                            style={{
+                                                                padding:
+                                                                    "2px 5px",
+                                                                borderRadius: 3
+                                                            }}
+                                                        >
+                                                            Pending
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </td>
+                                            <td>
                                                 <button
-                                                    className="button is-ghost p-0"
+                                                    className="button mr-1"
+                                                    title="View grades"
                                                     onClick={() =>
-                                                        showViewTORBlockchain(
-                                                            id
+                                                        showViewTOR(
+                                                            torRequestId
                                                         )
                                                     }
                                                 >
-                                                    BlockHash: {block_hash}
+                                                    <span className="icon">
+                                                        <i className="fa-solid fa-eye"></i>
+                                                    </span>
                                                 </button>
-                                            </div>
-                                            <div>
-                                                {block_hash ? (
-                                                    <span
-                                                        className="is-size-7 has-background-info has-text-white mr-4"
-                                                        style={{
-                                                            padding: "2px 5px",
-                                                            borderRadius: 3
-                                                        }}
-                                                    >
-                                                        On blockchain
-                                                    </span>
-                                                ) : (
-                                                    <span
-                                                        className="is-size-7 has-background-dark has-text-white mr-4"
-                                                        style={{
-                                                            padding: "2px 5px",
-                                                            borderRadius: 3
-                                                        }}
-                                                    >
-                                                        Pending
-                                                    </span>
-                                                )}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <button
-                                                className="button mr-1"
-                                                title="View grades"
-                                                onClick={() => showViewTOR(id)}
-                                            >
-                                                <span className="icon">
-                                                    <i className="fa-solid fa-eye"></i>
-                                                </span>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                );
-                            }
-                        )}
-                    </tbody>
-                </table>
+                                            </td>
+                                        </tr>
+                                    );
+                                }
+                            )}
+                        </tbody>
+                    </table>
+                </div>
                 <div className="p-4 has-text-right">
                     {filteredTORRequests.length} total items
                 </div>
@@ -218,6 +245,7 @@ const BlockchainGrades = () => {
                     content={
                         <ViewTORBlockchain
                             torRequestId={selectedTORRequestId}
+                            hashId={selectedHashId}
                         />
                     }
                 />

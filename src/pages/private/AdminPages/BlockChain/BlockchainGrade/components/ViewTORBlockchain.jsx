@@ -10,7 +10,7 @@ import CryptoJS from "crypto-js";
 
 import http from "services/httpService";
 
-const ViewTORBlockchain = ({ torRequestId }) => {
+const ViewTORBlockchain = ({ torRequestId, hashId }) => {
     const [student, setStudent] = useState({});
     const [syEnrollmentItems, setSYEnrollmentItems] = useState([]);
 
@@ -42,7 +42,7 @@ const ViewTORBlockchain = ({ torRequestId }) => {
                     );
 
                     const fetchedData = await contract.getGradeToStudent(
-                        torRequestId
+                        hashId
                     );
 
                     if (fetchedData) {
@@ -126,92 +126,104 @@ const ViewTORBlockchain = ({ torRequestId }) => {
                                             <label className="label">
                                                 {syYear}: {sySemester} Semester
                                             </label>
-                                            <table className="table is-fullwidth is-hoverable">
-                                                <thead>
-                                                    <tr>
-                                                        <th
-                                                            style={{
-                                                                width: 500
-                                                            }}
-                                                        >
-                                                            Subject name
-                                                        </th>
-                                                        <th>Grade</th>
-                                                        <th>Rating</th>
-                                                        <th>Remarks</th>
-                                                        <th
-                                                            style={{
-                                                                width: 120
-                                                            }}
-                                                        ></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {enrollmentItems.map(
-                                                        enrollmentItem => {
-                                                            const {
-                                                                subject_id,
-                                                                subject_code,
-                                                                subject_name,
-                                                                grade
-                                                            } = enrollmentItem;
+                                            <div className="table-container">
+                                                <table
+                                                    className="table is-fullwidth is-hoverable"
+                                                    style={{
+                                                        whiteSpace: "nowrap"
+                                                    }}
+                                                >
+                                                    <thead>
+                                                        <tr>
+                                                            <th
+                                                                style={{
+                                                                    width: 500
+                                                                }}
+                                                            >
+                                                                Subject name
+                                                            </th>
+                                                            <th>Grade</th>
+                                                            <th>Rating</th>
+                                                            <th>Remarks</th>
+                                                            <th
+                                                                style={{
+                                                                    width: 120
+                                                                }}
+                                                            ></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {enrollmentItems.map(
+                                                            enrollmentItem => {
+                                                                const {
+                                                                    subject_id,
+                                                                    subject_code,
+                                                                    subject_name,
+                                                                    grade
+                                                                } =
+                                                                    enrollmentItem;
 
-                                                            let {
-                                                                prelim_grade,
-                                                                midterm_grade,
-                                                                final_grade,
-                                                                grade: g,
-                                                                rating,
-                                                                remarks
-                                                            } = grade || {};
+                                                                let {
+                                                                    prelim_grade,
+                                                                    midterm_grade,
+                                                                    final_grade,
+                                                                    grade: g,
+                                                                    rating,
+                                                                    remarks
+                                                                } = grade || {};
 
-                                                            prelim_grade =
-                                                                prelim_grade ||
-                                                                0;
-                                                            midterm_grade =
-                                                                midterm_grade ||
-                                                                0;
-                                                            final_grade =
-                                                                final_grade ||
-                                                                0;
-                                                            rating =
-                                                                rating || 0;
-                                                            remarks =
-                                                                remarks || "-";
-                                                            g = g || 0;
+                                                                prelim_grade =
+                                                                    prelim_grade ||
+                                                                    0;
+                                                                midterm_grade =
+                                                                    midterm_grade ||
+                                                                    0;
+                                                                final_grade =
+                                                                    final_grade ||
+                                                                    0;
+                                                                rating =
+                                                                    rating || 0;
+                                                                remarks =
+                                                                    remarks ||
+                                                                    "-";
+                                                                g = g || 0;
 
-                                                            return (
-                                                                <tr
-                                                                    key={
-                                                                        subject_id
-                                                                    }
-                                                                >
-                                                                    <td>
-                                                                        <div>
-                                                                            <span className="has-text-weight-medium">
-                                                                                {
-                                                                                    subject_code
-                                                                                }
-
-                                                                                :{" "}
-                                                                                {
-                                                                                    subject_name
-                                                                                }
-                                                                            </span>
-                                                                        </div>
-                                                                    </td>
-
-                                                                    <td>{g}</td>
-                                                                    <td>
-                                                                        {rating}
-                                                                    </td>
-                                                                    <td>
-                                                                        {
-                                                                            remarks
+                                                                return (
+                                                                    <tr
+                                                                        key={
+                                                                            subject_id
                                                                         }
-                                                                    </td>
-                                                                    <td>
-                                                                        {/* <button
+                                                                    >
+                                                                        <td>
+                                                                            <div>
+                                                                                <span className="has-text-weight-medium">
+                                                                                    {
+                                                                                        subject_code
+                                                                                    }
+
+                                                                                    :{" "}
+                                                                                    {
+                                                                                        subject_name
+                                                                                    }
+                                                                                </span>
+                                                                            </div>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            {g}
+                                                                        </td>
+                                                                        <td>
+                                                                            {
+                                                                                rating
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            {
+                                                                                remarks
+                                                                            }
+                                                                        </td>
+                                                                        <td>
+                                                                            {/* <button
                                                                         className="button"
                                                                         title="View Grade"
                                                                         onClick={() =>
@@ -224,13 +236,14 @@ const ViewTORBlockchain = ({ torRequestId }) => {
                                                                             <i className="fa-solid fa-eye"></i>
                                                                         </span>
                                                                     </button> */}
-                                                                    </td>
-                                                                </tr>
-                                                            );
-                                                        }
-                                                    )}
-                                                </tbody>
-                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                );
+                                                            }
+                                                        )}
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                             <hr />
                                         </div>
                                     );

@@ -109,74 +109,79 @@ const TORRequests = () => {
                         </div>
                     ) : (
                         <>
-                            <table className="table is-fullwidth is-hoverable">
-                                <thead>
-                                    <tr>
-                                        <th>Reason / Purpose</th>
-                                        <th>Date requested</th>
-                                        <th>Remarks</th>
-                                        <th>Status</th>
-                                        <th style={{ width: 120 }}></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {TORRequests.map(
-                                        ({
-                                            id,
-                                            reason,
-                                            remarks,
-                                            status,
-                                            created_at
-                                        }) => {
-                                            let d = new Date(created_at);
-                                            const datestring = `${
-                                                d.getMonth() + 1
-                                            }-${d.getDate()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
+                            <div className="table-container">
+                                <table
+                                    className="table is-fullwidth is-hoverable"
+                                    style={{ whiteSpace: "nowrap" }}
+                                >
+                                    <thead>
+                                        <tr>
+                                            <th>Reason / Purpose</th>
+                                            <th>Date requested</th>
+                                            <th>Remarks</th>
+                                            <th>Status</th>
+                                            <th style={{ width: 120 }}></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {TORRequests.map(
+                                            ({
+                                                id,
+                                                reason,
+                                                remarks,
+                                                status,
+                                                created_at
+                                            }) => {
+                                                let d = new Date(created_at);
+                                                const datestring = `${
+                                                    d.getMonth() + 1
+                                                }-${d.getDate()}-${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
 
-                                            return (
-                                                <tr key={id}>
-                                                    <td>{reason}</td>
-                                                    <td>{datestring}</td>
-                                                    <td>{remarks}</td>
-                                                    <td>{status}</td>
-                                                    <td>
-                                                        {status ===
-                                                            "Pending" && (
-                                                            <>
-                                                                <Link
-                                                                    to={`/updateTORRequest/${id}`}
-                                                                >
+                                                return (
+                                                    <tr key={id}>
+                                                        <td>{reason}</td>
+                                                        <td>{datestring}</td>
+                                                        <td>{remarks}</td>
+                                                        <td>{status}</td>
+                                                        <td>
+                                                            {status ===
+                                                                "Pending" && (
+                                                                <>
+                                                                    <Link
+                                                                        to={`/updateTORRequest/${id}`}
+                                                                    >
+                                                                        <button
+                                                                            className="button mr-1"
+                                                                            title="Update"
+                                                                        >
+                                                                            <span className="icon">
+                                                                                <i className="fa-solid fa-pen-to-square"></i>
+                                                                            </span>
+                                                                        </button>
+                                                                    </Link>
                                                                     <button
-                                                                        className="button mr-1"
-                                                                        title="Update"
+                                                                        className="button is-danger"
+                                                                        title="Delete"
+                                                                        onClick={() =>
+                                                                            showConfirmDelete(
+                                                                                id
+                                                                            )
+                                                                        }
                                                                     >
                                                                         <span className="icon">
-                                                                            <i className="fa-solid fa-pen-to-square"></i>
+                                                                            <i className="fa-solid fa-trash"></i>
                                                                         </span>
                                                                     </button>
-                                                                </Link>
-                                                                <button
-                                                                    className="button is-danger"
-                                                                    title="Delete"
-                                                                    onClick={() =>
-                                                                        showConfirmDelete(
-                                                                            id
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    <span className="icon">
-                                                                        <i className="fa-solid fa-trash"></i>
-                                                                    </span>
-                                                                </button>
-                                                            </>
-                                                        )}
-                                                    </td>
-                                                </tr>
-                                            );
-                                        }
-                                    )}
-                                </tbody>
-                            </table>
+                                                                </>
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            }
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
                             <div className="p-4 has-text-right">
                                 {TORRequests.length} total items
                             </div>

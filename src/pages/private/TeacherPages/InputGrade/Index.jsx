@@ -333,103 +333,118 @@ const InputGrade = () => {
                                         No students found.
                                     </div>
                                 ) : (
-                                    <table className="table is-fullwidth is-hoverable">
-                                        <thead>
-                                            <tr>
-                                                <th>Student name</th>
-                                                <th>Prelim Grade</th>
-                                                <th>Midterm Grade</th>
-                                                <th>Final Grade</th>
-                                                <th>Grade</th>
-                                                <th style={{ width: 120 }}></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {filteredEnrollmentItems.map(
-                                                enrollmentItem => {
-                                                    const {
-                                                        student_id,
-                                                        student_lastname,
-                                                        student_firstname,
-                                                        student_middlename,
-                                                        student_extname,
-                                                        student_course_name,
-                                                        grade
-                                                    } = enrollmentItem;
+                                    <div className="table-container">
+                                        <table
+                                            className="table is-fullwidth is-hoverable"
+                                            style={{ whiteSpace: "nowrap" }}
+                                        >
+                                            <thead>
+                                                <tr>
+                                                    <th>Student name</th>
+                                                    <th>Prelim Grade</th>
+                                                    <th>Midterm Grade</th>
+                                                    <th>Final Grade</th>
+                                                    <th>Grade</th>
+                                                    <th
+                                                        style={{ width: 120 }}
+                                                    ></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {filteredEnrollmentItems.map(
+                                                    enrollmentItem => {
+                                                        const {
+                                                            student_id,
+                                                            student_lastname,
+                                                            student_firstname,
+                                                            student_middlename,
+                                                            student_extname,
+                                                            student_course_name,
+                                                            grade
+                                                        } = enrollmentItem;
 
-                                                    let {
-                                                        prelim_grade,
-                                                        midterm_grade,
-                                                        final_grade,
-                                                        grade: g
-                                                    } = grade || {};
+                                                        let {
+                                                            prelim_grade,
+                                                            midterm_grade,
+                                                            final_grade,
+                                                            grade: g
+                                                        } = grade || {};
 
-                                                    prelim_grade =
-                                                        prelim_grade || 0;
-                                                    midterm_grade =
-                                                        midterm_grade || 0;
-                                                    final_grade =
-                                                        final_grade || 0;
-                                                    g = g || 0;
+                                                        prelim_grade =
+                                                            prelim_grade || 0;
+                                                        midterm_grade =
+                                                            midterm_grade || 0;
+                                                        final_grade =
+                                                            final_grade || 0;
+                                                        g = g || 0;
 
-                                                    return (
-                                                        <tr key={student_id}>
-                                                            <td>
-                                                                <div>
-                                                                    <span className="has-text-weight-medium">
-                                                                        <UserName
-                                                                            user={{
-                                                                                lastname:
-                                                                                    student_lastname,
-                                                                                firstname:
-                                                                                    student_firstname,
-                                                                                middlename:
-                                                                                    student_middlename,
-                                                                                extname:
-                                                                                    student_extname
-                                                                            }}
-                                                                        />
-                                                                    </span>
-                                                                </div>
-                                                                <div>
-                                                                    <span className="is-size-6">
-                                                                        {
-                                                                            student_course_name
-                                                                        }
-                                                                    </span>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                {prelim_grade}
-                                                            </td>
-                                                            <td>
-                                                                {midterm_grade}
-                                                            </td>
-                                                            <td>
-                                                                {final_grade}
-                                                            </td>
-                                                            <td>{g}</td>
-                                                            <td>
-                                                                <button
-                                                                    className="button is-success"
-                                                                    title="Input Grade"
-                                                                    onClick={() =>
-                                                                        showGradeDetails(
-                                                                            enrollmentItem
-                                                                        )
+                                                        return (
+                                                            <tr
+                                                                key={student_id}
+                                                            >
+                                                                <td>
+                                                                    <div>
+                                                                        <span className="has-text-weight-medium">
+                                                                            <UserName
+                                                                                user={{
+                                                                                    lastname:
+                                                                                        student_lastname,
+                                                                                    firstname:
+                                                                                        student_firstname,
+                                                                                    middlename:
+                                                                                        student_middlename,
+                                                                                    extname:
+                                                                                        student_extname
+                                                                                }}
+                                                                            />
+                                                                        </span>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span className="is-size-6">
+                                                                            {
+                                                                                student_course_name
+                                                                            }
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    {
+                                                                        prelim_grade
                                                                     }
-                                                                >
-                                                                    <span className="icon">
-                                                                        <i className="fa-solid fa-calculator"></i>
-                                                                    </span>
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                }
-                                            )}
-                                        </tbody>
-                                    </table>
+                                                                </td>
+                                                                <td>
+                                                                    {
+                                                                        midterm_grade
+                                                                    }
+                                                                </td>
+                                                                <td>
+                                                                    {
+                                                                        final_grade
+                                                                    }
+                                                                </td>
+                                                                <td>{g}</td>
+                                                                <td>
+                                                                    <button
+                                                                        className="button is-success"
+                                                                        title="Input Grade"
+                                                                        onClick={() =>
+                                                                            showGradeDetails(
+                                                                                enrollmentItem
+                                                                            )
+                                                                        }
+                                                                    >
+                                                                        <span className="icon">
+                                                                            <i className="fa-solid fa-calculator"></i>
+                                                                        </span>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        );
+                                                    }
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 )}
                             </div>
                         </>

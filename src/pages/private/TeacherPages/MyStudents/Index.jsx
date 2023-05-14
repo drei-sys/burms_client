@@ -277,55 +277,62 @@ const MyStudents = () => {
                                         No students found.
                                     </div>
                                 ) : (
-                                    <table className="table is-fullwidth is-hoverable">
-                                        <thead>
-                                            <tr>
-                                                <th>Student name</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {filteredEnrollmentItems.map(
-                                                ({
-                                                    student_id,
-                                                    student_lastname,
-                                                    student_firstname,
-                                                    student_middlename,
-                                                    student_extname,
-                                                    student_course_name
-                                                }) => {
-                                                    return (
-                                                        <tr key={student_id}>
-                                                            <td>
-                                                                <div>
-                                                                    <span className="has-text-weight-medium">
-                                                                        <UserName
-                                                                            user={{
-                                                                                lastname:
-                                                                                    student_lastname,
-                                                                                firstname:
-                                                                                    student_firstname,
-                                                                                middlename:
-                                                                                    student_middlename,
-                                                                                extname:
-                                                                                    student_extname
-                                                                            }}
-                                                                        />
-                                                                    </span>
-                                                                </div>
-                                                                <div>
-                                                                    <span className="is-size-6">
-                                                                        {
-                                                                            student_course_name
-                                                                        }
-                                                                    </span>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                }
-                                            )}
-                                        </tbody>
-                                    </table>
+                                    <div className="table-container">
+                                        <table
+                                            className="table is-fullwidth is-hoverable"
+                                            style={{ whiteSpace: "nowrap" }}
+                                        >
+                                            <thead>
+                                                <tr>
+                                                    <th>Student name</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {filteredEnrollmentItems.map(
+                                                    ({
+                                                        student_id,
+                                                        student_lastname,
+                                                        student_firstname,
+                                                        student_middlename,
+                                                        student_extname,
+                                                        student_course_name
+                                                    }) => {
+                                                        return (
+                                                            <tr
+                                                                key={student_id}
+                                                            >
+                                                                <td>
+                                                                    <div>
+                                                                        <span className="has-text-weight-medium">
+                                                                            <UserName
+                                                                                user={{
+                                                                                    lastname:
+                                                                                        student_lastname,
+                                                                                    firstname:
+                                                                                        student_firstname,
+                                                                                    middlename:
+                                                                                        student_middlename,
+                                                                                    extname:
+                                                                                        student_extname
+                                                                                }}
+                                                                            />
+                                                                        </span>
+                                                                    </div>
+                                                                    <div>
+                                                                        <span className="is-size-6">
+                                                                            {
+                                                                                student_course_name
+                                                                            }
+                                                                        </span>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        );
+                                                    }
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 )}
                             </div>
                         </>

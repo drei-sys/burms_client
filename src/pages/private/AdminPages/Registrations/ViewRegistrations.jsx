@@ -55,11 +55,12 @@ const ViewRegistration = () => {
     const handleVerify = async () => {
         try {
             setIsVerifyLoading(true);
-            await http.put(`/api/registeredUser/${selectedUser.id}`, {
+            await http.put(`/api/registeredUser/${user.id}`, {
                 status: "Verified"
             });
             navigate("/registrations");
         } catch (error) {
+            console.log(error);
             setError(error);
         } finally {
             setIsVerifyLoading(false);
@@ -69,7 +70,7 @@ const ViewRegistration = () => {
     const handleReject = async () => {
         try {
             setIsRejectLoading(true);
-            await http.put(`/api/registeredUser/${selectedUser.id}`, {
+            await http.put(`/api/registeredUser/${user.id}`, {
                 status: "Rejected"
             });
             navigate("/registrations");

@@ -825,6 +825,13 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 value={formData.elementary_school || ""}
                                 onChange={onInputChange}
                             />
+                            {formError.elementary_school && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.elementary_school}
+                                    </span>
+                                </div>
+                            )}
                         </td>
                         <td>
                             <input
@@ -835,6 +842,13 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 value={formData.elementary_remarks || ""}
                                 onChange={onInputChange}
                             />
+                            {formError.elementary_remarks && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.elementary_remarks}
+                                    </span>
+                                </div>
+                            )}
                         </td>
                     </tr>
                     <tr>
@@ -848,6 +862,13 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 value={formData.secondary_school || ""}
                                 onChange={onInputChange}
                             />
+                            {formError.secondary_school && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.secondary_school}
+                                    </span>
+                                </div>
+                            )}
                         </td>
                         <td>
                             <input
@@ -858,6 +879,13 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 value={formData.secondary_remarks || ""}
                                 onChange={onInputChange}
                             />
+                            {formError.secondary_remarks && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.secondary_remarks}
+                                    </span>
+                                </div>
+                            )}
                         </td>
                     </tr>
                     <tr>
@@ -871,6 +899,13 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 value={formData.vocational_school || ""}
                                 onChange={onInputChange}
                             />
+                            {formError.vocational_school && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.vocational_school}
+                                    </span>
+                                </div>
+                            )}
                         </td>
                         <td>
                             <input
@@ -881,6 +916,13 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 value={formData.vocational_remarks || ""}
                                 onChange={onInputChange}
                             />
+                            {formError.vocational_remarks && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.vocational_remarks}
+                                    </span>
+                                </div>
+                            )}
                         </td>
                     </tr>
                     <tr>
@@ -894,6 +936,13 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 value={formData.college_school || ""}
                                 onChange={onInputChange}
                             />
+                            {formError.college_school && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.college_school}
+                                    </span>
+                                </div>
+                            )}
                         </td>
                         <td>
                             <input
@@ -904,6 +953,13 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 value={formData.college_remarks || ""}
                                 onChange={onInputChange}
                             />
+                            {formError.college_remarks && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.college_remarks}
+                                    </span>
+                                </div>
+                            )}
                         </td>
                     </tr>
                     <tr>
@@ -917,6 +973,13 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 value={formData.graduate_studies_school || ""}
                                 onChange={onInputChange}
                             />
+                            {formError.graduate_studies_school && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.graduate_studies_school}
+                                    </span>
+                                </div>
+                            )}
                         </td>
                         <td>
                             <input
@@ -927,6 +990,13 @@ const NonTeachingForm = ({ formData, formError, mode, onInputChange }) => {
                                 value={formData.graduate_studies_remarks || ""}
                                 onChange={onInputChange}
                             />
+                            {formError.graduate_studies_remarks && (
+                                <div>
+                                    <span className="has-text-danger">
+                                        {formError.graduate_studies_remarks}
+                                    </span>
+                                </div>
+                            )}
                         </td>
                     </tr>
                 </tbody>

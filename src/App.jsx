@@ -139,9 +139,9 @@ function App() {
     ];
 
     const registrarRoutes = [
-        { path: "/students", element: Students },
-        { path: "/student/:id", element: ViewStudentDetails },
-        { path: "/studentGrades/:id", element: ViewStudentGrades },
+        { path: "/registrarStudents", element: Students },
+        { path: "/registrarStudent/:id", element: ViewStudentDetails },
+        { path: "/registrarStudentGrades/:id", element: ViewStudentGrades },
         { path: "/registrarTORRequests", element: RegistrarTORRequests },
         { path: "/tor/:id", element: ViewTOR },
         { path: "/releasedDocs", element: ReleasedDocs },
@@ -163,6 +163,9 @@ function App() {
     ];
 
     const deptChairRoutes = [
+        { path: "/deptChairStudents", element: Students },
+        { path: "/deptChairStudent/:id", element: ViewStudentDetails },
+        { path: "/deptChairStudentGrades/:id", element: ViewStudentGrades },
         { path: "/deptChairSections", element: Sections },
         { path: "/deptChairCreateSection", element: CreateSection },
         { path: "/deptChairUpdateSection/:id", element: UpdateSection },

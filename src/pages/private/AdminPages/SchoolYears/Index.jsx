@@ -128,114 +128,129 @@ const SchoolYears = () => {
                         </div>
                     ) : (
                         <>
-                            <table className="table is-fullwidth is-hoverable">
-                                <thead>
-                                    <tr>
-                                        <th>School year</th>
-                                        <th>Semester</th>
-                                        <th>Status</th>
-                                        <th style={{ width: 283 }}></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {schoolYears.map(
-                                        ({ id, year, semester, status }) => (
-                                            <tr key={id}>
-                                                <td>{year}</td>
-                                                <td>{semester}</td>
-                                                <td>{status}</td>
-                                                <td>
-                                                    <Link
-                                                        to={`/schoolYearSections/${id}`}
-                                                    >
-                                                        <button
-                                                            className="button mr-1"
-                                                            title="View"
-                                                        >
-                                                            <span className="icon">
-                                                                <i className="fa-solid fa-eye"></i>
-                                                            </span>
-                                                        </button>
-                                                    </Link>
-                                                    {status !== "Locked" && (
+                            <div className="table-container">
+                                <table
+                                    className="table is-fullwidth is-hoverable"
+                                    style={{ whiteSpace: "nowrap" }}
+                                >
+                                    <thead>
+                                        <tr>
+                                            <th>School year</th>
+                                            <th>Semester</th>
+                                            <th>Status</th>
+                                            <th style={{ width: 283 }}></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {schoolYears.map(
+                                            ({
+                                                id,
+                                                year,
+                                                semester,
+                                                status
+                                            }) => (
+                                                <tr key={id}>
+                                                    <td>{year}</td>
+                                                    <td>{semester}</td>
+                                                    <td>{status}</td>
+                                                    <td>
                                                         <Link
                                                             to={`/schoolYearSections/${id}`}
                                                         >
                                                             <button
                                                                 className="button mr-1"
-                                                                title="Add Section"
+                                                                title="View"
                                                             >
                                                                 <span className="icon">
-                                                                    <i className="fa-solid fa-plus"></i>
+                                                                    <i className="fa-solid fa-eye"></i>
                                                                 </span>
                                                             </button>
                                                         </Link>
-                                                    )}
-                                                    {status === "Active" && (
-                                                        <button
-                                                            className="button mr-1"
-                                                            title="Publish"
-                                                            onClick={() =>
-                                                                showConfirmPublish(
-                                                                    id
-                                                                )
-                                                            }
-                                                        >
-                                                            <span className="icon">
-                                                                <i className="fa-solid fa-upload"></i>
-                                                            </span>
-                                                        </button>
-                                                    )}
-                                                    {status !== "Locked" && (
-                                                        <button
-                                                            className="button mr-1"
-                                                            title="Lock"
-                                                            onClick={() =>
-                                                                showConfirmLock(
-                                                                    id
-                                                                )
-                                                            }
-                                                        >
-                                                            <span className="icon">
-                                                                <i className="fa-solid fa-lock"></i>
-                                                            </span>
-                                                        </button>
-                                                    )}
-                                                    {status === "Active" && (
-                                                        <Link
-                                                            to={`/updateSchoolYear/${id}`}
-                                                        >
+                                                        {status !==
+                                                            "Locked" && (
+                                                            <Link
+                                                                to={`/schoolYearSections/${id}`}
+                                                            >
+                                                                <button
+                                                                    className="button mr-1"
+                                                                    title="Add Section"
+                                                                >
+                                                                    <span className="icon">
+                                                                        <i className="fa-solid fa-plus"></i>
+                                                                    </span>
+                                                                </button>
+                                                            </Link>
+                                                        )}
+                                                        {status ===
+                                                            "Active" && (
                                                             <button
                                                                 className="button mr-1"
-                                                                title="Edit School Year"
+                                                                title="Publish"
+                                                                onClick={() =>
+                                                                    showConfirmPublish(
+                                                                        id
+                                                                    )
+                                                                }
                                                             >
                                                                 <span className="icon">
-                                                                    <i className="fa-solid fa-pen-to-square"></i>
+                                                                    <i className="fa-solid fa-upload"></i>
                                                                 </span>
                                                             </button>
-                                                        </Link>
-                                                    )}
-                                                    {status === "Active" && (
-                                                        <button
-                                                            className="button is-danger"
-                                                            title="Delete"
-                                                            onClick={() =>
-                                                                showConfirmDelete(
-                                                                    id
-                                                                )
-                                                            }
-                                                        >
-                                                            <span className="icon">
-                                                                <i className="fa-solid fa-trash"></i>
-                                                            </span>
-                                                        </button>
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        )
-                                    )}
-                                </tbody>
-                            </table>
+                                                        )}
+                                                        {status !==
+                                                            "Locked" && (
+                                                            <button
+                                                                className="button mr-1"
+                                                                title="Lock"
+                                                                onClick={() =>
+                                                                    showConfirmLock(
+                                                                        id
+                                                                    )
+                                                                }
+                                                            >
+                                                                <span className="icon">
+                                                                    <i className="fa-solid fa-lock"></i>
+                                                                </span>
+                                                            </button>
+                                                        )}
+                                                        {status ===
+                                                            "Active" && (
+                                                            <Link
+                                                                to={`/updateSchoolYear/${id}`}
+                                                            >
+                                                                <button
+                                                                    className="button mr-1"
+                                                                    title="Edit School Year"
+                                                                >
+                                                                    <span className="icon">
+                                                                        <i className="fa-solid fa-pen-to-square"></i>
+                                                                    </span>
+                                                                </button>
+                                                            </Link>
+                                                        )}
+                                                        {status ===
+                                                            "Active" && (
+                                                            <button
+                                                                className="button is-danger"
+                                                                title="Delete"
+                                                                onClick={() =>
+                                                                    showConfirmDelete(
+                                                                        id
+                                                                    )
+                                                                }
+                                                            >
+                                                                <span className="icon">
+                                                                    <i className="fa-solid fa-trash"></i>
+                                                                </span>
+                                                            </button>
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            )
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
                             <div className="p-4 has-text-right">
                                 {schoolYears.length} total items
                             </div>

@@ -4,10 +4,14 @@ import "assets/css/sidebar.css";
 import Logo from "assets/images/logo.png";
 
 import { useUserStore } from "store/userStore";
+import { useAppStore } from "store/appStore";
 
 const Sidebar = () => {
     const location = useLocation();
     const { type: userType } = useUserStore(state => state);
+    const { isSidebarDrawerVisible, setSidebarDrawerVisible } = useAppStore(
+        state => state
+    );
 
     const adminMenuItems = [
         {
@@ -95,7 +99,7 @@ const Sidebar = () => {
         {
             name: "Students",
             icon: "fa-solid fa-user",
-            path: "/students"
+            path: "/registrarStudents"
         },
         {
             name: "TOR Requests",
@@ -122,6 +126,11 @@ const Sidebar = () => {
         //{ name: "Approve Grades", path: "/approveGrades" }
     ];
     const deptChainMenuItems = [
+        {
+            name: "Students",
+            icon: "fa-solid fa-user",
+            path: "/deptChairStudents"
+        },
         {
             name: "Sections",
             icon: "fa-solid fa-user",
@@ -168,6 +177,7 @@ const Sidebar = () => {
                                     ? "is-active"
                                     : ""
                             }
+                            onClick={() => setSidebarDrawerVisible(false)}
                         >
                             Dashboard
                         </Link>
@@ -180,6 +190,7 @@ const Sidebar = () => {
                                     ? "is-active"
                                     : ""
                             }
+                            onClick={() => setSidebarDrawerVisible(false)}
                         >
                             Profile
                         </Link>
@@ -192,6 +203,7 @@ const Sidebar = () => {
                                     ? "is-active"
                                     : ""
                             }
+                            onClick={() => setSidebarDrawerVisible(false)}
                         >
                             Announcement
                         </Link>
@@ -209,6 +221,9 @@ const Sidebar = () => {
                                         path === location.pathname
                                             ? "is-active"
                                             : ""
+                                    }
+                                    onClick={() =>
+                                        setSidebarDrawerVisible(false)
                                     }
                                 >
                                     {name}
@@ -229,6 +244,9 @@ const Sidebar = () => {
                                             ? "is-active"
                                             : ""
                                     }
+                                    onClick={() =>
+                                        setSidebarDrawerVisible(false)
+                                    }
                                 >
                                     {name}
                                 </Link>
@@ -248,6 +266,59 @@ const Sidebar = () => {
                                             ? "is-active"
                                             : ""
                                     }
+                                    onClick={() =>
+                                        setSidebarDrawerVisible(false)
+                                    }
+                                >
+                                    {name}
+                                </Link>
+                            </li>
+                        ))}
+                </ul>
+            </>
+        );
+    };
+
+    const SidebarMenuItems = () => {
+        return userType === "Admin" ? (
+            <AdminMenuItems />
+        ) : (
+            <>
+                <p className="menu-label has-text-white">Menu</p>
+                <ul className="menu-list">
+                    {menuItems
+                        .filter(({ userType }) => userType === undefined)
+                        .map(({ name, path }) => (
+                            <li key={path}>
+                                <Link
+                                    to={path}
+                                    className={
+                                        path === location.pathname
+                                            ? "is-active"
+                                            : ""
+                                    }
+                                    onClick={() =>
+                                        setSidebarDrawerVisible(false)
+                                    }
+                                >
+                                    {name}
+                                </Link>
+                            </li>
+                        ))}
+                    {menuItems
+                        .filter(props => props.userType === userType)
+                        .map(({ name, path }) => (
+                            <li key={path}>
+                                <Link
+                                    to={path}
+                                    className={
+                                        path === location.pathname
+                                            ? "is-active"
+                                            : ""
+                                    }
+                                    onClick={() =>
+                                        setSidebarDrawerVisible(false)
+                                    }
                                 >
                                     {name}
                                 </Link>
@@ -259,90 +330,128 @@ const Sidebar = () => {
     };
 
     return (
-        <aside
-            className="is-hidden-mobile"
-            style={{
-                background: "#21BF73",
-                width: 270,
-                height: "100vh",
-                padding: 16,
-                position: "sticky",
-                overflow: "auto",
-                top: 0
-            }}
-        >
-            <div
+        <div>
+            <aside
+                className="is-hidden-touch"
                 style={{
-                    backgroundColor: "#20aa68",
-                    borderRadius: 5,
-                    padding: "5px 10px"
+                    background: "#21BF73",
+                    width: 270,
+                    height: "100vh",
+                    padding: 16,
+                    position: "sticky",
+                    overflow: "auto",
+                    top: 0
                 }}
-                className="is-flex is-align-items-center"
             >
-                <div className="mr-2">
-                    <img
-                        src={Logo}
-                        alt="logo"
-                        width={32}
-                        height={32}
-                        style={{ marginTop: 5 }}
-                    />
+                <div
+                    style={{
+                        backgroundColor: "#20aa68",
+                        borderRadius: 5,
+                        padding: "5px 10px"
+                    }}
+                    className="is-flex is-align-items-center"
+                >
+                    <div className="mr-2">
+                        <img
+                            src={Logo}
+                            alt="logo"
+                            width={32}
+                            height={32}
+                            style={{ marginTop: 5 }}
+                        />
+                    </div>
+                    <div className="mr-2">
+                        <h1
+                            className="is-size-4 has-text-weight-bold has-text-white"
+                            style={{ marginTop: -2 }}
+                        >
+                            BURMS
+                        </h1>
+                    </div>
+                    <div>
+                        <span className="has-text-white is-size-7">v1.0</span>
+                    </div>
                 </div>
-                <div className="mr-2">
-                    <h1
-                        className="is-size-4 has-text-weight-bold has-text-white"
-                        style={{ marginTop: -2 }}
+
+                <SidebarMenuItems />
+            </aside>
+
+            <div className={`modal ${isSidebarDrawerVisible && "is-active"}`}>
+                <div
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        position: "relative"
+                    }}
+                >
+                    <div
+                        className="modal-background"
+                        style={{ zIndex: 5 }}
+                        onClick={() => setSidebarDrawerVisible(false)}
+                    ></div>
+                    <div
+                        className="box"
+                        style={{
+                            position: "fixed",
+                            top: 0,
+                            left: 0,
+                            width: 300,
+                            zIndex: 6,
+                            height: "100%",
+                            overflow: "auto",
+                            borderRadius: 0,
+                            background: "#21BF73"
+                        }}
                     >
-                        BURMS
-                    </h1>
-                </div>
-                <div>
-                    <span className="has-text-white is-size-7">v1.0</span>
+                        <div
+                            style={{
+                                backgroundColor: "#20aa68",
+                                borderRadius: 5,
+                                padding: "5px 10px"
+                            }}
+                            className="is-flex is-align-items-center"
+                        >
+                            <div className="mr-2">
+                                <img
+                                    src={Logo}
+                                    alt="logo"
+                                    width={32}
+                                    height={32}
+                                    style={{ marginTop: 5 }}
+                                />
+                            </div>
+                            <div className="mr-2">
+                                <h1
+                                    className="is-size-4 has-text-weight-bold has-text-white"
+                                    style={{ marginTop: -2 }}
+                                >
+                                    BURMS
+                                </h1>
+                            </div>
+                            <div>
+                                <span className="has-text-white is-size-7">
+                                    v1.0
+                                </span>
+                            </div>
+                            <div>
+                                <button
+                                    className="button ml-6 is-small"
+                                    onClick={() =>
+                                        setSidebarDrawerVisible(false)
+                                    }
+                                >
+                                    <span className="icon">
+                                        <i className="fa-solid fa-xmark"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <SidebarMenuItems />
+                    </div>
                 </div>
             </div>
-
-            {userType === "Admin" ? (
-                <AdminMenuItems />
-            ) : (
-                <>
-                    <p className="menu-label has-text-white">Menu</p>
-                    <ul className="menu-list">
-                        {menuItems
-                            .filter(({ userType }) => userType === undefined)
-                            .map(({ name, path }) => (
-                                <li key={path}>
-                                    <Link
-                                        to={path}
-                                        className={
-                                            path === location.pathname
-                                                ? "is-active"
-                                                : ""
-                                        }
-                                    >
-                                        {name}
-                                    </Link>
-                                </li>
-                            ))}
-                        {menuItems
-                            .filter(props => props.userType === userType)
-                            .map(({ name, path }) => (
-                                <li key={path}>
-                                    <Link
-                                        to={path}
-                                        className={
-                                            path === location.pathname
-                                                ? "is-active"
-                                                : ""
-                                        }
-                                    >
-                                        {name}
-                                    </Link>
-                                </li>
-                            ))}
-                    </ul>
-                </>
-            )}
-        </aside>
+        </div>
     );
 };
 

@@ -24,7 +24,13 @@ const Register = () => {
         birth_date: "",
         birth_place: "",
         gender: "",
-        address: "",
+        house_number: "",
+        street: "",
+        subdivision: "",
+        barangay: "",
+        city: "",
+        province: "",
+        zipcode: "",
         civil_status: "Single",
         contact: "",
         is_cabuyeno: "",
@@ -59,7 +65,13 @@ const Register = () => {
         birth_date: "",
         birth_place: "",
         gender: "",
-        address: "",
+        house_number: "",
+        street: "",
+        subdivision: "",
+        barangay: "",
+        city: "",
+        province: "",
+        zipcode: "",
         civil_status: "",
         contact: "",
         is_cabuyeno: "",
@@ -260,10 +272,18 @@ const Register = () => {
             const {
                 lastname,
                 firstname,
+                middlename,
+                extname,
                 birth_date,
                 birth_place,
                 gender,
-                address,
+                house_number,
+                street,
+                subdivision,
+                barangay,
+                city,
+                province,
+                zipcode,
                 civil_status,
                 contact,
                 is_cabuyeno,
@@ -293,10 +313,18 @@ const Register = () => {
             const studentFormError = {
                 lastname: "",
                 firstname: "",
+                middlename: "",
+                extname: "",
                 birth_date: "",
                 birth_place: "",
                 gender: "",
-                address: "",
+                house_number: "",
+                street: "",
+                subdivision: "",
+                barangay: "",
+                city: "",
+                province: "",
+                zipcode: "",
                 civil_status: "",
                 contact: "",
                 is_cabuyeno: "",
@@ -322,6 +350,7 @@ const Register = () => {
                 password_confirmation: ""
             };
 
+            //#region Required
             if (lastname.trim() === "") {
                 studentFormError.lastname = "This is required";
                 hasError = true;
@@ -342,8 +371,32 @@ const Register = () => {
                 studentFormError.gender = "This is required";
                 hasError = true;
             }
-            if (address.trim() === "") {
-                studentFormError.address = "This is required";
+            if (house_number.trim() === "") {
+                studentFormError.house_number = "This is required";
+                hasError = true;
+            }
+            if (street.trim() === "") {
+                studentFormError.street = "This is required";
+                hasError = true;
+            }
+            if (subdivision.trim() === "") {
+                studentFormError.subdivision = "This is required";
+                hasError = true;
+            }
+            if (barangay.trim() === "") {
+                studentFormError.barangay = "This is required";
+                hasError = true;
+            }
+            if (city.trim() === "") {
+                studentFormError.city = "This is required";
+                hasError = true;
+            }
+            if (province.trim() === "") {
+                studentFormError.province = "This is required";
+                hasError = true;
+            }
+            if (zipcode.trim() === "") {
+                studentFormError.zipcode = "This is required";
                 hasError = true;
             }
             if (civil_status.trim() === "") {
@@ -444,6 +497,102 @@ const Register = () => {
                 studentFormError.password_confirmation = "Password not match";
                 hasError = true;
             }
+            //#endregion
+
+            //#region Input Checking
+            const hasLetters = /[A-Za-z]/;
+            const hasNumber = /\d/;
+            if (hasNumber.test(lastname)) {
+                studentFormError.lastname = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(firstname)) {
+                studentFormError.firstname = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(middlename)) {
+                studentFormError.middlename = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(extname)) {
+                studentFormError.extname = "Must not contain numbers";
+                hasError = true;
+            }
+
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const birthDate = new Date(birth_date);
+            const birthDateYear = birthDate.getFullYear();
+            const yearDiff = currentYear - birthDateYear;
+
+            if (yearDiff < 16) {
+                studentFormError.birth_date =
+                    "You must be 16 years old and above";
+                hasError = true;
+            }
+
+            if (hasNumber.test(birth_place)) {
+                studentFormError.birth_place = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(barangay)) {
+                studentFormError.barangay = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(city)) {
+                studentFormError.city = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(province)) {
+                studentFormError.province = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasLetters.test(zipcode)) {
+                studentFormError.zipcode = "Must not contain letters";
+                hasError = true;
+            }
+            if (hasLetters.test(contact)) {
+                studentFormError.contact = "Must not contain letters";
+                hasError = true;
+            }
+            if (hasNumber.test(father_name)) {
+                studentFormError.father_name = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(father_occupation)) {
+                studentFormError.father_occupation = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasLetters.test(father_contact)) {
+                studentFormError.father_contact = "Must not contain letters";
+                hasError = true;
+            }
+            if (hasNumber.test(mother_name)) {
+                studentFormError.mother_name = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(mother_occupation)) {
+                studentFormError.mother_occupation = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasLetters.test(mother_contact)) {
+                studentFormError.mother_contact = "Must not contain letters";
+                hasError = true;
+            }
+            if (hasNumber.test(last_school_attended)) {
+                studentFormError.last_school_attended =
+                    "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(award_received)) {
+                studentFormError.award_received = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(sh_school_strand)) {
+                studentFormError.sh_school_strand = "Must not contain numbers";
+                hasError = true;
+            }
+            //#endregion
 
             if (hasError) {
                 setStudentFormError(studentFormError);
@@ -452,10 +601,18 @@ const Register = () => {
                 setStudentFormError({
                     lastname: "",
                     firstname: "",
+                    middlename: "",
+                    extname: "",
                     birth_date: "",
                     birth_place: "",
                     gender: "",
-                    address: "",
+                    house_number: "",
+                    street: "",
+                    subdivision: "",
+                    barangay: "",
+                    city: "",
+                    province: "",
+                    zipcode: "",
                     civil_status: "",
                     contact: "",
                     is_cabuyeno: "",
@@ -487,6 +644,8 @@ const Register = () => {
             const {
                 lastname,
                 firstname,
+                middlename,
+                extname,
                 birth_date,
                 birth_place,
                 gender,
@@ -506,13 +665,26 @@ const Register = () => {
                 tin,
                 email,
                 password,
-                password_confirmation
+                password_confirmation,
+
+                elementary_school,
+                elementary_remarks,
+                secondary_school,
+                secondary_remarks,
+                vocational_school,
+                vocational_remarks,
+                college_school,
+                college_remarks,
+                graduate_studies_school,
+                graduate_studies_remarks
             } = nonTeachingFormData;
 
             let hasError = false;
             const nonTeachingFormError = {
                 lastname: "",
                 firstname: "",
+                middlename: "",
+                extname: "",
                 birth_date: "",
                 birth_place: "",
                 gender: "",
@@ -532,9 +704,21 @@ const Register = () => {
                 tin: "",
                 email: "",
                 password: "",
-                password_confirmation: ""
+                password_confirmation: "",
+
+                elementary_school: "",
+                elementary_remarks: "",
+                secondary_school: "",
+                secondary_remarks: "",
+                vocational_school: "",
+                vocational_remarks: "",
+                college_school: "",
+                college_remarks: "",
+                graduate_studies_school: "",
+                graduate_studies_remarks: ""
             };
 
+            //#region Required
             if (lastname.trim() === "") {
                 nonTeachingFormError.lastname = "This is required";
                 hasError = true;
@@ -623,6 +807,137 @@ const Register = () => {
                 nonTeachingFormError.password_confirmation = "This is required";
                 hasError = true;
             }
+            //#endregion
+
+            //#region Input checking
+            const hasLetters = /[A-Za-z]/;
+            const hasNumber = /\d/;
+            if (hasNumber.test(lastname)) {
+                nonTeachingFormError.lastname = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(firstname)) {
+                nonTeachingFormError.firstname = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(middlename)) {
+                nonTeachingFormError.middlename = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(extname)) {
+                nonTeachingFormError.extname = "Must not contain numbers";
+                hasError = true;
+            }
+
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const birthDate = new Date(birth_date);
+            const birthDateYear = birthDate.getFullYear();
+            const yearDiff = currentYear - birthDateYear;
+
+            if (yearDiff < 16) {
+                nonTeachingFormError.birth_date =
+                    "You must be 16 years old and above";
+                hasError = true;
+            }
+
+            if (hasNumber.test(birth_place)) {
+                nonTeachingFormError.birth_place = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(citizenship)) {
+                nonTeachingFormError.citizenship = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(barangay)) {
+                nonTeachingFormError.barangay = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(city)) {
+                nonTeachingFormError.city = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(province)) {
+                nonTeachingFormError.province = "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasLetters.test(zipcode)) {
+                nonTeachingFormError.zipcode = "Must not contain letters";
+                hasError = true;
+            }
+            if (hasLetters.test(gsis)) {
+                nonTeachingFormError.gsis = "Numbers only";
+                hasError = true;
+            }
+            if (hasLetters.test(pagibig)) {
+                nonTeachingFormError.pagibig = "Numbers only";
+                hasError = true;
+            }
+            if (hasLetters.test(philhealth)) {
+                nonTeachingFormError.philhealth = "Numbers only";
+                hasError = true;
+            }
+            if (hasLetters.test(sss)) {
+                nonTeachingFormError.sss = "Numbers only";
+                hasError = true;
+            }
+            if (hasLetters.test(tin)) {
+                nonTeachingFormError.tin = "Numbers only";
+                hasError = true;
+            }
+
+            if (hasNumber.test(elementary_school)) {
+                nonTeachingFormError.elementary_school =
+                    "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(elementary_remarks)) {
+                nonTeachingFormError.elementary_remarks =
+                    "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(secondary_school)) {
+                nonTeachingFormError.secondary_school =
+                    "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(secondary_remarks)) {
+                nonTeachingFormError.secondary_remarks =
+                    "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(vocational_school)) {
+                nonTeachingFormError.vocational_school =
+                    "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(vocational_remarks)) {
+                nonTeachingFormError.vocational_remarks =
+                    "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(college_school)) {
+                nonTeachingFormError.college_school =
+                    "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(college_remarks)) {
+                nonTeachingFormError.college_remarks =
+                    "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(graduate_studies_school)) {
+                nonTeachingFormError.graduate_studies_school =
+                    "Must not contain numbers";
+                hasError = true;
+            }
+            if (hasNumber.test(graduate_studies_remarks)) {
+                nonTeachingFormError.graduate_studies_remarks =
+                    "Must not contain numbers";
+                hasError = true;
+            }
+
+            //#endregion
 
             if (hasError) {
                 setNonTeachingFormError(nonTeachingFormError);
@@ -631,6 +946,8 @@ const Register = () => {
                 setNonTeachingFormError({
                     lastname: "",
                     firstname: "",
+                    middlename: "",
+                    extname: "",
                     birth_date: "",
                     birth_place: "",
                     gender: "",

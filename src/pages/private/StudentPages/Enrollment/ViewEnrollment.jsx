@@ -95,43 +95,48 @@ const ViewEnrollment = () => {
                 View Enrollment
             </h1>
             <div className="box">
-                <table className="table " style={{ width: "100%" }}>
-                    <thead>
-                        <tr>
-                            <th>School Year</th>
-                            <th>Semester</th>
-                            <th>Course</th>
-                            <th>Section</th>
-                            <th>Subject</th>
-                            <th>Unit</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {enrollmentItems.map(enrollmentItem => {
-                            const {
-                                subject_id,
-                                course_name,
-                                section_name,
-                                subject_code,
-                                subject_name,
-                                subject_unit
-                            } = enrollmentItem;
+                <div className="table-container">
+                    <table
+                        className="table is-fullwidth is-hoverable"
+                        style={{ whiteSpace: "nowrap" }}
+                    >
+                        <thead>
+                            <tr>
+                                <th>School Year</th>
+                                <th>Semester</th>
+                                <th>Course</th>
+                                <th>Section</th>
+                                <th>Subject</th>
+                                <th>Unit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {enrollmentItems.map(enrollmentItem => {
+                                const {
+                                    subject_id,
+                                    course_name,
+                                    section_name,
+                                    subject_code,
+                                    subject_name,
+                                    subject_unit
+                                } = enrollmentItem;
 
-                            return (
-                                <tr key={subject_id}>
-                                    <td>{enrollment.sy_year}</td>
-                                    <td>{enrollment.sy_semester}</td>
-                                    <td>{course_name}</td>
-                                    <td>{section_name}</td>
-                                    <td>
-                                        {subject_code}: {subject_name}
-                                    </td>
-                                    <td>{subject_unit}</td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                                return (
+                                    <tr key={subject_id}>
+                                        <td>{enrollment.sy_year}</td>
+                                        <td>{enrollment.sy_semester}</td>
+                                        <td>{course_name}</td>
+                                        <td>{section_name}</td>
+                                        <td>
+                                            {subject_code}: {subject_name}
+                                        </td>
+                                        <td>{subject_unit}</td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
                 <div className="p-4 has-text-right">
                     <span className="mr-4">{totalUnits} total units</span> -{" "}
                     <span className="ml-4">

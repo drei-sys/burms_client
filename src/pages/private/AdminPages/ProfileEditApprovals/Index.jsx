@@ -74,65 +74,72 @@ const ProfileEditApprovals = () => {
                     </div>
                 ) : (
                     <>
-                        <table className="table is-fullwidth is-hoverable">
-                            <thead>
-                                <tr>
-                                    <th>User name</th>
-                                    <th style={{ width: 60 }}></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {users.map(
-                                    ({
-                                        id,
-                                        lastname,
-                                        firstname,
-                                        middlename,
-                                        extname,
-                                        user_type
-                                    }) => {
-                                        return (
-                                            <tr key={id}>
-                                                <td>
-                                                    <div>
-                                                        <span className="has-text-weight-medium">
-                                                            <UserName
-                                                                user={{
-                                                                    lastname,
-                                                                    firstname,
-                                                                    middlename,
-                                                                    extname
-                                                                }}
-                                                            />
-                                                        </span>
-                                                    </div>
-                                                    <div>
-                                                        <span className="is-size-6">
-                                                            {user_type}
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <button
-                                                        className="button is-success mr-1"
-                                                        title="Approve"
-                                                        onClick={() =>
-                                                            showConfirmApprove(
-                                                                id
-                                                            )
-                                                        }
-                                                    >
-                                                        <span className="icon">
-                                                            <i className="fa-solid fa-check"></i>
-                                                        </span>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        );
-                                    }
-                                )}
-                            </tbody>
-                        </table>
+                        <div className="table-container">
+                            <table
+                                className="table is-fullwidth is-hoverable"
+                                style={{
+                                    whiteSpace: "nowrap"
+                                }}
+                            >
+                                <thead>
+                                    <tr>
+                                        <th>User name</th>
+                                        <th style={{ width: 60 }}></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {users.map(
+                                        ({
+                                            id,
+                                            lastname,
+                                            firstname,
+                                            middlename,
+                                            extname,
+                                            user_type
+                                        }) => {
+                                            return (
+                                                <tr key={id}>
+                                                    <td>
+                                                        <div>
+                                                            <span className="has-text-weight-medium">
+                                                                <UserName
+                                                                    user={{
+                                                                        lastname,
+                                                                        firstname,
+                                                                        middlename,
+                                                                        extname
+                                                                    }}
+                                                                />
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <span className="is-size-6">
+                                                                {user_type}
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <button
+                                                            className="button is-success mr-1"
+                                                            title="Approve"
+                                                            onClick={() =>
+                                                                showConfirmApprove(
+                                                                    id
+                                                                )
+                                                            }
+                                                        >
+                                                            <span className="icon">
+                                                                <i className="fa-solid fa-check"></i>
+                                                            </span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        }
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                         <div className="p-4 has-text-right">
                             {users.length} total items
                         </div>
@@ -142,7 +149,7 @@ const ProfileEditApprovals = () => {
 
             <ConfirmModal
                 title="Approve Edit Profile"
-                description={`Are you sure do you want to approve the profile edit of ${selectedUser?.lastname}?`}
+                description={`Are you sure do you want to approve the profile edit of ${selectedUser?.lastname}, ${selectedUser?.firstname}?`}
                 isOpen={isOpenConfirmApprove}
                 isLoading={isLoading}
                 onOk={() => {

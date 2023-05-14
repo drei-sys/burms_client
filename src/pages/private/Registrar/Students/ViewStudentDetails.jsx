@@ -18,7 +18,7 @@ const ViewStudent = () => {
 
     const params = useParams();
     const navigate = useNavigate();
-    const { status: userStatus } = useUserStore(state => state);
+    const { status: userStatus, type: userType } = useUserStore(state => state);
 
     useEffect(() => {
         const getStudent = async () => {
@@ -78,7 +78,15 @@ const ViewStudent = () => {
             <h1 className="is-size-4 mb-4">
                 <button
                     className="button is-ghost"
-                    onClick={() => navigate("/students")}
+                    onClick={() =>
+                        navigate(
+                            `/${
+                                userType === "Registrar"
+                                    ? "registrarStudents"
+                                    : "deptChairStudents"
+                            }`
+                        )
+                    }
                 >
                     <i className="fa-solid fa-arrow-left"></i>
                 </button>{" "}

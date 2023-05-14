@@ -82,56 +82,67 @@ const Subjects = () => {
                         </div>
                     ) : (
                         <>
-                            <table className="table is-fullwidth is-hoverable">
-                                <thead>
-                                    <tr>
-                                        <th>Subject code</th>
-                                        <th>Subject name</th>
-                                        <th>Unit</th>
-                                        <th>Type</th>
-                                        <th style={{ width: 120 }}></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {subjects.map(
-                                        ({ id, code, name, unit, type }) => (
-                                            <tr key={id}>
-                                                <td>{code}</td>
-                                                <td>{name}</td>
-                                                <td>{unit}</td>
-                                                <td>{type}</td>
-                                                <td>
-                                                    <Link
-                                                        to={`/updateSubject/${id}`}
-                                                    >
+                            <div className="table-container">
+                                <table
+                                    className="table is-fullwidth is-hoverable"
+                                    style={{ whiteSpace: "nowrap" }}
+                                >
+                                    <thead>
+                                        <tr>
+                                            <th>Subject code</th>
+                                            <th>Subject name</th>
+                                            <th>Unit</th>
+                                            <th>Type</th>
+                                            <th style={{ width: 120 }}></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {subjects.map(
+                                            ({
+                                                id,
+                                                code,
+                                                name,
+                                                unit,
+                                                type
+                                            }) => (
+                                                <tr key={id}>
+                                                    <td>{code}</td>
+                                                    <td>{name}</td>
+                                                    <td>{unit}</td>
+                                                    <td>{type}</td>
+                                                    <td>
+                                                        <Link
+                                                            to={`/updateSubject/${id}`}
+                                                        >
+                                                            <button
+                                                                className="button mr-1"
+                                                                title="Update"
+                                                            >
+                                                                <span className="icon">
+                                                                    <i className="fa-solid fa-pen-to-square"></i>
+                                                                </span>
+                                                            </button>
+                                                        </Link>
                                                         <button
-                                                            className="button mr-1"
-                                                            title="Update"
+                                                            className="button is-danger"
+                                                            title="Delete"
+                                                            onClick={() =>
+                                                                showConfirmDelete(
+                                                                    id
+                                                                )
+                                                            }
                                                         >
                                                             <span className="icon">
-                                                                <i className="fa-solid fa-pen-to-square"></i>
+                                                                <i className="fa-solid fa-trash"></i>
                                                             </span>
                                                         </button>
-                                                    </Link>
-                                                    <button
-                                                        className="button is-danger"
-                                                        title="Delete"
-                                                        onClick={() =>
-                                                            showConfirmDelete(
-                                                                id
-                                                            )
-                                                        }
-                                                    >
-                                                        <span className="icon">
-                                                            <i className="fa-solid fa-trash"></i>
-                                                        </span>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        )
-                                    )}
-                                </tbody>
-                            </table>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
                             <div className="p-4 has-text-right">
                                 {subjects.length} total items
                             </div>

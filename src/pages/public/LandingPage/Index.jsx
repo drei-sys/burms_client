@@ -51,6 +51,8 @@ const LandingPage = () => {
         showShortDesc: true
     });
 
+    const [isMobileMenuVisible, setIsMobileMenuVisible] = useState(false);
+
     return (
         <>
             {/* Navbar */}
@@ -79,6 +81,9 @@ const LandingPage = () => {
                         aria-label="menu"
                         aria-expanded="false"
                         data-target="navbarBasicExample"
+                        onClick={() =>
+                            setIsMobileMenuVisible(!isMobileMenuVisible)
+                        }
                     >
                         <span aria-hidden="true"></span>
                         <span aria-hidden="true"></span>
@@ -91,7 +96,6 @@ const LandingPage = () => {
                         <a href="#Home" className="navbar-item">
                             Home
                         </a>
-
                         <a href="#About" className="navbar-item">
                             About
                         </a>
@@ -119,14 +123,56 @@ const LandingPage = () => {
                         </div>
                     </div>
                 </div>
+
+                {isMobileMenuVisible && (
+                    <div
+                        style={{
+                            borderTop: "1px solid #dbdbdb",
+                            padding: "25px 10px"
+                        }}
+                    >
+                        <div>
+                            <a href="#Home" className="navbar-item">
+                                Home
+                            </a>
+                        </div>
+                        <div>
+                            <a href="#About" className="navbar-item">
+                                About
+                            </a>
+                        </div>
+                        <div>
+                            <a href="#Team" className="navbar-item">
+                                Team
+                            </a>
+                        </div>
+                        <div>
+                            <a href="#Contact" className="navbar-item">
+                                Contact
+                            </a>
+                        </div>
+                        <div>
+                            <div className="buttons">
+                                <Link
+                                    to="/register"
+                                    className="button is-primary"
+                                >
+                                    <strong>Sign up</strong>
+                                </Link>
+                                <Link to="/login" className="button is-light">
+                                    Log in
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </nav>
 
             <main>
                 {/* Hero */}
-                <section>
-                    <div className="bg-image is-hidden-mobile"></div>
-
-                    <div className="hero-columns-container is-hidden-mobile">
+                <section className="is-hidden-mobile">
+                    <div className="bg-image"></div>
+                    <div className="hero-columns-container">
                         <div className="container">
                             <div className="columns">
                                 <div className="column is-6">
@@ -135,13 +181,13 @@ const LandingPage = () => {
                                         style={{ marginTop: 110 }}
                                     >
                                         <div className="bg-text has-text-centered">
-                                            <h1 className="title is-2 has-text-white">
+                                            <h1 className="title is-3 has-text-white">
                                                 Blockchain-based
                                                 <br />
                                                 University Records Management
                                                 System
                                             </h1>
-                                            <h5 className="subtitle is-4 has-text-white">
+                                            <h5 className="subtitle is-5 has-text-white">
                                                 Pamantasan ng Lungsod ng Cabuyao
                                             </h5>
                                             <div className="has-text-centered">
@@ -187,7 +233,6 @@ const LandingPage = () => {
                             </div>
                         </div>
                     </div>
-
                     <div
                         style={{
                             height: 15,
@@ -197,6 +242,19 @@ const LandingPage = () => {
                             position: "relative"
                         }}
                     ></div>
+                </section>
+
+                <section className="hero is-success is-hidden-tablet">
+                    <div className="hero-body">
+                        <p className="title">
+                            Blockchain-based
+                            <br />
+                            University Records Management System
+                        </p>
+                        <p className="subtitle">
+                            Pamantasan ng Lungsod ng Cabuyao
+                        </p>
+                    </div>
                 </section>
 
                 {/* Content */}
@@ -431,8 +489,8 @@ const LandingPage = () => {
                             Our Team
                         </h1>
 
-                        <div className="columns">
-                            <div className="column">
+                        <div className="columns ">
+                            <div className="column is-3">
                                 <div className="card">
                                     <div className="card-content">
                                         <div className="content has-text-centered">
@@ -477,7 +535,7 @@ const LandingPage = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="column">
+                            <div className="column is-3">
                                 <div className="card">
                                     <div className="card-content">
                                         <div className="content has-text-centered">
@@ -522,7 +580,7 @@ const LandingPage = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="column">
+                            <div className="column is-3">
                                 <div className="card">
                                     <div className="card-content">
                                         <div className="content has-text-centered">
@@ -568,7 +626,7 @@ const LandingPage = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="column">
+                            <div className="column is-3">
                                 <div className="card">
                                     <div className="card-content">
                                         <div className="content has-text-centered">
@@ -710,12 +768,10 @@ const LandingPage = () => {
             </main>
 
             {/* Footer */}
-
             <footer className="footer" style={{ backgroundColor: "#f0f0f0" }}>
                 <div className="content has-text-centered mt-5">
-                    <p>
-                        <h1 className="is-size-4">BURMS</h1>
-                    </p>
+                    <h1 className="is-size-4">BURMS</h1>
+
                     <p>
                         <a href="#Home" className="mr-2">
                             Home

@@ -135,40 +135,47 @@ const ViewEnrollment = () => {
                 </div>
             </div>
             <div className="box">
-                <table className="table " style={{ width: "100%" }}>
-                    <thead>
-                        <tr>
-                            <th>School Year</th>
-                            <th>Semester</th>
-                            <th>Course</th>
-                            <th>Section</th>
-                            <th>Subject</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {enrollmentItems.map(enrollmentItem => {
-                            const {
-                                subject_id,
-                                course_name,
-                                section_name,
-                                subject_code,
-                                subject_name
-                            } = enrollmentItem;
+                <div className="table-container">
+                    <table
+                        className="table is-fullwidth"
+                        style={{
+                            whiteSpace: "nowrap"
+                        }}
+                    >
+                        <thead>
+                            <tr>
+                                <th>School Year</th>
+                                <th>Semester</th>
+                                <th>Course</th>
+                                <th>Section</th>
+                                <th>Subject</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {enrollmentItems.map(enrollmentItem => {
+                                const {
+                                    subject_id,
+                                    course_name,
+                                    section_name,
+                                    subject_code,
+                                    subject_name
+                                } = enrollmentItem;
 
-                            return (
-                                <tr key={subject_id}>
-                                    <td>{enrollment.sy_year}</td>
-                                    <td>{enrollment.sy_semester}</td>
-                                    <td>{course_name}</td>
-                                    <td>{section_name}</td>
-                                    <td>
-                                        {subject_code}: {subject_name}
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                                return (
+                                    <tr key={subject_id}>
+                                        <td>{enrollment.sy_year}</td>
+                                        <td>{enrollment.sy_semester}</td>
+                                        <td>{course_name}</td>
+                                        <td>{section_name}</td>
+                                        <td>
+                                            {subject_code}: {subject_name}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
                 {enrollment.status === "For Approval" && (
                     <>
                         <hr />

@@ -19,7 +19,7 @@ const Students = () => {
     const [isContentLoading, setIsContentLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const { status: userStatus } = useUserStore(state => state);
+    const { status: userStatus, type: userType } = useUserStore(state => state);
 
     useEffect(() => {
         const getStudents = async () => {
@@ -53,7 +53,7 @@ const Students = () => {
     if (userStatus === "For Verification") {
         return (
             <>
-                <h1 className="is-size-4 mb-4">My Students</h1>
+                <h1 className="is-size-4 mb-4">Students</h1>
                 <div className="notification is-warning my-4">
                     Your account is pending for admin verification.
                 </div>
@@ -64,7 +64,7 @@ const Students = () => {
     if (userStatus === "Rejected") {
         return (
             <>
-                <h1 className="is-size-4 mb-4">My Students</h1>
+                <h1 className="is-size-4 mb-4">Students</h1>
                 <div className="notification is-danger my-4">
                     Your account has been rejected.
                 </div>
@@ -109,73 +109,92 @@ const Students = () => {
                     <>No students found.</>
                 ) : (
                     <>
-                        <table className="table is-fullwidth is-hoverable">
-                            <thead>
-                                <tr>
-                                    <th>Student name</th>
-                                    <th>Course</th>
-                                    <th style={{ width: 120 }}></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredStudents.map(
-                                    ({
-                                        id,
-                                        lastname,
-                                        firstname,
-                                        middlename,
-                                        extname,
-                                        year_level,
-                                        course_name
-                                    }) => {
-                                        return (
-                                            <tr key={id}>
-                                                <td>
-                                                    <div>
-                                                        <span className="has-text-weight-medium">
-                                                            <UserName
-                                                                user={{
-                                                                    lastname,
-                                                                    firstname,
-                                                                    middlename,
-                                                                    extname
-                                                                }}
-                                                            />
-                                                        </span>
-                                                    </div>
-                                                    <div>{year_level} year</div>
-                                                </td>
-                                                <td>{course_name}</td>
-                                                <td>
-                                                    <Link to={`/student/${id}`}>
-                                                        <button
-                                                            className="button mr-1"
-                                                            title="View student data"
-                                                        >
-                                                            <span className="icon">
-                                                                <i className="fa-solid fa-eye"></i>
+                        <div className="table-container">
+                            <table
+                                className="table is-fullwidth is-hoverable"
+                                style={{ whiteSpace: "nowrap" }}
+                            >
+                                <thead>
+                                    <tr>
+                                        <th>Student name</th>
+                                        <th>Course</th>
+                                        <th style={{ width: 120 }}></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filteredStudents.map(
+                                        ({
+                                            id,
+                                            lastname,
+                                            firstname,
+                                            middlename,
+                                            extname,
+                                            year_level,
+                                            course_name
+                                        }) => {
+                                            return (
+                                                <tr key={id}>
+                                                    <td>
+                                                        <div>
+                                                            <span className="has-text-weight-medium">
+                                                                <UserName
+                                                                    user={{
+                                                                        lastname,
+                                                                        firstname,
+                                                                        middlename,
+                                                                        extname
+                                                                    }}
+                                                                />
                                                             </span>
-                                                        </button>
-                                                    </Link>
-                                                    <Link
-                                                        to={`/studentGrades/${id}`}
-                                                    >
-                                                        <button
-                                                            className="button is-success mr-1"
-                                                            title="View student grade"
+                                                        </div>
+                                                        <div>
+                                                            {year_level} year
+                                                        </div>
+                                                    </td>
+                                                    <td>{course_name}</td>
+                                                    <td>
+                                                        <Link
+                                                            to={`/${
+                                                                userType ===
+                                                                "Registrar"
+                                                                    ? "registrarStudent"
+                                                                    : "deptChairStudent"
+                                                            }/${id}`}
                                                         >
-                                                            <span className="icon">
-                                                                <i className="fa-solid fa-calculator"></i>
-                                                            </span>
-                                                        </button>
-                                                    </Link>
-                                                </td>
-                                            </tr>
-                                        );
-                                    }
-                                )}
-                            </tbody>
-                        </table>
+                                                            <button
+                                                                className="button mr-1"
+                                                                title="View student data"
+                                                            >
+                                                                <span className="icon">
+                                                                    <i className="fa-solid fa-eye"></i>
+                                                                </span>
+                                                            </button>
+                                                        </Link>
+                                                        <Link
+                                                            to={`/${
+                                                                userType ===
+                                                                "Registrar"
+                                                                    ? "registrarStudentGrades"
+                                                                    : "deptChairStudentGrades"
+                                                            }/${id}`}
+                                                        >
+                                                            <button
+                                                                className="button is-success mr-1"
+                                                                title="View student grade"
+                                                            >
+                                                                <span className="icon">
+                                                                    <i className="fa-solid fa-calculator"></i>
+                                                                </span>
+                                                            </button>
+                                                        </Link>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        }
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                         <div className="p-4 has-text-right">
                             {filteredStudents.length} total items
                         </div>

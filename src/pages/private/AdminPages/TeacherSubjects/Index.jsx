@@ -179,91 +179,97 @@ const TeacherSubjects = () => {
                             </div>
                         ) : (
                             <>
-                                <table
-                                    className="table "
-                                    style={{ width: "100%" }}
-                                >
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Total subjects</th>
-                                            <th style={{ width: 180 }}></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {teacherSubjects.map(
-                                            ({
-                                                id,
-                                                total_subjects,
-                                                ...rest
-                                            }) => (
-                                                <tr key={id}>
-                                                    <td>
-                                                        <UserName user={rest} />
-                                                    </td>
-                                                    <td>{total_subjects}</td>
-                                                    <td>
-                                                        <Link
-                                                            to={`/${
-                                                                userType ===
-                                                                "Dean"
-                                                                    ? "deanTeacherSubject"
-                                                                    : "teacherSubject"
-                                                            }/${id}`}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                        >
-                                                            <button
-                                                                className="button mr-1"
-                                                                title="View"
-                                                            >
-                                                                <span className="icon">
-                                                                    <i className="fa-solid fa-eye"></i>
-                                                                </span>
-                                                            </button>
-                                                        </Link>
-                                                        {schoolYear?.status ===
-                                                            "Active" && (
+                                <div className="table-container">
+                                    <table
+                                        className="table is-fullwidth is-hoverable"
+                                        style={{ whiteSpace: "nowrap" }}
+                                    >
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Total subjects</th>
+                                                <th style={{ width: 180 }}></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {teacherSubjects.map(
+                                                ({
+                                                    id,
+                                                    total_subjects,
+                                                    ...rest
+                                                }) => (
+                                                    <tr key={id}>
+                                                        <td>
+                                                            <UserName
+                                                                user={rest}
+                                                            />
+                                                        </td>
+                                                        <td>
+                                                            {total_subjects}
+                                                        </td>
+                                                        <td>
                                                             <Link
                                                                 to={`/${
                                                                     userType ===
                                                                     "Dean"
-                                                                        ? "deanUpdateTeacherSubject"
-                                                                        : "updateTeacherSubject"
+                                                                        ? "deanTeacherSubject"
+                                                                        : "teacherSubject"
                                                                 }/${id}`}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
                                                             >
                                                                 <button
                                                                     className="button mr-1"
-                                                                    title="Update"
+                                                                    title="View"
                                                                 >
                                                                     <span className="icon">
-                                                                        <i className="fa-solid fa-pen-to-square"></i>
+                                                                        <i className="fa-solid fa-eye"></i>
                                                                     </span>
                                                                 </button>
                                                             </Link>
-                                                        )}
-                                                        {schoolYear?.status ===
-                                                            "Active" && (
-                                                            <button
-                                                                className="button is-danger"
-                                                                title="Delete"
-                                                                onClick={() =>
-                                                                    showConfirmDelete(
-                                                                        id
-                                                                    )
-                                                                }
-                                                            >
-                                                                <span className="icon">
-                                                                    <i className="fa-solid fa-trash"></i>
-                                                                </span>
-                                                            </button>
-                                                        )}
-                                                    </td>
-                                                </tr>
-                                            )
-                                        )}
-                                    </tbody>
-                                </table>
+                                                            {schoolYear?.status ===
+                                                                "Active" && (
+                                                                <Link
+                                                                    to={`/${
+                                                                        userType ===
+                                                                        "Dean"
+                                                                            ? "deanUpdateTeacherSubject"
+                                                                            : "updateTeacherSubject"
+                                                                    }/${id}`}
+                                                                >
+                                                                    <button
+                                                                        className="button mr-1"
+                                                                        title="Update"
+                                                                    >
+                                                                        <span className="icon">
+                                                                            <i className="fa-solid fa-pen-to-square"></i>
+                                                                        </span>
+                                                                    </button>
+                                                                </Link>
+                                                            )}
+                                                            {schoolYear?.status ===
+                                                                "Active" && (
+                                                                <button
+                                                                    className="button is-danger"
+                                                                    title="Delete"
+                                                                    onClick={() =>
+                                                                        showConfirmDelete(
+                                                                            id
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <span className="icon">
+                                                                        <i className="fa-solid fa-trash"></i>
+                                                                    </span>
+                                                                </button>
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
                                 <div className="p-4 has-text-right">
                                     {teacherSubjects.length} total items
                                 </div>

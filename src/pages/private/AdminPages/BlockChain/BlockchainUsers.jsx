@@ -198,109 +198,120 @@ const BlockchainUsers = () => {
                     </button>
                 </div>
                 <hr />
-                <table className="table is-fullwidth is-hoverable">
-                    <thead>
-                        <tr>
-                            <th>User name</th>
-                            <th>User Id</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredUsers.map(user => {
-                            const {
-                                id,
-                                lastname,
-                                firstname,
-                                middlename,
-                                extname,
-                                user_type,
-                                block_hash
-                            } = user;
+                <div className="table-container">
+                    <table
+                        className="table is-fullwidth is-hoverable"
+                        style={{
+                            whiteSpace: "nowrap"
+                        }}
+                    >
+                        <thead>
+                            <tr>
+                                <th>User name</th>
+                                <th style={{ width: 100 }}>User Id</th>
+                                <th style={{ width: 60 }}></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredUsers.map(user => {
+                                const {
+                                    id,
+                                    lastname,
+                                    firstname,
+                                    middlename,
+                                    extname,
+                                    user_type,
+                                    block_hash
+                                } = user;
 
-                            const blockHashItems = block_hash
-                                ? JSON.parse(block_hash)
-                                : [];
+                                const blockHashItems = block_hash
+                                    ? JSON.parse(block_hash)
+                                    : [];
 
-                            return (
-                                <tr key={id}>
-                                    <td>
-                                        <div className="mb-1">
-                                            <span className="has-text-weight-medium">
-                                                <UserName
-                                                    user={{
-                                                        lastname,
-                                                        firstname,
-                                                        middlename,
-                                                        extname
-                                                    }}
-                                                />
-                                            </span>
-                                        </div>
-                                        {blockHashItems.map(
-                                            ({ id, blockHash }) => {
-                                                return (
-                                                    <div key={id}>
-                                                        <button
-                                                            className="button  is-ghost p-0"
-                                                            onClick={() =>
-                                                                handleRead(id)
-                                                            }
-                                                        >
-                                                            BlockHash:{" "}
-                                                            {blockHash}
-                                                        </button>
-                                                    </div>
-                                                );
-                                            }
-                                        )}
-
-                                        <div>
-                                            <span className="is-size-6">
-                                                {user_type}
-                                            </span>
-                                        </div>
-                                        <div>
-                                            {block_hash ? (
-                                                <span
-                                                    className="is-size-7 has-background-info has-text-white mr-4"
-                                                    style={{
-                                                        padding: "2px 5px",
-                                                        borderRadius: 3
-                                                    }}
-                                                >
-                                                    On blockchain
+                                return (
+                                    <tr key={id}>
+                                        <td>
+                                            <div className="mb-1">
+                                                <span className="has-text-weight-medium">
+                                                    <UserName
+                                                        user={{
+                                                            lastname,
+                                                            firstname,
+                                                            middlename,
+                                                            extname
+                                                        }}
+                                                    />
                                                 </span>
-                                            ) : (
-                                                <span
-                                                    className="is-size-7 has-background-dark has-text-white mr-4"
-                                                    style={{
-                                                        padding: "2px 5px",
-                                                        borderRadius: 3
-                                                    }}
-                                                >
-                                                    Pending
-                                                </span>
+                                            </div>
+                                            {blockHashItems.map(
+                                                ({ id, blockHash }) => {
+                                                    return (
+                                                        <div key={id}>
+                                                            <button
+                                                                className="button  is-ghost p-0"
+                                                                onClick={() =>
+                                                                    handleRead(
+                                                                        id
+                                                                    )
+                                                                }
+                                                            >
+                                                                BlockHash:{" "}
+                                                                {blockHash}
+                                                            </button>
+                                                        </div>
+                                                    );
+                                                }
                                             )}
-                                        </div>
-                                    </td>
-                                    <td>{id}</td>
-                                    <td>
-                                        <button
-                                            className="button is-success"
-                                            title="Write to blockchain"
-                                            onClick={() => handleWrite(user)}
-                                        >
-                                            <span className="icon">
-                                                <i className="fa-solid fa-pencil"></i>
-                                            </span>
-                                        </button>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                                            <div>
+                                                <span className="is-size-6">
+                                                    {user_type}
+                                                </span>
+                                            </div>
+                                            <div>
+                                                {block_hash ? (
+                                                    <span
+                                                        className="is-size-7 has-background-info has-text-white mr-4"
+                                                        style={{
+                                                            padding: "2px 5px",
+                                                            borderRadius: 3
+                                                        }}
+                                                    >
+                                                        On blockchain
+                                                    </span>
+                                                ) : (
+                                                    <span
+                                                        className="is-size-7 has-background-dark has-text-white mr-4"
+                                                        style={{
+                                                            padding: "2px 5px",
+                                                            borderRadius: 3
+                                                        }}
+                                                    >
+                                                        Pending
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td>{id}</td>
+                                        <td>
+                                            <button
+                                                className="button is-success"
+                                                title="Write to blockchain"
+                                                onClick={() =>
+                                                    handleWrite(user)
+                                                }
+                                            >
+                                                <span className="icon">
+                                                    <i className="fa-solid fa-pencil"></i>
+                                                </span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+
                 <div className="p-4 has-text-right">
                     {filteredUsers.length} total items
                 </div>
